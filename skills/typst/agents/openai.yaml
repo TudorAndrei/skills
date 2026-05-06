@@ -1,0 +1,4 @@
+interface:
+  display_name: "Typst"
+  short_description: "Create, edit, debug, and compile Typst documents."
+  default_prompt: "Help me create or fix a Typst document."
