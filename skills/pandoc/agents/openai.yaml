@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pandoc"
+  short_description: "Generate business PDFs, slides, and documents."
+  default_prompt: "Use $pandoc to create a polished business PDF, Beamer presentation, or other Pandoc output."

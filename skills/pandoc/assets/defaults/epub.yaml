@@ -1,0 +1,8 @@
+standalone: true
+from: markdown+smart
+to: epub
+table-of-contents: true
+resource-path:
+  - "."
+metadata:
+  lang: en-US

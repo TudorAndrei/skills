@@ -1,0 +1,7 @@
+standalone: true
+from: markdown+smart
+to: docx
+resource-path:
+  - "."
+metadata:
+  lang: en-US

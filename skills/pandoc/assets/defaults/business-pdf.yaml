@@ -1,0 +1,17 @@
+standalone: true
+from: markdown+smart
+pdf-engine: xelatex
+table-of-contents: true
+number-sections: true
+resource-path:
+  - "."
+variables:
+  documentclass: article
+  papersize: letter
+  geometry: margin=1in
+  fontsize: 11pt
+  colorlinks: true
+  linkcolor: blue
+  urlcolor: blue
+metadata:
+  lang: en-US

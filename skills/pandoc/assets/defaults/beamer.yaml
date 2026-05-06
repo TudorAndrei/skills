@@ -1,0 +1,12 @@
+standalone: true
+from: markdown+smart
+to: beamer
+pdf-engine: xelatex
+slide-level: 2
+resource-path:
+  - "."
+variables:
+  aspectratio: 169
+  fontsize: 10pt
+metadata:
+  lang: en-US
