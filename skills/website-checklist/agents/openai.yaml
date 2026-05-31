@@ -1,0 +1,4 @@
+interface:
+  display_name: "Website Checklist"
+  short_description: "Audit websites against The Website Specification"
+  default_prompt: "Use $website-checklist to audit this website against required and recommended technical checklist items."
