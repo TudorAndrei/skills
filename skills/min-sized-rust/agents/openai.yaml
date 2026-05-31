@@ -1,0 +1,4 @@
+interface:
+  display_name: "Min-Sized Rust"
+  short_description: "Shrink Rust binaries with Cargo and toolchain tactics"
+  default_prompt: "Use $min-sized-rust to reduce this Rust binary's release size."
