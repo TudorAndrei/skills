@@ -1,0 +1,4 @@
+interface:
+  display_name: "C4 Model"
+  short_description: "Create and review C4 architecture diagrams"
+  default_prompt: "Use $c4-model to create C4 diagrams for this software system."
