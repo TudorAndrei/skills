@@ -1,0 +1,4 @@
+interface:
+  display_name: "Technical SEO Growth"
+  short_description: "Implement localized SEO and authority patterns"
+  default_prompt: "Use $technical-seo-growth to review and improve localized SEO, indexing, backlinks, and measurement for this site."
