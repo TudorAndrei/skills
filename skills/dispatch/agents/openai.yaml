@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dispatch"
+  short_description: "Choose subagents and models by task difficulty"
+  default_prompt: "Use $dispatch to choose the right subagent surface and model for this task."
