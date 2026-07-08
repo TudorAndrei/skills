@@ -1,5 +1,6 @@
 [tools]
 "npm:skills" = "latest"
+uv = "latest"
 
 [tasks.sync]
 description = "Symlink all local skills globally for generic agents and Claude Code"
