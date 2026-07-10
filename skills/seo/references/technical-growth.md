@@ -1,8 +1,3 @@
----
-name: technical-seo-growth
-description: Implement and review technical SEO growth work for product sites, especially localized SSR/Next.js pages, URL locale middleware, language pickers, sitemaps, canonical and hreflang tags, robots noindex/nofollow rules, internal and cross-product backlinks, satellite-product SEO loops, LLM recommendation visibility, and attribution measurement. Use when Codex is asked to improve SEO for localized pages, diagnose indexing/cannibalization, add SEO metadata, plan backlink strategy, or convert Cristina Poncela's technical SEO article into actionable site changes.
----
-
 # Technical SEO Growth
 
 ## Workflow
@@ -14,7 +9,7 @@ Use this skill to turn SEO growth ideas into concrete implementation and review 
 - **Campaign, affiliate, or discount pages**: decide whether they should be indexed or protected with `noindex, nofollow`.
 - **Satellite products or blogs**: evaluate backlinks, topical authority, and conversion paths back to the main product.
 
-For detailed implementation patterns and the full article-derived topic map, read [references/seo-growth-patterns.md](references/seo-growth-patterns.md). Use it when implementing, auditing, or planning any non-trivial SEO work.
+For detailed implementation patterns and the full article-derived topic map, read [references/seo-growth-patterns.md](seo-growth-patterns.md). Use it when implementing, auditing, or planning any non-trivial SEO work.
 
 ## Implementation Order
 
@@ -51,7 +46,3 @@ Check these before finishing SEO work:
 - `noindex` is applied only to pages that should stay out of search results.
 - Backlinks are contextually relevant and not spammy.
 - SEO impact is measured against cannibalization risk, not just gross clicks.
-
-## Source
-
-This skill is based on Cristina Poncela Cubeiro's article "Technical SEO: Localized Pages, Backlinks, Indexing and More" and adapts its patterns into reusable Codex guidance.

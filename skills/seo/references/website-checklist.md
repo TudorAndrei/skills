@@ -1,12 +1,3 @@
----
-name: website-checklist
-description: Audit, plan, or generate website launch checklists from The Website Specification. Use when reviewing a website's technical foundations, SEO, accessibility, security, well-known URIs, agent readiness, performance, privacy, resilience, or internationalisation requirements.
-license: CC-BY-4.0 source checklist; local skill instructions MIT-compatible
-metadata:
-  source: https://specification.website/checklist/
-  source_license: CC-BY-4.0
----
-
 # Website Checklist
 
 Use The Website Specification as the audit contract for modern website quality.
@@ -14,7 +5,7 @@ Use The Website Specification as the audit contract for modern website quality.
 ## Workflow
 
 1. Clarify the audit scope from the user request: full site, one page, launch readiness, agent readiness, accessibility, security, or another category.
-2. Load [references/checklist.md](references/checklist.md) when you need the complete checklist or category/status filters.
+2. Load [checklist.md](checklist.md) when you need the complete checklist or category/status filters.
 3. Prioritize statuses in this order:
    - `required`: platform, accessibility, security, or discoverability expectations that should be fixed first.
    - `avoid`: harmful or obsolete patterns; flag these as defects, not missing enhancements.
@@ -37,7 +28,4 @@ For audits, report results as a grouped checklist with evidence:
 
 For planning, return a scoped task list. Keep required and avoid items above recommended work.
 
-## Source
-
-The checklist is adapted from The Website Specification checklist, content licensed CC BY 4.0:
-https://specification.website/checklist/
+The SEO category here is a lightweight checklist (robots.txt, sitemaps, structured data, breadcrumbs). When it surfaces deeper SEO work, move to the audit, ai-search, programmatic, or technical-growth guides in this skill.

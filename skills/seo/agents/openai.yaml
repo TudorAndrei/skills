@@ -1,0 +1,4 @@
+interface:
+  display_name: "SEO"
+  short_description: "Audit, AI-search, programmatic, and technical-growth SEO in one skill"
+  default_prompt: "Use $seo to audit, optimize, build at scale, or implement localized technical SEO for this site."
