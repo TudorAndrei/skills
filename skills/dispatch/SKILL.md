@@ -20,7 +20,7 @@ Dispatch work only when delegation is explicitly requested or local instructions
 ## Surface Selection
 
 - Use built-in `spawn_agent` first when available and the work fits local multi-agent delegation. Prefer it for codebase exploration, disjoint implementation slices, and verification that can run in parallel.
-- Use `agent` (Cursor Agent) when Cursor-specific model variety, Cursor worktrees, or Cursor workspace context is useful. Use `agent --print --output-format json` for scriptable one-shot tasks and `agent models` or `agent --list-models` for current model IDs.
+- Use `agent` (Cursor Agent) when Cursor worktrees or Cursor workspace context is useful. Always dispatch with the `composer-fast-2.5` model (`--model composer-fast-2.5`); do not use other Cursor models. Use `agent --print --output-format json` for scriptable one-shot tasks.
 - Use `agy` (Antigravity CLI) when the task should run through Antigravity project context or its available Gemini/Claude/OpenAI model routes. Use `agy --print` for one-shot tasks and `agy models` for current model availability.
 - Use `codex` when the task benefits from Codex behavior, OpenAI coding models, local sandbox controls, or Codex plugin/MCP context. Use `codex exec` for non-interactive tasks and `codex debug models` for the model catalog.
 - Use `claude` when the task benefits from Claude Code features, background agents, Claude-specific review, or Anthropic model behavior. Use `claude -p` for one-shot tasks, `claude --bg` plus `claude agents` for background work, and `claude --help` for current model alias guidance.
@@ -47,10 +47,9 @@ Omit built-in model overrides unless the user asks for one or the task clearly n
 
 ## Live Model Discovery
 
-External model catalogs change. Before presenting exact model IDs or dispatching through an external CLI, run the relevant discovery command when feasible:
+External model catalogs change. Cursor Agent is pinned to `composer-fast-2.5`, so skip discovery for it. For the other external CLIs, run the relevant discovery command when feasible before presenting exact model IDs or dispatching:
 
 ```bash
-agent models
 agy models
 codex debug models
 claude --help
