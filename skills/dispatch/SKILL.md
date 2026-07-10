@@ -31,18 +31,17 @@ Prefer the built-in subagent tool over shelling out when both can do the job, be
 
 Map model strength to task difficulty, not to preference.
 
-- Trivial: formatting, simple grep questions, tiny edits, or command output summarization. Keep local or use the fastest model. Built-in: `gpt-5.3-codex-spark` or `gpt-5.4-mini` with low/medium effort. External: fast/low mini, flash, nano, or default auto modes.
-- Routine: well-scoped bug fixes, small tests, localized refactors, basic docs, or one-module analysis. Use everyday coding models. Built-in: `gpt-5.4` medium, or `gpt-5.4-mini` high when cost/speed matters.
-- Complex: cross-module changes, ambiguous bugs, migrations, security-sensitive reviews, architecture tradeoffs, or tasks needing long context and tool use. Use frontier/high reasoning. Built-in: `gpt-5.5` high or xhigh; `gpt-5.4` high/xhigh if lower cost is acceptable.
+- Trivial: formatting, simple grep questions, tiny edits, or command output summarization. Keep local or use the fastest model. Built-in: `gpt-5.6-luna` with low/medium effort. External: fast/low mini, flash, nano, or default auto modes.
+- Routine: well-scoped bug fixes, small tests, localized refactors, basic docs, or one-module analysis. Use everyday coding models. Built-in: `gpt-5.6-terra` medium, or `gpt-5.6-luna` high when cost/speed matters.
+- Complex: cross-module changes, ambiguous bugs, migrations, security-sensitive reviews, architecture tradeoffs, or tasks needing long context and tool use. Use frontier/high reasoning. Built-in: `gpt-5.6-sol` high or xhigh; use `max` for the hardest tasks and `ultra` when automatic task delegation is beneficial. `gpt-5.6-terra` high/xhigh is the balanced alternative.
 - Exploratory: broad codebase reconnaissance with specific questions. Use explorer-style subagents with medium/high effort; give each a distinct question. Favor speed and parallelism over maximum model strength unless the question is subtle.
 - Risky implementation: tasks that write files across different domains. Split by ownership, use worker-style agents, require changed path lists, and reserve the strongest model for integration or review.
 
 Built-in `spawn_agent` model overrides currently exposed by the environment:
 
-- `gpt-5.5`: frontier model for complex coding, research, and real-world work; reasoning `low`, `medium`, `high`, `xhigh`; priority tier available.
-- `gpt-5.4`: strong everyday coding model; reasoning `low`, `medium`, `high`, `xhigh`; priority tier available.
-- `gpt-5.4-mini`: small, fast, cost-efficient model for simpler coding tasks; reasoning `low`, `medium`, `high`, `xhigh`.
-- `gpt-5.3-codex-spark`: ultra-fast coding model; reasoning `low`, `medium`, `high`, `xhigh`; default high.
+- `gpt-5.6-sol`: latest frontier agentic coding model; reasoning `low`, `medium`, `high`, `xhigh`, `max`, `ultra`; priority tier and `fast` speed tier available.
+- `gpt-5.6-terra`: balanced agentic coding model for everyday work; reasoning `low`, `medium`, `high`, `xhigh`, `max`, `ultra`; priority tier available.
+- `gpt-5.6-luna`: fast, affordable agentic coding model; reasoning `low`, `medium`, `high`, `xhigh`, `max`; priority tier available.
 
 Omit built-in model overrides unless the user asks for one or the task clearly needs a different strength/speed tradeoff than the parent model.
 
