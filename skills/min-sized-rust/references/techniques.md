@@ -7,14 +7,14 @@ Prefer stable Cargo profile settings first, then escalate only when the target s
 
 ## Stable Cargo Profile
 
-| Technique | Minimum Rust | Config or command | Main tradeoff |
-| --- | --- | --- | --- |
-| Release build | 1.0 | `cargo build --release` | Optimized build takes longer than debug. |
-| Strip symbols | 1.59 for Cargo profile | `strip = true` under `[profile.release]` | Removes symbol/debug information from final binary. |
-| Optimize for size | 1.28 | `opt-level = "z"` or test `"s"` | Can reduce runtime speed; either value may be smaller. |
-| Link-time optimization | 1.0 | `lto = true` | Slower compile, often smaller output. |
-| One codegen unit | stable | `codegen-units = 1` | Slower compile, enables broader optimization. |
-| Abort panics | 1.10 | `panic = "abort"` | Removes unwinding, changes panic behavior. |
+| Technique              | Minimum Rust           | Config or command                        | Main tradeoff                                          |
+| ---------------------- | ---------------------- | ---------------------------------------- | ------------------------------------------------------ |
+| Release build          | 1.0                    | `cargo build --release`                  | Optimized build takes longer than debug.               |
+| Strip symbols          | 1.59 for Cargo profile | `strip = true` under `[profile.release]` | Removes symbol/debug information from final binary.    |
+| Optimize for size      | 1.28                   | `opt-level = "z"` or test `"s"`          | Can reduce runtime speed; either value may be smaller. |
+| Link-time optimization | 1.0                    | `lto = true`                             | Slower compile, often smaller output.                  |
+| One codegen unit       | stable                 | `codegen-units = 1`                      | Slower compile, enables broader optimization.          |
+| Abort panics           | 1.10                   | `panic = "abort"`                        | Removes unwinding, changes panic behavior.             |
 
 Recommended starting profile:
 

@@ -74,10 +74,13 @@ export function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-next-locale", language);
   requestHeaders.set("Accept-Language", language);
-  requestHeaders.set("cookie", mergeCookieHeader(request.headers.get("cookie"), {
-    language,
-    NEXT_LOCALE: language,
-  }));
+  requestHeaders.set(
+    "cookie",
+    mergeCookieHeader(request.headers.get("cookie"), {
+      language,
+      NEXT_LOCALE: language,
+    }),
+  );
 
   url.pathname = rest || "/";
   return NextResponse.rewrite(url, { request: { headers: requestHeaders } });
@@ -151,9 +154,8 @@ Example metadata shape:
 ```ts
 function buildSeoLinks(baseUrl: string, path: string, locale: string, locales: string[]) {
   const cleanPath = path.startsWith("/") ? path : `/${path}`;
-  const canonical = locale === "en"
-    ? `${baseUrl}${cleanPath}`
-    : `${baseUrl}/${locale}-${locale}${cleanPath}`;
+  const canonical =
+    locale === "en" ? `${baseUrl}${cleanPath}` : `${baseUrl}/${locale}-${locale}${cleanPath}`;
 
   const alternates = [
     { hreflang: "x-default", href: `${baseUrl}${cleanPath}` },
@@ -183,9 +185,7 @@ Common mistakes:
 Index only pages that should compete in search. Add robots controls to pages that should be reachable by users but invisible to search results, such as referral, affiliate, discount, duplicate campaign, or tracking-specific pages.
 
 ```ts
-const robots = isAffiliateOrCampaignPage(pathname)
-  ? "noindex, nofollow"
-  : "index, follow";
+const robots = isAffiliateOrCampaignPage(pathname) ? "noindex, nofollow" : "index, follow";
 ```
 
 Use `nofollow` when crawler link discovery from that page would dilute or distort ranking signals. Be careful not to place `noindex` on canonical public pages through shared metadata helpers.

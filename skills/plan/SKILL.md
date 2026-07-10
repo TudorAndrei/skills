@@ -22,34 +22,42 @@ Generate a `PLAN.md` with the implementation design and a `TODO.md` with the ver
 # Plan: <short title>
 
 ## Goal
+
 One paragraph: what is being built or changed and why.
 
 ## Approach
+
 Narrative description of the implementation strategy. Include:
+
 - Key design decisions and their rationale
 - Architectural changes (new files, modules, schemas, APIs)
 - Dependencies or prerequisites
 - Anything explicitly out of scope
 
 ## Implementation Phases
+
 Group steps into named phases. Each phase should be coherent enough to land as a single commit.
 
 ### Phase 1: <phase name>
+
 - <step>
 - <step>
-**Commit:** `<type>(<scope>): <short message describing what this phase delivers>`
+  **Commit:** `<type>(<scope>): <short message describing what this phase delivers>`
 
 ### Phase 2: <phase name>
+
 - <step>
 - <step>
-**Commit:** `<type>(<scope>): <short message>`
+  **Commit:** `<type>(<scope>): <short message>`
 
 ...
 
 ## Risks & Tradeoffs
+
 - <risk or tradeoff and mitigation>
 
 ## Open Questions
+
 - <anything that needs a decision before or during implementation>
 ```
 
@@ -59,11 +67,13 @@ Group steps into named phases. Each phase should be coherent enough to land as a
 # TODO: <short title matching PLAN.md>
 
 ## Phase 1: <phase name>
+
 - [ ] <step>
 - [ ] <step>
 - [ ] Commit: `<type>(<scope>): <message>`
 
 ## Phase 2: <phase name>
+
 - [ ] <step>
 - [ ] <step>
 - [ ] Commit: `<type>(<scope>): <message>`
@@ -71,6 +81,7 @@ Group steps into named phases. Each phase should be coherent enough to land as a
 ...
 
 ## Verification
+
 - [ ] All existing tests pass
 - [ ] New tests written for <feature/change>
 - [ ] Manual smoke test: <describe the happy path to exercise>
@@ -78,6 +89,7 @@ Group steps into named phases. Each phase should be coherent enough to land as a
 - [ ] No regressions in <related area>
 
 ## Review
+
 - [ ] Code reviewed
 - [ ] PLAN.md updated if approach changed during implementation
 - [ ] All phase commits are clean and describe their intent
@@ -96,7 +108,7 @@ Group steps into named phases. Each phase should be coherent enough to land as a
 ## Commit guidance
 
 - Draft the commit message for each phase in `PLAN.md` before implementation starts. Use conventional commits: `feat`, `fix`, `refactor`, `test`, `chore`, `docs`.
-- The commit message should describe what the phase *delivers*, not what files changed.
+- The commit message should describe what the phase _delivers_, not what files changed.
 - Each phase commit should leave the codebase in a working state — no broken builds or half-wired code between phases.
 - If a phase turns out to need splitting during implementation, update both `PLAN.md` and `TODO.md` before continuing, then commit each sub-phase separately.
 - Mark the corresponding TODO.md commit checkbox only after `git commit` succeeds.

@@ -1,6 +1,16 @@
 [tools]
 "npm:skills" = "latest"
 uv = "latest"
+hk = "latest"
+pkl = "latest"
+gitleaks = "latest"
+"npm:oxfmt" = "latest"
+
+[env]
+HK_MISE = 1
+
+[hooks]
+postinstall = "hk install --mise"
 
 [tasks.sync]
 description = "Symlink all local skills globally for generic agents and Claude Code"

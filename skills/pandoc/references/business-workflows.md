@@ -4,14 +4,14 @@
 
 Choose the target based on how the document will be used:
 
-| Need | Output | Notes |
-| --- | --- | --- |
-| Executive memo, report, policy, proposal | PDF | Use a defaults YAML, TOC when useful, numbered headings for long documents. |
-| Board or client presentation | Beamer PDF | Use concise Markdown slides and keep the theme conservative unless branding exists. |
-| Editable handoff | DOCX | Use `reference.docx` for corporate styles when provided. |
-| Intranet or email-compatible page | HTML | Use standalone HTML for simple sharing; use a full site generator for multi-page docs. |
-| Reusable publication | EPUB | Check images, metadata, heading order, and accessibility. |
-| Slide handoff to Office users | PPTX | Prefer a `reference.pptx` if the team needs branded layouts. |
+| Need                                     | Output     | Notes                                                                                  |
+| ---------------------------------------- | ---------- | -------------------------------------------------------------------------------------- |
+| Executive memo, report, policy, proposal | PDF        | Use a defaults YAML, TOC when useful, numbered headings for long documents.            |
+| Board or client presentation             | Beamer PDF | Use concise Markdown slides and keep the theme conservative unless branding exists.    |
+| Editable handoff                         | DOCX       | Use `reference.docx` for corporate styles when provided.                               |
+| Intranet or email-compatible page        | HTML       | Use standalone HTML for simple sharing; use a full site generator for multi-page docs. |
+| Reusable publication                     | EPUB       | Check images, metadata, heading order, and accessibility.                              |
+| Slide handoff to Office users            | PPTX       | Prefer a `reference.pptx` if the team needs branded layouts.                           |
 
 ## Recommended Project Layout
 

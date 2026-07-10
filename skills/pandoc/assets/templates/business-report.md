@@ -27,12 +27,12 @@ State the recommended action and why it is preferable.
 
 # Risks And Mitigations
 
-| Risk | Impact | Mitigation |
-| --- | --- | --- |
+| Risk         | Impact | Mitigation         |
+| ------------ | ------ | ------------------ |
 | Example risk | Medium | Example mitigation |
 
 # Next Steps
 
-| Owner | Action | Date |
-| --- | --- | --- |
-| Team | Confirm plan | 2026-05-13 |
+| Owner | Action       | Date       |
+| ----- | ------------ | ---------- |
+| Team  | Confirm plan | 2026-05-13 |

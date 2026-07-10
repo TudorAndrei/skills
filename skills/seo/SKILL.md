@@ -42,18 +42,18 @@ Then establish scope so you pick the right workstream:
 
 ## Choose Your Workstream
 
-| If the task is… | Use | Reference |
-|---|---|---|
-| Diagnose SEO problems, review a site, "why am I not ranking," traffic drop | **Audit** | [references/audit.md](references/audit.md) |
-| Get cited by ChatGPT / Perplexity / AI Overviews, AEO/GEO/LLMO, llms.txt | **AI search** | [references/ai-search.md](references/ai-search.md) |
-| Build many templated pages targeting keyword/location patterns at scale | **Programmatic** | [references/programmatic.md](references/programmatic.md) |
-| Implement localized SSR routing, canonical/hreflang, sitemaps, backlink loops | **Technical growth** | [references/technical-growth.md](references/technical-growth.md) |
+| If the task is…                                                                                     | Use                   | Reference                                                          |
+| --------------------------------------------------------------------------------------------------- | --------------------- | ------------------------------------------------------------------ |
+| Diagnose SEO problems, review a site, "why am I not ranking," traffic drop                          | **Audit**             | [references/audit.md](references/audit.md)                         |
+| Get cited by ChatGPT / Perplexity / AI Overviews, AEO/GEO/LLMO, llms.txt                            | **AI search**         | [references/ai-search.md](references/ai-search.md)                 |
+| Build many templated pages targeting keyword/location patterns at scale                             | **Programmatic**      | [references/programmatic.md](references/programmatic.md)           |
+| Implement localized SSR routing, canonical/hreflang, sitemaps, backlink loops                       | **Technical growth**  | [references/technical-growth.md](references/technical-growth.md)   |
 | Audit launch/quality readiness — accessibility, security, privacy, agent readiness, well-known URIs | **Website checklist** | [references/website-checklist.md](references/website-checklist.md) |
 
 Workstreams layer. A launch often runs: technical-growth (build indexable localized pages) →
 programmatic (generate the page set) → ai-search (make them extractable/citable) → audit (verify it
 all actually works) → website-checklist (broader launch-readiness pass beyond SEO). Localization
-diagnosis lives in **audit**; localization *implementation* lives in **technical-growth**; both draw
+diagnosis lives in **audit**; localization _implementation_ lives in **technical-growth**; both draw
 on the shared [references/international-seo.md](references/international-seo.md). **Website checklist**
 is the widest net — accessibility, security, privacy, resilience, and agent readiness alongside SEO —
 so use it for whole-site launch reviews and hand off to the SEO modes for depth.
@@ -97,7 +97,7 @@ the Rich Results Test, or a Screaming Frog render instead (details in [reference
 
 ### What NOT to do (all workstreams)
 
-- **Keyword stuffing** — ineffective for traditional SEO and *actively* reduces AI visibility (~-10%).
+- **Keyword stuffing** — ineffective for traditional SEO and _actively_ reduces AI visibility (~-10%).
 - **Thin / duplicate / doorway content** — swapping a variable in an identical template earns penalties, not rankings.
 - **Keyword cannibalization** — multiple pages fighting over one keyword; map keywords to pages instead.
 - **Writing separate content "for AI"** — risks Google's scaled-content-abuse policy; the same content should serve people and machines.

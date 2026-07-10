@@ -21,6 +21,7 @@ For audits, report results as a grouped checklist with evidence:
 
 ```markdown
 ## Accessibility
+
 - [ ] `required` Image alt text - FAIL: product gallery images have empty `alt` values.
 - [x] `required` Keyboard navigation - PASS: primary nav and checkout can be completed by keyboard.
 - [ ] `avoid` Accessibility overlays - PASS: no overlay script found.

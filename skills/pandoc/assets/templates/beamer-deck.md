@@ -31,8 +31,8 @@ date: "2026-05-06"
 
 ## Options
 
-| Option | Benefit | Tradeoff |
-| --- | --- | --- |
+| Option   | Benefit | Tradeoff |
+| -------- | ------- | -------- |
 | Option A | Benefit | Tradeoff |
 | Option B | Benefit | Tradeoff |
 
@@ -46,6 +46,6 @@ date: "2026-05-06"
 
 ## Next Steps
 
-| Owner | Action | Date |
-| --- | --- | --- |
-| Team | Confirm scope | 2026-05-13 |
+| Owner | Action        | Date       |
+| ----- | ------------- | ---------- |
+| Team  | Confirm scope | 2026-05-13 |
