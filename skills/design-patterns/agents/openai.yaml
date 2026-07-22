@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design Patterns"
+  short_description: "Choose and apply classic design patterns"
+  default_prompt: "Use $design-patterns to select and implement the right pattern for this codebase."
