@@ -1,0 +1,41 @@
+{
+  "skill_name": "postgres-tips",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Our API's customer order list is slow after the orders table hit 30 million rows. The query filters on customer_id and status, orders by created_at DESC, and returns 50 rows. Draft a diagnosis and a safe index rollout for a production database.",
+      "expected_output": "An evidence-first plan that requests a query plan, proposes an access-path-aligned compound index only conditionally, uses concurrent index creation with operational caveats, and states verification/rollback signals.",
+      "files": [],
+      "expectations": [
+        "Requests or interprets EXPLAIN evidence before treating an index as certain.",
+        "Relates the candidate compound index to equality filters and ORDER BY.",
+        "Marks index creation as production-changing and calls out CREATE INDEX CONCURRENTLY cannot run in a transaction block.",
+        "Includes monitoring and a concrete verification signal."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our update-heavy events table is growing 20 GB of disk per week, latency jumps overnight, and pg_stat_activity shows a transaction that has been open for eight hours. Give the incident triage and the longer-term prevention plan.",
+      "expected_output": "A bloat/autovacuum response that investigates long transactions, table maintenance, vacuum/analyze history and transaction-ID risk before proposing safe remediation; it avoids unsafe blanket VACUUM FULL advice.",
+      "files": [],
+      "expectations": [
+        "Prioritizes identification of the long transaction and explains its effect on cleanup.",
+        "Provides read-only observability queries or equivalent evidence to inspect dead tuples and autovacuum.",
+        "Treats VACUUM FULL as a maintenance-window operation rather than an immediate production fix.",
+        "Includes prevention through transaction duration and table-specific maintenance tuning."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "We need to move 800 million live rows from legacy_events to events_v2 while writes continue. We can tolerate a gradual rollout but not downtime. Design the migration and call out the failure modes.",
+      "expected_output": "An expand/backfill/validate/switch plan with short idempotent batches, ongoing-write mirroring, integrity reconciliation, cutover safeguards, and rollback window rather than one giant transaction.",
+      "files": [],
+      "expectations": [
+        "Avoids a single long-running transaction.",
+        "Uses idempotent bounded batches and a resumable checkpoint.",
+        "Addresses writes that arrive during the backfill through dual writes or a carefully tested trigger.",
+        "Defines validation, cutover monitoring, and a rollback or forward-fix window."
+      ]
+    }
+  ]
+}
