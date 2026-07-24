@@ -5,6 +5,21 @@ description: Guide for writing ast-grep rules to perform structural code search 
 
 # ast-grep Code Search
 
+## Setup (run first)
+
+This skill requires the `ast-grep` CLI. It is declared in this skill's `mise.toml`, so
+ensure it is installed and run it through mise (works regardless of your current directory):
+
+```bash
+# One-time per machine (cached; a no-op afterwards):
+mise trust skills/ast-grep/mise.toml && mise -C skills/ast-grep install
+
+# Invoke the CLI through mise so it is on PATH regardless of cwd:
+mise -C skills/ast-grep exec -- ast-grep run -p 'console.log($A)' -l js
+```
+
+If `ast-grep` is already on your PATH (e.g. installed globally), you may call it directly.
+
 ## Overview
 
 This skill helps translate natural language queries into ast-grep rules for structural code search. ast-grep uses Abstract Syntax Tree (AST) patterns to match code based on its structure rather than just text, enabling powerful and precise code search across large codebases.
