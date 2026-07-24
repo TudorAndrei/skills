@@ -22,7 +22,7 @@ Dispatch work only when delegation is explicitly requested or local instructions
 - Use built-in `spawn_agent` first when available and the work fits local multi-agent delegation. Prefer it for codebase exploration, disjoint implementation slices, and verification that can run in parallel.
 - Use `agent` (Cursor Agent) when Cursor worktrees or Cursor workspace context is useful. Always dispatch with the `composer-fast-2.5` model (`--model composer-fast-2.5`); do not use other Cursor models. Use `agent --print --output-format json` for scriptable one-shot tasks.
 - Use `agy` (Antigravity CLI) when the task should run through Antigravity project context or its available Gemini/Claude/OpenAI model routes. Use `agy --print` for one-shot tasks and `agy models` for current model availability.
-- Use `codex` when the task benefits from Codex behavior, OpenAI coding models, local sandbox controls, or Codex plugin/MCP context. Use `codex exec` for non-interactive tasks and `codex debug models` for the model catalog.
+- Use `codex` when the task benefits from Codex behavior, OpenAI coding models, local sandbox controls, or Codex plugin/MCP context. Use `codex exec` for non-interactive tasks and `codex debug models` for the model catalog. `codex exec` streams its runtime/progress trace to **stderr** and writes only the final result to **stdout**, so append `2>/dev/null` when dispatching to keep captured output clean (e.g. `codex exec review --uncommitted 2>/dev/null`), or `2>codex.trace` to keep the trace on disk for debugging. This is CLI-only and does not affect the interactive TUI.
 - Use `claude` when the task benefits from Claude Code features, background agents, Claude-specific review, or Anthropic model behavior. Use `claude -p` for one-shot tasks, `claude --bg` plus `claude agents` for background work, and `claude --help` for current model alias guidance.
 
 Prefer the built-in subagent tool over shelling out when both can do the job, because it returns structured agent IDs and integrates with the current session. Use external CLIs when the user names one, the requested model only exists there, or the external agent's project/worktree/background semantics matter.
@@ -51,7 +51,7 @@ External model catalogs change. Cursor Agent is pinned to `composer-fast-2.5`, s
 
 ```bash
 agy models
-codex debug models
+codex debug models 2>/dev/null
 claude --help
 ```
 

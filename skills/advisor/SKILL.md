@@ -21,10 +21,11 @@ claude -p "<query>" --model claude-fable-5
 ## Codex + GPT-5.6 Sol at high reasoning
 
 ```bash
-codex exec -m gpt-5.6-sol -c model_reasoning_effort=high "<query>"
+codex exec -m gpt-5.6-sol -c model_reasoning_effort=high "<query>" 2>/dev/null
 ```
 
-- `codex exec` is the non-interactive mode; the prompt can also come from stdin (`cat question.md | codex exec -m gpt-5.6-sol -c model_reasoning_effort=high`).
+- `codex exec` is the non-interactive mode; the prompt can also come from stdin (`cat question.md | codex exec -m gpt-5.6-sol -c model_reasoning_effort=high 2>/dev/null`).
+- Codex streams its runtime/progress trace to **stderr** and writes only the final answer to **stdout**. Append `2>/dev/null` to suppress the trace, or `2>codex.trace` to keep it in a file for debugging without cluttering the terminal. This is CLI-only and does not affect the interactive TUI — there is no config setting, the trace is simply the stderr stream. See the [non-interactive-mode docs](https://learn.chatgpt.com/docs/non-interactive-mode).
 - `-c model_reasoning_effort=high` sets the reasoning level. `gpt-5.6-sol` also supports `low`, `medium`, `xhigh`, `max`, and `ultra`; `high` is the advisor default here.
 - Use `-C <dir>` to point Codex at a specific repo, and `-o <file>` / `--output-last-message` if only the final answer is needed.
 - The default sandbox is read-only, which is the right posture for advisory queries.
