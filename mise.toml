@@ -13,5 +13,14 @@ HK_MISE = 1
 postinstall = "hk install --mise"
 
 [tasks.sync]
-description = "Symlink all local skills globally for generic agents and Claude Code"
+description = "Symlink everything in skills/ globally for Codex and Claude Code"
 run = "skills add . --global --skill '*' --agent codex --agent claude-code --yes --full-depth"
+
+[tasks.add]
+description = "Clone a remote skill into skills/ (global scope), e.g. `mise run add shadcn/improve`"
+usage = 'arg "<pkg>" help="owner/repo, owner/repo@skill, or a GitHub URL"'
+run = "./scripts/vendor-skill.sh {{arg(name='pkg')}}"
+
+[tasks.update]
+description = "Refresh every vendored external skill (skills/ + .agents/skills) from source"
+run = "./scripts/update-skills.sh"
