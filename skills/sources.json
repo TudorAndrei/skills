@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "skills": [
+    {
+      "name": "agent-browser",
+      "repo": "https://github.com/vercel-labs/agent-browser.git",
+      "path": "skills/agent-browser",
+      "ref": "main",
+      "author": "vercel-labs",
+      "homepage": "https://github.com/vercel-labs/agent-browser",
+      "license": {
+        "spdx": "Apache-2.0"
+      }
+    },
+    {
+      "name": "ast-grep",
+      "repo": "https://github.com/ast-grep/agent-skill.git",
+      "path": "ast-grep/skills/ast-grep",
+      "ref": "main",
+      "author": "ast-grep",
+      "homepage": "https://github.com/ast-grep/agent-skill",
+      "license": {
+        "spdx": "UNKNOWN"
+      }
+    },
+    {
+      "name": "find-docs",
+      "repo": "https://github.com/upstash/context7.git",
+      "path": "skills/find-docs",
+      "ref": "master",
+      "author": "upstash",
+      "homepage": "https://github.com/upstash/context7",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "frontend-design",
+      "repo": "https://github.com/anthropics/skills.git",
+      "path": "skills/frontend-design",
+      "ref": "main",
+      "author": "anthropics",
+      "homepage": "https://github.com/anthropics/skills",
+      "license": {
+        "spdx": "Apache-2.0"
+      }
+    },
+    {
+      "name": "hyperframes",
+      "repo": "https://github.com/heygen-com/hyperframes.git",
+      "path": "skills/hyperframes",
+      "ref": "main",
+      "author": "heygen-com",
+      "homepage": "https://github.com/heygen-com/hyperframes",
+      "license": {
+        "spdx": "Apache-2.0"
+      }
+    },
+    {
+      "name": "hyperframes-cli",
+      "repo": "https://github.com/heygen-com/hyperframes.git",
+      "path": "skills/hyperframes-cli",
+      "ref": "main",
+      "author": "heygen-com",
+      "homepage": "https://github.com/heygen-com/hyperframes",
+      "license": {
+        "spdx": "Apache-2.0"
+      }
+    },
+    {
+      "name": "hyperframes-registry",
+      "repo": "https://github.com/heygen-com/hyperframes.git",
+      "path": "skills/hyperframes-registry",
+      "ref": "main",
+      "author": "heygen-com",
+      "homepage": "https://github.com/heygen-com/hyperframes",
+      "license": {
+        "spdx": "Apache-2.0"
+      }
+    },
+    {
+      "name": "improve",
+      "repo": "https://github.com/shadcn/improve.git",
+      "path": "skills/improve",
+      "ref": "main",
+      "author": "shadcn",
+      "homepage": "https://github.com/shadcn/improve",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "postgresql-optimization",
+      "repo": "https://github.com/github/awesome-copilot.git",
+      "path": "skills/postgresql-optimization",
+      "ref": "main",
+      "author": "github",
+      "homepage": "https://github.com/github/awesome-copilot",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "tmux",
+      "repo": "https://github.com/mitsuhiko/agent-stuff.git",
+      "path": "skills/tmux",
+      "ref": "main",
+      "author": "mitsuhiko",
+      "homepage": "https://github.com/mitsuhiko/agent-stuff",
+      "license": {
+        "spdx": "Apache-2.0"
+      }
+    },
+    {
+      "name": "tufte",
+      "repo": "https://github.com/aref-vc/tufte-claude-skill.git",
+      "path": ".",
+      "ref": "main",
+      "author": "aref-vc",
+      "homepage": "https://github.com/aref-vc/tufte-claude-skill",
+      "license": {
+        "spdx": "MIT"
+      }
+    }
+  ]
+}

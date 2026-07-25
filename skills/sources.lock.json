@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "skills": {
+    "agent-browser": {
+      "commit": "3cc7022271235694b5b5ce8aaea8bbfaa66e8cd5",
+      "hash": "7d35a0a7c4ff375d30eafae46dead640a01379aaafb20fa63a975d9acfff08b2"
+    },
+    "ast-grep": {
+      "commit": "c2a9bc154f4ffe08b25d28d5e852dfac8c0d0d8a",
+      "hash": "0e6dc6ab30a68dc9f12eeb09ddd1d306835870bfa62bf3e80982901f2dd80320"
+    },
+    "find-docs": {
+      "commit": "b250c2515694eee4b6df4db82fa056df9ed3e306",
+      "hash": "c799524bef29ceb6023151c13b72968c22ce58a06ed416a8ef1a7957ba47c32e"
+    },
+    "frontend-design": {
+      "commit": "b29e7cf65e5cb78a5ac33d582270551bc74a14eb",
+      "hash": "5a30b6a387e669580b238f3d617a9fb5d7aff79dfacf18b927628b039ae04359"
+    },
+    "hyperframes": {
+      "commit": "b1edeebe39277caf8d96ff07213b519641daeb7f",
+      "hash": "cd0ab0c8fc2f265a2c1c24716dfe0e1ae7c06f018c7a30fc55006ef42b783c42"
+    },
+    "hyperframes-cli": {
+      "commit": "b1edeebe39277caf8d96ff07213b519641daeb7f",
+      "hash": "b4059a596e4c31a58846e6e5cea1fa5fadc808e542d548a3dc28f1ef708f406f"
+    },
+    "hyperframes-registry": {
+      "commit": "b1edeebe39277caf8d96ff07213b519641daeb7f",
+      "hash": "23aee765d00222d210f76f4aa73fa589bf2b804ef9f7f6a1226ee724be733ad3"
+    },
+    "improve": {
+      "commit": "03369ee6d7cafbfcecc4346539b05b3dc0a603bb",
+      "hash": "9554c2c7c54ba0674b69d2d4ab0fe28785944b9f7c6bad492a9b195861711581"
+    },
+    "postgresql-optimization": {
+      "commit": "aa280f28b1b73f9b6e6917b607eb92127b67b419",
+      "hash": "4292e37935a46f79af238e50a0adcb9d85f07395847a39fb4e9678fbe0058c41"
+    },
+    "tmux": {
+      "commit": "cc4b711dc6a2bee2aefb89820600e38291500543",
+      "hash": "3918c1bcc4ccea5721157273df39c9424fa3a9e8ce686045425839bfaf986ef2"
+    },
+    "tufte": {
+      "commit": "a145acf0c158f822d70ccdc2590164abb83b39cb",
+      "hash": "ae19a013c6279fb4681625cff44f870bd61487a5cb447abba61e7758bcb895d4"
+    }
+  }
+}

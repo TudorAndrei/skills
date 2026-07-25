@@ -1,0 +1,56 @@
+{
+  "name": "tudorandrei-skills",
+  "owner": {
+    "name": "TudorAndrei"
+  },
+  "description": "Skills I author, plus pinned snapshots of external skills I use.",
+  "plugins": [
+    {
+      "name": "essentials",
+      "displayName": "Essentials",
+      "source": "./",
+      "description": "Skills I author and maintain here.",
+      "strict": false,
+      "skills": [
+        "./skills/advisor",
+        "./skills/agent-cli-design",
+        "./skills/alphaxiv-paper-lookup",
+        "./skills/c4-model",
+        "./skills/design-patterns",
+        "./skills/dispatch",
+        "./skills/hk-init",
+        "./skills/min-size-docker",
+        "./skills/min-sized-rust",
+        "./skills/modern-postgres",
+        "./skills/pandoc",
+        "./skills/plan",
+        "./skills/postgres-tips",
+        "./skills/seo",
+        "./skills/shrink-git-repo",
+        "./skills/typst",
+        "./skills/update-deps",
+        "./skills/worktrunk-init"
+      ]
+    },
+    {
+      "name": "third-party",
+      "displayName": "Third-Party",
+      "source": "./",
+      "description": "Pinned snapshots of skills maintained upstream.",
+      "strict": false,
+      "skills": [
+        "./skills/agent-browser",
+        "./skills/ast-grep",
+        "./skills/find-docs",
+        "./skills/frontend-design",
+        "./skills/hyperframes",
+        "./skills/hyperframes-cli",
+        "./skills/hyperframes-registry",
+        "./skills/improve",
+        "./skills/postgresql-optimization",
+        "./skills/tmux",
+        "./skills/tufte"
+      ]
+    }
+  ]
+}

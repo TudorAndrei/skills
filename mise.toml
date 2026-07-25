@@ -1,5 +1,6 @@
 [tools]
 "npm:skills" = "latest"
+jq = "latest"
 uv = "latest"
 hk = "latest"
 pkl = "latest"
@@ -17,10 +18,26 @@ description = "Symlink everything in skills/ globally for Codex and Claude Code"
 run = "skills add . --global --skill '*' --agent codex --agent claude-code --yes --full-depth"
 
 [tasks.add]
-description = "Clone a remote skill into skills/ (global scope), e.g. `mise run add shadcn/improve`"
+description = "Vendor an external skill into skills/ as a pinned snapshot, e.g. `mise run add shadcn/improve`"
 usage = 'arg "<pkg>" help="owner/repo, owner/repo@skill, or a GitHub URL"'
 run = "./scripts/vendor-skill.sh {{arg(name='pkg')}}"
 
 [tasks.update]
-description = "Refresh every vendored external skill (skills/ + .agents/skills) from source"
+description = "Advance vendored skills to their tracked branch heads (previews and asks first)"
 run = "./scripts/update-skills.sh"
+
+[tasks.restore]
+description = "Re-fetch vendored skills at their pinned commits, discarding local edits"
+run = "./scripts/update-skills.sh --locked"
+
+[tasks.verify]
+description = "Offline check of the manifest, lock, snapshot hashes, licenses and catalog"
+run = "./scripts/verify-skills.sh"
+
+[tasks.catalog]
+description = "Regenerate .claude-plugin/marketplace.json from skills/ and the vendored lock"
+run = "./scripts/sync-catalog.sh"
+
+[tasks.update-project]
+description = "Refresh project-only skills in .agents/skills via the skills CLI"
+run = "skills update --project --yes"

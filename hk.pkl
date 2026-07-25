@@ -1,14 +1,20 @@
 amends "package://github.com/jdx/hk/releases/download/v1.50.0/hk@1.50.0#/Config.pkl"
 import "package://github.com/jdx/hk/releases/download/v1.50.0/hk@1.50.0#/Builtins.pkl"
+import "hk-vendored.pkl" as vendored
 
 local linters = new Mapping<String, Step> {
     ["check-merge-conflict"] = Builtins.check_merge_conflict
     ["check-added-large-files"] = Builtins.check_added_large_files
-    ["trailing-whitespace"] = Builtins.trailing_whitespace
-    ["newlines"] = Builtins.newlines
+    ["trailing-whitespace"] = (Builtins.trailing_whitespace) {
+        exclude = vendored.globs
+    }
+    ["newlines"] = (Builtins.newlines) {
+        exclude = vendored.globs
+    }
     ["gitleaks"] = Builtins.gitleaks
     ["oxfmt"] = (Builtins.oxfmt) {
         glob = List("**/*.md", "**/*.markdown")
+        exclude = vendored.globs
     }
 }
 
