@@ -8,6 +8,7 @@ module hkVendored
 globs: List<String> = List(
     "skills/agent-browser/**",
     "skills/ast-grep/**",
+    "skills/data-oriented-design/**",
     "skills/find-docs/**",
     "skills/frontend-design/**",
     "skills/hyperframes/**",

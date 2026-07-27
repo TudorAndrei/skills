@@ -9,6 +9,10 @@
       "commit": "c2a9bc154f4ffe08b25d28d5e852dfac8c0d0d8a",
       "hash": "0e6dc6ab30a68dc9f12eeb09ddd1d306835870bfa62bf3e80982901f2dd80320"
     },
+    "data-oriented-design": {
+      "commit": "1e0718473c5cea441a6fa55fec829cc5489f2ddf",
+      "hash": "e80b2d3594136dcd9d9e7cae1854f22e6a0067119df671356154a6a8461f5a6f"
+    },
     "find-docs": {
       "commit": "b250c2515694eee4b6df4db82fa056df9ed3e306",
       "hash": "c799524bef29ceb6023151c13b72968c22ce58a06ed416a8ef1a7957ba47c32e"

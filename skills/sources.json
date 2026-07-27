@@ -24,6 +24,17 @@
       }
     },
     {
+      "name": "data-oriented-design",
+      "repo": "https://github.com/macton/nagent.git",
+      "path": "context/data-oriented-design.md",
+      "ref": "main",
+      "author": "macton",
+      "homepage": "https://github.com/macton/nagent",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
       "name": "find-docs",
       "repo": "https://github.com/upstash/context7.git",
       "path": "skills/find-docs",
