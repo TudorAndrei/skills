@@ -99,6 +99,24 @@ normalize_repo() {
   printf '%s' "$spec"
 }
 
+# parse_github_link <web url> - split a github.com /blob/ or /tree/ link into
+# LINK_REPO, LINK_REF and LINK_PATH. A ref containing a slash is indistinguishable
+# from the path here; pass --ref explicitly for those.
+parse_github_link() {
+  local rest="${1%/}" owner repo
+  rest="${rest#*://*/}"
+  owner="${rest%%/*}"
+  rest="${rest#*/}"
+  repo="${rest%%/*}"
+  rest="${rest#*/}"
+  rest="${rest#*/}" # blob | tree
+  LINK_REF="${rest%%/*}"
+  LINK_PATH="${rest#*/}"
+  LINK_REPO="https://github.com/$owner/$repo"
+  [ -n "$owner" ] && [ -n "$repo" ] && [ -n "$LINK_REF" ] && [ -n "$LINK_PATH" ] ||
+    die "cannot parse github link: $1"
+}
+
 # repo_slug <url> -> owner/repo
 repo_slug() {
   local s="${1%.git}"
@@ -137,6 +155,10 @@ discover_path() {
 # fetch_snapshot <url> <ref-or-commit> <upstream-path> <dest-dir>
 # Populates dest with the upstream skill directory. Sets FETCHED_COMMIT and
 # FETCHED_LICENSE (path to an upstream license file, or empty).
+#
+# The path may also name a single upstream .md file, for sources that publish
+# skill-shaped prose without packaging it as a skill. That file becomes
+# SKILL.md; an overlay in vendor-overlays/<name>/ supplies the frontmatter.
 fetch_snapshot() {
   local url="$1" ref="$2" path="$3" dest="$4" work
   work="$(mktemp -d)"
@@ -150,17 +172,29 @@ fetch_snapshot() {
   if [ "$path" = "." ]; then
     git -C "$work" checkout -q FETCH_HEAD
   else
-    git -C "$work" sparse-checkout set --no-cone "/$path/" "/LICENSE*" "/COPYING*" >/dev/null
+    git -C "$work" sparse-checkout set --no-cone \
+      "/$path" "/$path/" "/LICENSE*" "/COPYING*" >/dev/null
     git -C "$work" checkout -q FETCH_HEAD
   fi
-  [ -f "$work/$path/SKILL.md" ] || die "$url@$ref: no SKILL.md at '$path'"
 
-  # --exclude matters when path is "." : the checkout's own .git would otherwise
-  # be vendored, and its contents differ between fetches, breaking reproduction.
   mkdir -p "$dest"
-  (cd "$work/$path" && tar cf - --exclude='./.git' --exclude='./.git/*' .) |
-    (cd "$dest" && tar xf -)
-  rm -f "$dest/.skill-source"
+  if [ -d "$work/$path" ]; then
+    [ -f "$work/$path/SKILL.md" ] || die "$url@$ref: no SKILL.md at '$path'"
+    # --exclude matters when path is "." : the checkout's own .git would
+    # otherwise be vendored, and its contents differ between fetches, breaking
+    # reproduction.
+    (cd "$work/$path" && tar cf - --exclude='./.git' --exclude='./.git/*' .) |
+      (cd "$dest" && tar xf -)
+    rm -f "$dest/.skill-source"
+  elif [ -f "$work/$path" ]; then
+    case "$path" in
+      *.md) ;;
+      *) die "$url@$ref: '$path' is a file but not markdown - cannot be a SKILL.md" ;;
+    esac
+    cp "$work/$path" "$dest/SKILL.md"
+  else
+    die "$url@$ref: nothing at '$path'"
+  fi
 
   FETCHED_LICENSE=""
   local candidate
@@ -207,6 +241,22 @@ apply_overlay() {
   OVERLAY_APPLIED="$had"
   [ "$had" -eq 1 ] && note "  applied overlay vendor-overlays/$name"
   return 0
+}
+
+# validate_skill <dest> <name> - a staged snapshot must be a loadable skill.
+# Run after the overlay, since the overlay is what supplies the frontmatter when
+# the upstream source is a bare markdown file.
+validate_skill() {
+  local dest="$1" name="$2"
+  [ -f "$dest/SKILL.md" ] || die "$name: staged snapshot has no SKILL.md"
+  awk '
+    NR == 1 { if ($0 != "---") exit; next }
+    $0 == "---" { closed = 1; exit }
+    /^name:[ \t]*[^ \t]/ { seen_name = 1 }
+    /^description:[ \t]*[^ \t]/ { seen_desc = 1 }
+    END { exit (closed && seen_name && seen_desc) ? 0 : 1 }
+  ' "$dest/SKILL.md" || die "$name: SKILL.md has no frontmatter with a name and description.
+  If upstream ships plain markdown, add one in vendor-overlays/$name/."
 }
 
 # spdx_guess <license-file> - best-effort identifier, "UNKNOWN" if unclear

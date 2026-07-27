@@ -4,10 +4,15 @@
 # Usage:
 #   scripts/vendor-skill.sh <owner/repo | owner/repo@skill | url> [options]
 #
+# A github.com /blob/ or /tree/ link works too: the ref and path are read from
+# the link. The path may name a single .md file, for upstreams that publish
+# skill-shaped prose without packaging it as a skill - it becomes SKILL.md and
+# vendor-overlays/<name>/ supplies the frontmatter.
+#
 # Options:
 #   --skill <a,b>    skill name(s) to vendor (default: inferred from the spec)
 #   --ref <branch>   branch to track (default: the remote's HEAD branch)
-#   --path <p>       upstream directory, skips discovery (single skill only)
+#   --path <p>       upstream directory or .md file, skips discovery (single skill only)
 #   --author <a>     attribution recorded in UPSTREAM.md (default: repo owner)
 #   --homepage <u>   homepage recorded in UPSTREAM.md
 #
@@ -15,6 +20,7 @@
 #   scripts/vendor-skill.sh shadcn/improve
 #   scripts/vendor-skill.sh heygen-com/hyperframes --skill hyperframes,gsap
 #   scripts/vendor-skill.sh github/awesome-copilot --skill postgresql-optimization
+#   scripts/vendor-skill.sh https://github.com/macton/nagent/blob/main/context/data-oriented-design.md
 #
 # Fetches with git directly, stages and validates every requested skill, then
 # swaps them in with rollback. The manifest, lock and marketplace are written
@@ -60,6 +66,20 @@ while [ $# -gt 0 ]; do
   esac
 done
 
+# A github.com /blob/ or /tree/ link carries the ref and path already; an
+# explicit --ref or --path still wins.
+link_name=""
+case "$spec" in
+  *://*/blob/* | *://*/tree/*)
+    parse_github_link "$spec"
+    spec="$LINK_REPO"
+    [ -n "$ref" ] || ref="$LINK_REF"
+    [ -n "$path_arg" ] || path_arg="$LINK_PATH"
+    link_name="$(basename "$LINK_PATH")"
+    link_name="${link_name%.md}"
+    ;;
+esac
+
 # owner/repo@skill
 case "$spec" in
   git@* | *://*) ;;
@@ -73,7 +93,7 @@ url="$(normalize_repo "$spec")"
 slug="$(repo_slug "$url")"
 owner="${slug%%/*}"
 reponame="${slug##*/}"
-[ -n "$skill_arg" ] || skill_arg="$reponame"
+[ -n "$skill_arg" ] || skill_arg="${link_name:-$reponame}"
 [ -n "$author" ] || author="$owner"
 [ -n "$homepage" ] || homepage="https://github.com/$slug"
 
@@ -117,6 +137,7 @@ for name in "${wanted[@]}"; do
   rm -rf "$FETCH_WORKDIR"
 
   apply_overlay "$name" "$dest"
+  validate_skill "$dest" "$name"
   write_provenance "$dest" "$name" "$url" "$upstream_path" "$ref" \
     "$FETCHED_COMMIT" "$author" "$homepage" "$spdx"
 

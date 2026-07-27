@@ -77,6 +77,7 @@ for name in "${requested[@]}"; do
   rm -rf "$FETCH_WORKDIR"
 
   apply_overlay "$name" "$dest"
+  validate_skill "$dest" "$name"
   write_provenance "$dest" "$name" "$url" "$upstream_path" "$ref" \
     "$FETCHED_COMMIT" "$author" "$homepage" "$spdx"
   new_hash="$(snapshot_hash "$dest")"

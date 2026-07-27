@@ -2,14 +2,19 @@ amends "package://github.com/jdx/hk/releases/download/v1.50.0/hk@1.50.0#/Config.
 import "package://github.com/jdx/hk/releases/download/v1.50.0/hk@1.50.0#/Builtins.pkl"
 import "hk-vendored.pkl" as vendored
 
+// Overlay patches are byte-exact: a context line is " " plus the original line,
+// so stripping its trailing space makes the patch stop applying. Fixers that
+// rewrite bytes must leave them alone, same as the vendored snapshots.
+local unformattable = vendored.globs + List("vendor-overlays/**/*.patch")
+
 local linters = new Mapping<String, Step> {
     ["check-merge-conflict"] = Builtins.check_merge_conflict
     ["check-added-large-files"] = Builtins.check_added_large_files
     ["trailing-whitespace"] = (Builtins.trailing_whitespace) {
-        exclude = vendored.globs
+        exclude = unformattable
     }
     ["newlines"] = (Builtins.newlines) {
-        exclude = vendored.globs
+        exclude = unformattable
     }
     ["gitleaks"] = Builtins.gitleaks
     ["oxfmt"] = (Builtins.oxfmt) {
