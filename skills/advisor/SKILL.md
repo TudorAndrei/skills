@@ -1,22 +1,22 @@
 ---
 name: advisor
-description: Reference for querying frontier advisor models from the terminal — Claude Code with the Fable model and Codex with gpt-5.6-sol at high reasoning. Use whenever the user wants to ask an advisor model, get a second opinion from Claude Code or Codex, run a one-shot query against fable or gpt-5.6-sol, or mentions "advisor", "ask fable", "ask sol", or consulting an external frontier model on a question.
+description: Reference for querying frontier advisor models from the terminal — Claude Code with the Opus 5 model and Codex with gpt-5.6-sol at high reasoning. Use whenever the user wants to ask an advisor model, get a second opinion from Claude Code or Codex, run a one-shot query against opus or gpt-5.6-sol, or mentions "advisor", "ask opus", "ask sol", or consulting an external frontier model on a question.
 ---
 
 # Advisor
 
 Documents the exact commands for running a one-shot query against the two advisor setups. Both run non-interactively, print the answer to stdout, and exit — suitable for scripting, piping, and parallel dispatch.
 
-## Claude Code + Fable
+## Claude Code + Opus 5
 
 ```bash
-claude -p "<query>" --model claude-fable-5
+claude -p "<query>" --model claude-opus-5
 ```
 
 - `-p` / `--print` runs non-interactively and prints the result.
-- `--model` accepts the alias `fable` or the full name `claude-fable-5`.
+- `--model` accepts the alias `opus` or the full name `claude-opus-5`.
 - Runs in the current working directory; `cd` to the relevant repo first if the query needs codebase context.
-- Long or multi-line queries can be piped: `cat question.md | claude -p --model claude-fable-5`.
+- Long or multi-line queries can be piped: `cat question.md | claude -p --model claude-opus-5`.
 
 ## Codex + GPT-5.6 Sol at high reasoning
 
