@@ -1,19 +1,16 @@
 ---
 name: modern-postgres
 description: >-
-  Audits an existing self-hosted PostgreSQL deployment and produces a prioritized modernization
-  report — which extensions to adopt for specific use cases (pgvector for embeddings, TimescaleDB /
-  pg_partman for time-series, pg_search for BM25 search, PostGIS for geo, pg_repack for bloat,
-  pg_stat_monitor / hypopg / pgvector for observability and planning, PgBouncer/pgcat for pooling,
-  Citus for scale-out, pgmq for queues, pgaudit for compliance), and which version-gated modern
-  PostgreSQL features to turn on for performance (LZ4/zstd TOAST & WAL compression, covering/BRIN
-  indexes, native partitioning, MERGE, JSON_TABLE, async I/O, generated columns, extended statistics,
-  incremental backup, adaptive-radix-tree vacuum). Read-only advisor: it inspects and recommends, it
-  does not write migrations. Use whenever the user wants to improve, modernize, speed up, or "level
-  up" a running Postgres database, asks which Postgres extension fits a use case (vector/AI search,
-  time-series, geospatial, queues, sharding, full-text), asks what new features in their Postgres
-  version they should be using, is planning a major-version upgrade, or is fighting bloat, slow
-  queries, bad plans, autovacuum, or partitioning at scale.
+  Audits a self-hosted PostgreSQL deployment and returns a prioritized modernization report: which
+  extensions to adopt (pgvector, TimescaleDB, pg_partman, pg_search, PostGIS, pg_repack,
+  pg_stat_monitor, hypopg, PgBouncer/pgcat, Citus, pgmq, pgaudit) and which version-gated core
+  features to turn on (LZ4/zstd compression, covering/BRIN indexes, native partitioning, MERGE,
+  JSON_TABLE, async I/O, extended statistics, incremental backup). Read-only: recommends, does not
+  write migrations. Use whenever the user wants to improve, modernize, or speed up a running Postgres
+  database, asks which Postgres extension fits a use case (vector/AI search, time-series, geospatial,
+  queues, sharding, full-text), asks what features their Postgres version unlocks, is planning a
+  major-version upgrade, or is fighting bloat, slow queries, bad plans, autovacuum, or partitioning
+  at scale.
 metadata:
   version: "1.0.0"
   audience: self-hosted PostgreSQL (full superuser / can install extensions)
