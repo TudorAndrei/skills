@@ -67,25 +67,42 @@ Two rules that decide most of the hard cases:
 
 Don't add linters for languages that appear only incidentally (a single script, vendored code). Builtin names in Pkl are snake_case (`Builtins.ruff_format`, `Builtins.ox_lint`).
 
-### 4. Write hk.pkl
+### 4. Order the steps
 
-Run `hk init --mise` to scaffold, or write `hk.pkl` directly. Pin the version in the package URLs to the installed hk version (`hk --version`). Template:
+hk runs every step in a hook in parallel, coordinated by per-file read/write locks. The locks make that _safe_; they don't make it _sensible_. Steps still need ordering wherever one rewrites a file another reads.
+
+**Read `references/pipeline.md` for the tier model, the two ordering primitives, and a complete validated `hk.pkl` to copy from.** The pipeline in five tiers:
+
+1. **Gatekeepers** — never mutate: `check_merge_conflict`, `check_added_large_files`, `gitleaks`, `actionlint`, `zizmor`. No ordering.
+2. **Content fixers** — change what the code says: `ruff`, `ox_lint`, `rumdl`, `typos`.
+3. **Formatters** — change only how it looks: `ruff_format`, `oxfmt`, `rumdl_format`, `tombi_format`, `shfmt`. Each `depends` on the tier-2 step sharing its glob.
+4. **Whole-repo hygiene** — `trailing_whitespace`, `newlines`. Their globs overlap everything, so they go last, inside one `Group` barrier.
+5. **Validators** — read-only, must see the final bytes: `tsc`, `ty`, `cargo_clippy`, `shellcheck`, `knip`.
+
+Formatting is deliberately _after_ lint-fixing, not before. The goal is the same one behind "format first" — never lint a file that's about to be reformatted — but lint autofixers emit unformatted code (`ruff check --fix` removes an import and leaves a blank line; `oxlint --fix` rewrites an expression without re-wrapping). Formatting last is what makes the run's output format-stable; formatting first would commit unformatted code and reformat it on the next run forever. It's also why Astral documents `ruff check --fix` → `ruff format`, and why hk's own bundled example puts `prettier` behind `depends = List("eslint")`. In check-only runs nothing mutates, so the order affects only which failure prints first.
+
+Use `depends = List("<step-key>")` to order two steps that share a glob — it costs nothing, everything else keeps running in parallel. Use `exclusive = true` (or a `Group`) only for steps whose glob is genuinely repo-wide, since it's a full barrier.
+
+### 5. Write hk.pkl
+
+Run `hk init --mise` to scaffold, or write `hk.pkl` directly, using the reference pipeline as the skeleton and dropping the tiers that don't apply. Pin the version in the package URLs to the installed hk version (`hk --version`).
 
 ```pkl
 amends "package://github.com/jdx/hk/releases/download/vX.Y.Z/hk@X.Y.Z#/Config.pkl"
 import "package://github.com/jdx/hk/releases/download/vX.Y.Z/hk@X.Y.Z#/Builtins.pkl"
 
-local linters = new Mapping<String, Step> {
-    // selected builtins, e.g.:
-    ["ruff"] = Builtins.ruff
-    ["ruff-format"] = Builtins.ruff_format
-    ["oxlint"] = Builtins.ox_lint
-    ["oxfmt"] = Builtins.oxfmt
-    ["rumdl"] = Builtins.rumdl_format
-    ["typos"] = Builtins.typos
-    ["gitleaks"] = Builtins.gitleaks
-    ["check-merge-conflict"] = Builtins.check_merge_conflict
-    ["trailing-whitespace"] = Builtins.trailing_whitespace
+local linters = new Mapping<String, Step | Group> {
+    ["gitleaks"] = Builtins.gitleaks                                    // tier 1
+    ["typos"] = (Builtins.typos) { exclusive = true }                   // tier 2, repo-wide
+    ["ruff"] = Builtins.ruff                                            // tier 2
+    ["ruff-format"] = (Builtins.ruff_format) { depends = List("ruff") } // tier 3
+    ["hygiene"] = new Group {                                           // tier 4
+        steps {
+            ["trailing-whitespace"] = Builtins.trailing_whitespace
+            ["newlines"] = Builtins.newlines
+        }
+    }
+    ["ty"] = Builtins.ty                                                // tier 5
 }
 
 hooks {
@@ -103,14 +120,17 @@ hooks {
         steps { ...linters }
     }
     ["fix"] {
+        fix = true
         steps { ...linters }
     }
 }
 ```
 
-Customize a builtin by amending it, e.g. `["prettier"] = (Builtins.prettier) { glob = List("*.ts", "*.tsx") }`.
+The mapping must be typed `Mapping<String, Step | Group>` if any `Group` is used. Customize a builtin by amending it, e.g. `["oxfmt"] = (Builtins.oxfmt) { glob = List("**/*.ts", "**/*.tsx") }`.
 
-### 5. Add the linter tools to mise.toml
+Verify the ordering came out as intended: `hk fix --all -v` prints the resulting barriers as `running group: 0…N`.
+
+### 6. Add the linter tools to mise.toml
 
 For every selected builtin that needs an external tool, add it to `[tools]` in `mise.toml`, then run `mise install`. The exact install lines — including which tools need a `cargo:`/`npm:` backend because they aren't in the mise registry — are in `references/modern-builtins.md` under "mise install lines".
 
@@ -118,7 +138,7 @@ Skip tools already provided by the project (e.g. eslint/prettier in `package.jso
 
 Verify each tool resolves before writing it into `hk.pkl`: `mise x -- <tool> --version`. If a tool won't install on the user's platform, drop that step rather than shipping a hook that fails for everyone.
 
-### 6. Install the hooks and run the checks
+### 7. Install the hooks and run the checks
 
 ```sh
 hk install --mise   # writes .git/hooks/* wrapped with `mise x`
@@ -129,6 +149,6 @@ hk check --all      # run every linter across the whole repo
 - If a specific linter fails due to missing project config or an unfixable pre-existing issue, report it; offer to either fix the findings or narrow/remove that step rather than leaving a hook that blocks every commit.
 - Test the commit-msg hook without committing: `echo "bad message" | hk util check-conventional-commit /dev/stdin` should fail, `feat: example` should pass.
 
-### 7. Report
+### 8. Report
 
 Summarize for the user: which builtins were selected and why, which tools were added to `mise.toml`, and the result of `hk check --all`. Remind them that teammates only need `mise install` (the `postinstall` hook installs the git hooks automatically).

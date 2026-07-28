@@ -4,6 +4,8 @@ Curated from `hk builtins` (hk 1.52.0, 144 builtins). The picks below favour fas
 single-binary, mostly Rust/Go tools over the older Node/Python-runtime linters they
 replace. Builtin names are the snake_case Pkl identifiers (`Builtins.ox_lint`).
 
+Once the steps are chosen, see `pipeline.md` for the order to run them in.
+
 ## Always on
 
 | Builtin                                                                              | Tool needed                       |
