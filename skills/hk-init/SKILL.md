@@ -39,34 +39,33 @@ Then run `mise install` so `hk` and `pkl` are available.
 
 ### 3. Analyze the codebase and select builtins
 
-hk ships 140+ builtins (`Builtins.pkl`). Inspect the repo — file extensions, manifests, config files — and select only the builtins that match. Reference table of the most useful mappings:
+hk ships 140+ builtins (`hk builtins` lists them all; sources live in hk's repo under `pkl/builtins/`). Inspect the repo — file extensions, manifests, config files — and select only the builtins that match.
 
-| Evidence in repo                   | Builtin(s)                                                                                        | mise tool                         |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------- | --------------------------------- |
-| _(always)_                         | `check_conventional_commit`                                                                       | — (uses `hk util`, no extra tool) |
-| _(always)_                         | `check_merge_conflict`, `trailing_whitespace`, `newlines`, `check_added_large_files`              | — (built into hk)                 |
-| Any code, secrets risk             | `gitleaks`, `detect_private_key`                                                                  | `gitleaks`                        |
-| `*.py`, `pyproject.toml`           | `ruff`, `ruff_format` (prefer over black/flake8/isort)                                            | `ruff`                            |
-| `pyproject.toml` with mypy config  | `mypy`                                                                                            | `mypy`                            |
-| `*.ts`/`*.js`, `package.json`      | `prettier` (or `biome` if `biome.json` exists), `eslint` if `.eslintrc*`/`eslint.config.*` exists | `npm:prettier`, `npm:eslint`      |
-| `tsconfig.json`                    | `tsc`                                                                                             | (project-local, via package.json) |
-| `Cargo.toml`                       | `cargo_fmt`, `cargo_clippy`                                                                       | — (uses rustup toolchain)         |
-| `go.mod`                           | `go_fmt`, `go_vet` (or `golangci_lint` if `.golangci.yml` exists)                                 | `golangci-lint` if used           |
-| `*.sh`, shebang scripts            | `shellcheck`, `shfmt`                                                                             | `shellcheck`, `shfmt`             |
-| `Dockerfile*`                      | `hadolint`                                                                                        | `hadolint`                        |
-| `.github/workflows/`               | `actionlint`                                                                                      | `actionlint`                      |
-| `*.tf`                             | `terraform` or `tofu`, `tf_lint`                                                                  | `terraform`/`opentofu`, `tflint`  |
-| `*.yaml`/`*.yml` (beyond a couple) | `yamllint`                                                                                        | `yamllint`                        |
-| `*.toml`                           | `taplo`                                                                                           | `taplo`                           |
-| `*.md` (docs-heavy repo)           | `markdown_lint`                                                                                   | `npm:markdownlint-cli2`           |
-| `*.lua`                            | `stylua`, `luacheck`                                                                              | `stylua`, `luacheck`              |
+**Default to the modern subset** — the fast, single-binary, mostly Rust/Go tools that replace the older Node/Python-runtime linters. Use a legacy tool only when the repo already commits to it.
 
-Rules:
+**Read `references/modern-builtins.md` before choosing steps.** It holds the full selection tables — always-on steps, the evidence → builtin mapping, the legacy → modern swap list, per-tool caveats, formatter-overlap rules, and the exact `mise.toml` install lines (including the handful of tools that need a `cargo:`/`npm:` backend).
 
-- **Always include `check_conventional_commit`** in the `commit-msg` hook. It needs no extra tool (`hk util check-conventional-commit`).
-- Respect existing config: if the repo already has `.prettierrc`, `ruff.toml`, `.golangci.yml`, etc., include the matching builtin; don't add a competing tool.
-- Don't add linters for languages that appear only incidentally (a single script, vendored code).
-- Builtin names in Pkl use snake_case (`Builtins.ruff_format`); the full list is in hk's repo under `pkl/builtins/`.
+The short version of the defaults:
+
+| Domain     | Use                          | Not                                 |
+| ---------- | ---------------------------- | ----------------------------------- |
+| JS/TS      | `ox_lint` + `oxfmt`          | `eslint` + `prettier`               |
+| Python     | `ruff` + `ruff_format`, `ty` | `black`, `flake8`, `isort`, `mypy`  |
+| Markdown   | `rumdl` + `rumdl_format`     | `markdown_lint`                     |
+| YAML       | `ryl`                        | `yamllint`                          |
+| TOML       | `tombi` + `tombi_format`     | `taplo`                             |
+| Go         | `golangci_lint`, `go_fumpt`  | `go_fmt` + `go_vet` + `staticcheck` |
+| Spelling   | `typos`                      | codespell / cspell                  |
+| GH Actions | `actionlint` + `zizmor`      | `actionlint` alone                  |
+
+Plus, always: `check_conventional_commit` (commit-msg), `check_merge_conflict`, `trailing_whitespace`, `newlines`, `check_added_large_files`, `gitleaks`, `detect_private_key`.
+
+Two rules that decide most of the hard cases:
+
+- **Existing config wins.** If the repo already has `.eslintrc*`/`eslint.config.*` with custom plugins, `.prettierrc`, `.markdownlint*`, `.yamllint`, `mypy.ini`, `biome.json`, or `.golangci.yml`, use the matching builtin instead of swapping it out underneath the team. Name the modern alternative in your final report and let them decide. (oxlint in particular does not yet cover type-aware `@typescript-eslint` rules.)
+- **One formatter per file type.** `oxfmt` also claims markdown, YAML, TOML, JSON, CSS and HTML by default — narrow its `glob` when `rumdl_format`/`tombi_format`/`ryl` are also selected. See the reference for the exact override.
+
+Don't add linters for languages that appear only incidentally (a single script, vendored code). Builtin names in Pkl are snake_case (`Builtins.ruff_format`, `Builtins.ox_lint`).
 
 ### 4. Write hk.pkl
 
@@ -80,7 +79,11 @@ local linters = new Mapping<String, Step> {
     // selected builtins, e.g.:
     ["ruff"] = Builtins.ruff
     ["ruff-format"] = Builtins.ruff_format
-    ["prettier"] = Builtins.prettier
+    ["oxlint"] = Builtins.ox_lint
+    ["oxfmt"] = Builtins.oxfmt
+    ["rumdl"] = Builtins.rumdl_format
+    ["typos"] = Builtins.typos
+    ["gitleaks"] = Builtins.gitleaks
     ["check-merge-conflict"] = Builtins.check_merge_conflict
     ["trailing-whitespace"] = Builtins.trailing_whitespace
 }
@@ -109,9 +112,11 @@ Customize a builtin by amending it, e.g. `["prettier"] = (Builtins.prettier) { g
 
 ### 5. Add the linter tools to mise.toml
 
-For every selected builtin that needs an external tool (third column of the table), add it to `[tools]` in `mise.toml`, then run `mise install`. Skip tools already provided by the project (e.g. eslint/prettier in `package.json` devDependencies — hk will find them via the project's node_modules when run through mise).
+For every selected builtin that needs an external tool, add it to `[tools]` in `mise.toml`, then run `mise install`. The exact install lines — including which tools need a `cargo:`/`npm:` backend because they aren't in the mise registry — are in `references/modern-builtins.md` under "mise install lines".
 
-Verify each tool resolves: `mise x -- <tool> --version`.
+Skip tools already provided by the project (e.g. eslint/prettier in `package.json` devDependencies — hk will find them via the project's node_modules when run through mise).
+
+Verify each tool resolves before writing it into `hk.pkl`: `mise x -- <tool> --version`. If a tool won't install on the user's platform, drop that step rather than shipping a hook that fails for everyone.
 
 ### 6. Install the hooks and run the checks
 
