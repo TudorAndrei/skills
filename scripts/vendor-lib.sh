@@ -152,6 +152,50 @@ discover_path() {
   printf '%s' "$dir"
 }
 
+# lexical_path <path> - collapse "." and ".." segments without touching disk.
+lexical_path() {
+  local out=() seg
+  local IFS=/
+  for seg in $1; do
+    case "$seg" in
+      '' | .) ;;
+      ..) [ ${#out[@]} -gt 0 ] && unset 'out[${#out[@]}-1]' ;;
+      *) out+=("$seg") ;;
+    esac
+  done
+  printf '/%s' "${out[@]}"
+}
+
+# widen_for_symlinks <workdir> <upstream-path> - a skill directory may symlink
+# into sibling directories of the upstream repo (shared reference docs), which
+# the sparse checkout left out. Pull those targets in so the tar below has real
+# content to dereference. Iterates, since a target can itself be a symlink.
+widen_for_symlinks() {
+  local work="$1" path="$2" pass link target rel widened
+  for pass in 1 2 3; do
+    widened=0
+    while IFS= read -r link; do
+      [ -n "$link" ] && [ ! -e "$link" ] || continue
+      target="$(readlink "$link")"
+      case "$target" in
+        /*) die "$path: '${link#"$work"/}' is an absolute symlink - cannot vendor" ;;
+      esac
+      rel="$(lexical_path "${link%/*}/$target")"
+      rel="${rel#"$(lexical_path "$work")"/}"
+      case "$rel" in
+        /*) die "$path: '${link#"$work"/}' points outside the repository" ;;
+      esac
+      SPARSE_PATTERNS+=("/$rel" "/$rel/")
+      widened=1
+    done < <(find "$work/$path" -type l)
+    [ "$widened" -eq 1 ] || return 0
+    git -C "$work" sparse-checkout set --no-cone "${SPARSE_PATTERNS[@]}" >/dev/null
+    git -C "$work" checkout -q FETCH_HEAD
+  done
+  link="$(find "$work/$path" -type l ! -exec test -e {} \; -print -quit)"
+  [ -z "$link" ] || die "$path: '${link#"$work"/}' still dangles after widening the checkout"
+}
+
 # fetch_snapshot <url> <ref-or-commit> <upstream-path> <dest-dir>
 # Populates dest with the upstream skill directory. Sets FETCHED_COMMIT and
 # FETCHED_LICENSE (path to an upstream license file, or empty).
@@ -172,18 +216,22 @@ fetch_snapshot() {
   if [ "$path" = "." ]; then
     git -C "$work" checkout -q FETCH_HEAD
   else
-    git -C "$work" sparse-checkout set --no-cone \
-      "/$path" "/$path/" "/LICENSE*" "/COPYING*" >/dev/null
+    SPARSE_PATTERNS=("/$path" "/$path/" "/LICENSE*" "/COPYING*")
+    git -C "$work" sparse-checkout set --no-cone "${SPARSE_PATTERNS[@]}" >/dev/null
     git -C "$work" checkout -q FETCH_HEAD
+    widen_for_symlinks "$work" "$path"
   fi
 
   mkdir -p "$dest"
   if [ -d "$work/$path" ]; then
     [ -f "$work/$path/SKILL.md" ] || die "$url@$ref: no SKILL.md at '$path'"
+    # -h dereferences symlinks: a skill that links to a sibling directory
+    # upstream must still be self-contained once snapshotted here, and the
+    # snapshot hash only covers file content.
     # --exclude matters when path is "." : the checkout's own .git would
     # otherwise be vendored, and its contents differ between fetches, breaking
     # reproduction.
-    (cd "$work/$path" && tar cf - --exclude='./.git' --exclude='./.git/*' .) |
+    (cd "$work/$path" && tar chf - --exclude='./.git' --exclude='./.git/*' .) |
       (cd "$dest" && tar xf -)
     rm -f "$dest/.skill-source"
   elif [ -f "$work/$path" ]; then

@@ -48,6 +48,7 @@
         "./skills/hyperframes-cli",
         "./skills/hyperframes-registry",
         "./skills/improve",
+        "./skills/postgres",
         "./skills/postgresql-optimization",
         "./skills/tmux",
         "./skills/tufte"

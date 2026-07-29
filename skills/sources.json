@@ -101,6 +101,17 @@
       }
     },
     {
+      "name": "postgres",
+      "repo": "https://github.com/timescale/pg-aiguide.git",
+      "path": "skills/postgres",
+      "ref": "main",
+      "author": "timescale",
+      "homepage": "https://github.com/timescale/pg-aiguide",
+      "license": {
+        "spdx": "Apache-2.0"
+      }
+    },
+    {
       "name": "postgresql-optimization",
       "repo": "https://github.com/github/awesome-copilot.git",
       "path": "skills/postgresql-optimization",
