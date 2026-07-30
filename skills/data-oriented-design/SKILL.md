@@ -1,6 +1,13 @@
 ---
 name: data-oriented-design
-description: Mike Acton's data-oriented design operating rules - understand the real data first, then design the simplest transformation from the input you actually have to the output you actually need, at a stated cost. Use when designing or reviewing anything performance-sensitive or data-shaped: memory layout, struct-of-arrays vs array-of-structs, cache behavior, batch and pipeline design, hot loops, allocation strategy, or when a design is being justified by habit, analogy, abstraction, or "clean code" rather than by measurement. Also use when asked to reason like Mike Acton or apply data-oriented design.
+description: >-
+  Mike Acton's data-oriented design operating rules - understand the real data first, then design
+  the simplest transformation from the input you actually have to the output you actually need, at a
+  stated cost. Use when designing or reviewing anything performance-sensitive or data-shaped - memory
+  layout, struct-of-arrays vs array-of-structs, cache behavior, batch and pipeline design, hot loops,
+  allocation strategy - or when a design is being justified by habit, analogy, abstraction, or "clean
+  code" rather than by measurement. Also use when asked to reason like Mike Acton or apply
+  data-oriented design.
 ---
 
 # Data-Oriented Design (Mike Acton) — Operating Rules

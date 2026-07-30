@@ -305,6 +305,66 @@ validate_skill() {
     END { exit (closed && seen_name && seen_desc) ? 0 : 1 }
   ' "$dest/SKILL.md" || die "$name: SKILL.md has no frontmatter with a name and description.
   If upstream ships plain markdown, add one in vendor-overlays/$name/."
+  local problem
+  problem="$(description_problem "$dest/SKILL.md" "$name")"
+  [ -z "$problem" ] || die "$problem"
+}
+
+# description_problem <skill.md> <name> - print why the frontmatter description
+# would not load, or nothing if it is fine. Both failure modes below have
+# actually shipped from here: an agent that skips the skill reports nothing at
+# load time, so the check belongs in the tooling.
+DESCRIPTION_LIMIT=1024
+description_problem() {
+  local file="$1" name="$2" parsed style desc len
+  parsed="$(awk '
+    NR == 1 { if ($0 != "---") exit; next }
+    NR > 1 && $0 == "---" { done = 1; exit }
+    /^description:[ \t]*/ && !in_desc {
+      v = $0
+      sub(/^description:[ \t]*/, "", v)
+      if (v == "" || v == "|" || v == "|-" || v == ">" || v == ">-" || v == "|+" || v == ">+") {
+        in_desc = 1
+        style = "block"
+        next
+      }
+      style = (v ~ /^["'"'"']/) ? "quoted" : "plain"
+      text = v
+      done = 1
+      exit
+    }
+    # A block scalar runs until the indentation stops; blank lines fold to a space.
+    in_desc && /^[ \t]*$/ { text = text " "; next }
+    in_desc && /^[ \t]+/ {
+      t = $0
+      gsub(/^[ \t]+|[ \t]+$/, "", t)
+      text = text (text == "" || text ~ / $/ ? "" : " ") t
+      next
+    }
+    in_desc { done = 1; exit }
+    END { if (style != "") printf "%s\t%s\n", style, text }
+  ' "$file")"
+  style="${parsed%%$'\t'*}"
+  desc="${parsed#*$'\t'}"
+  [ -n "$style" ] || return 0
+
+  # An unquoted plain scalar cannot contain ": " - YAML reads it as a nested
+  # mapping and the whole file fails to parse.
+  if [ "$style" = plain ] && printf '%s' "$desc" | grep -q ': '; then
+    printf '%s: SKILL.md description is an unquoted scalar containing ": ", which YAML parses
+  as a nested mapping, so the skill fails to load. Use a folded block scalar
+  (description: >-) or quote the value.' "$name"
+    return 0
+  fi
+
+  len="$(printf '%s' "$desc" | wc -m | tr -d ' ')"
+  if [ "$len" -gt "$DESCRIPTION_LIMIT" ]; then
+    printf '%s: SKILL.md description is %s characters; the limit is %s. Trim it' \
+      "$name" "$len" "$DESCRIPTION_LIMIT"
+    [ -d "$ROOT/vendor-overlays/$name" ] || [ -n "$(locked_commit "$name" 2>/dev/null)" ] &&
+      printf ' in vendor-overlays/%s/' "$name"
+    printf '.'
+  fi
 }
 
 # spdx_guess <license-file> - best-effort identifier, "UNKNOWN" if unclear

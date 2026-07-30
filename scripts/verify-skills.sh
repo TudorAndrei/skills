@@ -95,6 +95,12 @@ while IFS= read -r n; do
 done < <(jq -r '.skills | keys[]' "$LOCK")
 
 shopt -s nullglob
+# Every skill here, authored or vendored, has to be loadable by an agent.
+for skill in "$SKILLS_DIR"/*/SKILL.md; do
+  n="$(basename "$(dirname "$skill")")"
+  problem="$(description_problem "$skill" "$n")"
+  [ -z "$problem" ] || err "$problem"
+done
 for marker in "$SKILLS_DIR"/*/.skill-source; do
   err "$(basename "$(dirname "$marker")"): legacy .skill-source marker still present"
 done
