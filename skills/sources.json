@@ -222,17 +222,6 @@
       }
     },
     {
-      "name": "postgresql-optimization",
-      "repo": "https://github.com/github/awesome-copilot.git",
-      "path": "skills/postgresql-optimization",
-      "ref": "main",
-      "author": "github",
-      "homepage": "https://github.com/github/awesome-copilot",
-      "license": {
-        "spdx": "MIT"
-      }
-    },
-    {
       "name": "prototype",
       "repo": "https://github.com/mattpocock/skills.git",
       "path": "skills/engineering/prototype",

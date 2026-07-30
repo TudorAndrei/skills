@@ -1,5 +1,5 @@
 {
-  "skill_name": "postgres-tips",
+  "skill_name": "postgres-ops",
   "evals": [
     {
       "id": 1,
@@ -35,6 +35,30 @@
         "Uses idempotent bounded batches and a resumable checkpoint.",
         "Addresses writes that arrive during the backfill through dual writes or a carefully tested trigger.",
         "Defines validation, cutover monitoring, and a rollback or forward-fix window."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "We self-host PostgreSQL 13 for a multi-tenant SaaS. It works but feels dated and nobody has touched the config in years. What could we be doing better?",
+      "expected_output": "A prioritized modernization report that starts by establishing version/workload/scale/installed extensions, puts the major-version upgrade and observability first, then names free structural wins, each with a why and a tradeoff.",
+      "files": [],
+      "expectations": [
+        "Requests or supplies audit SQL for version, installed extensions, table sizes and current pain before recommending.",
+        "Ranks a supported major-version upgrade and pg_stat_statements ahead of speculative query work.",
+        "Does not present post-13 features as available today; frames them as reasons to upgrade.",
+        "Gives each recommendation an explicit tradeoff or cost, not just a name."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "We want semantic search over about 4 million support tickets, and right now a Python worker polls a jobs table every second to do the embedding. Which Postgres extensions should we adopt?",
+      "expected_output": "A use-case match to pgvector for the embeddings (with index/quantization tradeoffs) and pgmq or LISTEN/NOTIFY for the polling worker, with maturity tiers and the option of hybrid keyword+vector search — not a spray of every extension.",
+      "files": [],
+      "expectations": [
+        "Matches pgvector to the semantic-search use case and names a real tradeoff (index build cost, recall/latency tuning, or storage).",
+        "Identifies the polling worker as bespoke machinery a queue extension replaces.",
+        "States the maturity tier or operational cost of each recommendation.",
+        "Stays read-only: sketches illustrative SQL but does not author a migration file."
       ]
     }
   ]

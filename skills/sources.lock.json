@@ -81,10 +81,6 @@
       "commit": "b4f11a45907af3abda0f79e784aff9a6d5eef468",
       "hash": "8d6628ebb6a2c7ae17eddecf51748d7ab8326bba71eba3153bc2389cc57a265f"
     },
-    "postgresql-optimization": {
-      "commit": "aa280f28b1b73f9b6e6917b607eb92127b67b419",
-      "hash": "4292e37935a46f79af238e50a0adcb9d85f07395847a39fb4e9678fbe0058c41"
-    },
     "prototype": {
       "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
       "hash": "00e79f4f41b25074d34771c91e43d146306760daf9374344dadf75c9eb28081e"

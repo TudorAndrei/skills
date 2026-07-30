@@ -26,7 +26,6 @@ globs: List<String> = List(
     "skills/improve/**",
     "skills/improve-codebase-architecture/**",
     "skills/postgres/**",
-    "skills/postgresql-optimization/**",
     "skills/prototype/**",
     "skills/research/**",
     "skills/resolving-merge-conflicts/**",
