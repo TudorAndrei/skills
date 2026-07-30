@@ -5,13 +5,29 @@
       "commit": "3cc7022271235694b5b5ce8aaea8bbfaa66e8cd5",
       "hash": "7d35a0a7c4ff375d30eafae46dead640a01379aaafb20fa63a975d9acfff08b2"
     },
+    "ask-matt": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "9bb4d61e173ac1210981f1945393209d72d1242b47445cbd2a94a73a18bd048e"
+    },
     "ast-grep": {
       "commit": "c2a9bc154f4ffe08b25d28d5e852dfac8c0d0d8a",
       "hash": "0e6dc6ab30a68dc9f12eeb09ddd1d306835870bfa62bf3e80982901f2dd80320"
     },
+    "codebase-design": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "90180b4730f2598a19b4805cd12b09506f9eef054c9649d2ea3633b2f7399fb9"
+    },
     "data-oriented-design": {
       "commit": "1e0718473c5cea441a6fa55fec829cc5489f2ddf",
       "hash": "e80b2d3594136dcd9d9e7cae1854f22e6a0067119df671356154a6a8461f5a6f"
+    },
+    "diagnosing-bugs": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "fa5255a340ce476b7ca9b6e22509ee74c623d5964f1ba8a978e68bb3834cd6c8"
+    },
+    "domain-modeling": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "84675337dba7b263280893f879cdbc5a77bf07f50285369db55a134dd0504163"
     },
     "find-docs": {
       "commit": "b250c2515694eee4b6df4db82fa056df9ed3e306",
@@ -20,6 +36,22 @@
     "frontend-design": {
       "commit": "b29e7cf65e5cb78a5ac33d582270551bc74a14eb",
       "hash": "5a30b6a387e669580b238f3d617a9fb5d7aff79dfacf18b927628b039ae04359"
+    },
+    "grill-me": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "2e3d045ad374b9e6ad9940c5b72faf81e47a46d2b4f531afe7cdacfb5105b8a1"
+    },
+    "grill-with-docs": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "abad9552437b57694ce55783f37f364c05626d4afc08484efb1a06a6a0ccb988"
+    },
+    "grilling": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "cf4306cc886a5bd64735019ec777feef9ba08ba24d92ad479b2c9a763349835c"
+    },
+    "handoff": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "f043f1a84dd4e6f5ad91ad66800c04404dc16b2fb8457a07fffbea0aab3b1927"
     },
     "hyperframes": {
       "commit": "b1edeebe39277caf8d96ff07213b519641daeb7f",
@@ -33,9 +65,17 @@
       "commit": "b1edeebe39277caf8d96ff07213b519641daeb7f",
       "hash": "23aee765d00222d210f76f4aa73fa589bf2b804ef9f7f6a1226ee724be733ad3"
     },
+    "implement": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "63562314398af51350e6360f280fb7102167d11efbf535f57fa7e3dd692d5ec0"
+    },
     "improve": {
       "commit": "03369ee6d7cafbfcecc4346539b05b3dc0a603bb",
       "hash": "9554c2c7c54ba0674b69d2d4ab0fe28785944b9f7c6bad492a9b195861711581"
+    },
+    "improve-codebase-architecture": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "7bdfb8ef166754452d5a0a704b475937fd43d14d2da032eeb6aa8f0f78a32857"
     },
     "postgres": {
       "commit": "b4f11a45907af3abda0f79e784aff9a6d5eef468",
@@ -45,13 +85,57 @@
       "commit": "aa280f28b1b73f9b6e6917b607eb92127b67b419",
       "hash": "4292e37935a46f79af238e50a0adcb9d85f07395847a39fb4e9678fbe0058c41"
     },
+    "prototype": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "00e79f4f41b25074d34771c91e43d146306760daf9374344dadf75c9eb28081e"
+    },
+    "research": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "8a75c907565a59721a4e7c9c8307fae46f8a7e7641edbe8ae88f7e3a7578a14e"
+    },
+    "resolving-merge-conflicts": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "fcbf2adfcf6f00fa7da5bce7b28a5d5c219e28f974c4535b152895bf084aefe9"
+    },
+    "setup-matt-pocock-skills": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "61b0f5d4d3e6763410d29573e2a3f925f82ac4cd21467ea47671222bf0d0eeb7"
+    },
+    "tdd": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "216c23573a7ca37ea0b02c6366a15241091f1011db2b0d3c4b49d8c1de9ce400"
+    },
+    "teach": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "f9a9da322a730b039ad24cbf57b9bb76643183ac39da05c073e0c8b4d7d884eb"
+    },
     "tmux": {
       "commit": "cc4b711dc6a2bee2aefb89820600e38291500543",
       "hash": "3918c1bcc4ccea5721157273df39c9424fa3a9e8ce686045425839bfaf986ef2"
     },
+    "to-spec": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "d9736f8123914f7d2bd3162ac24724c7102cee932663e21492cfe72d8317850d"
+    },
+    "to-tickets": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "7f96642045b480b49ac9e4866a683c91873eedfc1b783e4ee622bb41d37b65ef"
+    },
+    "triage": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "9cc0ffdfe38759568fcf91e9c7304ef39a964ef280780ac5a7aef6d90ab5f40c"
+    },
     "tufte": {
       "commit": "a145acf0c158f822d70ccdc2590164abb83b39cb",
       "hash": "ae19a013c6279fb4681625cff44f870bd61487a5cb447abba61e7758bcb895d4"
+    },
+    "wayfinder": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "b40a753851f80a5ba224a2d37d87be9e93441bdb5350529ab66936a41c886769"
+    },
+    "writing-great-skills": {
+      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "hash": "3308dd8676d6935133415a895d3e0dc817ea9873593fc75b3e01597cab53d565"
     }
   }
 }

@@ -13,6 +13,17 @@
       }
     },
     {
+      "name": "ask-matt",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/engineering/ask-matt",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
       "name": "ast-grep",
       "repo": "https://github.com/ast-grep/agent-skill.git",
       "path": "ast-grep/skills/ast-grep",
@@ -24,12 +35,45 @@
       }
     },
     {
+      "name": "codebase-design",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/engineering/codebase-design",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
       "name": "data-oriented-design",
       "repo": "https://github.com/macton/nagent.git",
       "path": "context/data-oriented-design.md",
       "ref": "main",
       "author": "macton",
       "homepage": "https://github.com/macton/nagent",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "diagnosing-bugs",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/engineering/diagnosing-bugs",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "domain-modeling",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/engineering/domain-modeling",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
       "license": {
         "spdx": "MIT"
       }
@@ -54,6 +98,50 @@
       "homepage": "https://github.com/anthropics/skills",
       "license": {
         "spdx": "Apache-2.0"
+      }
+    },
+    {
+      "name": "grill-me",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/productivity/grill-me",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "grill-with-docs",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/engineering/grill-with-docs",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "grilling",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/productivity/grilling",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "handoff",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/productivity/handoff",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
+      "license": {
+        "spdx": "MIT"
       }
     },
     {
@@ -90,12 +178,34 @@
       }
     },
     {
+      "name": "implement",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/engineering/implement",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
       "name": "improve",
       "repo": "https://github.com/shadcn/improve.git",
       "path": "skills/improve",
       "ref": "main",
       "author": "shadcn",
       "homepage": "https://github.com/shadcn/improve",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "improve-codebase-architecture",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/engineering/improve-codebase-architecture",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
       "license": {
         "spdx": "MIT"
       }
@@ -123,6 +233,72 @@
       }
     },
     {
+      "name": "prototype",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/engineering/prototype",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "research",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/engineering/research",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "resolving-merge-conflicts",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/engineering/resolving-merge-conflicts",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "setup-matt-pocock-skills",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/engineering/setup-matt-pocock-skills",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "tdd",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/engineering/tdd",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "teach",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/productivity/teach",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
       "name": "tmux",
       "repo": "https://github.com/mitsuhiko/agent-stuff.git",
       "path": "skills/tmux",
@@ -134,12 +310,67 @@
       }
     },
     {
+      "name": "to-spec",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/engineering/to-spec",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "to-tickets",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/engineering/to-tickets",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "triage",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/engineering/triage",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
       "name": "tufte",
       "repo": "https://github.com/aref-vc/tufte-claude-skill.git",
       "path": ".",
       "ref": "main",
       "author": "aref-vc",
       "homepage": "https://github.com/aref-vc/tufte-claude-skill",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "wayfinder",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/engineering/wayfinder",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "writing-great-skills",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/productivity/writing-great-skills",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
       "license": {
         "spdx": "MIT"
       }
