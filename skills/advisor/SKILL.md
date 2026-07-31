@@ -7,6 +7,8 @@ description: Reference for querying frontier advisor models from the terminal �
 
 Documents the exact commands for running a one-shot query against the two advisor setups. Both run non-interactively, print the answer to stdout, and exit — suitable for scripting, piping, and parallel dispatch.
 
+Before running anything, read [Saving the output](#saving-the-output--do-this-every-time). Every command below must be paired with an explicit output path.
+
 ## Claude Code + Opus 5
 
 ```bash
@@ -30,6 +32,40 @@ codex exec -m gpt-5.6-sol -c model_reasoning_effort=high "<query>" 2>/dev/null
 - Use `-C <dir>` to point Codex at a specific repo, and `-o <file>` / `--output-last-message` if only the final answer is needed.
 - The default sandbox is read-only, which is the right posture for advisory queries.
 
+## Saving the output — do this every time
+
+Advisor answers are long and expensive to regenerate. **Decide the output path before launching the command**, not after. A run whose answer only went to a terminal that scrolled, to a truncated tool result, or to a backgrounded job with no redirect is a lost run — it has to be paid for again.
+
+Rules:
+
+1. **Pick the path first.** Use a scratchpad or repo-local directory and a descriptive name: `advisor-opus-<topic>.md`, `advisor-sol-<topic>.md`. Never `out.txt`.
+2. **Always redirect or tee.** Never run an advisor command with output going only to the terminal.
+
+   ```bash
+   # Claude Code — tee keeps it visible AND saved
+   claude -p "<query>" --model claude-opus-5 | tee advisor-opus-<topic>.md
+
+   # Codex — -o writes the final message straight to a file
+   codex exec -m gpt-5.6-sol -c model_reasoning_effort=high \
+     -o advisor-sol-<topic>.md "<query>" 2>/dev/null
+   ```
+
+3. **Background jobs must redirect, not tee.** A backgrounded job's stdout is not reliably captured; send it to a file explicitly.
+   ```bash
+   claude -p "<query>" --model claude-opus-5 > advisor-opus-<topic>.md 2>&1 &
+   ```
+4. **Verify the file after the run.** Check it exists and is non-empty (`wc -c`) before reporting the answer or killing the shell. An empty file usually means the command errored into stderr — rerun without `2>/dev/null` to see why.
+5. **One file per advisor.** Do not append two advisors' answers to the same file; comparison requires them separate.
+6. **Keep the trace when debugging.** `2>advisor-sol-<topic>.trace` instead of `2>/dev/null` — the trace explains empty or truncated output.
+
 ## Running both
 
 The two commands are independent — when querying both for comparison, launch them in parallel (e.g. background shell jobs) and capture each output to its own file rather than running them serially.
+
+```bash
+claude -p "<query>" --model claude-opus-5 > advisor-opus-<topic>.md 2>&1 &
+codex exec -m gpt-5.6-sol -c model_reasoning_effort=high \
+  -o advisor-sol-<topic>.md "<query>" 2>advisor-sol-<topic>.trace &
+wait
+wc -c advisor-opus-<topic>.md advisor-sol-<topic>.md   # both must be non-empty
+```
