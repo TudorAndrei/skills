@@ -35,6 +35,17 @@
       }
     },
     {
+      "name": "batch-grill-me",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "path": "skills/in-progress/batch-grill-me",
+      "ref": "main",
+      "author": "mattpocock",
+      "homepage": "https://github.com/mattpocock/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
       "name": "codebase-design",
       "repo": "https://github.com/mattpocock/skills.git",
       "path": "skills/engineering/codebase-design",

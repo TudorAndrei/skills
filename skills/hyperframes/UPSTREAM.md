@@ -9,5 +9,5 @@ change `skills/sources.json` upstream and run `mise run update hyperframes`.
 - Homepage: https://github.com/heygen-com/hyperframes
 - Upstream path: `skills/hyperframes`
 - Tracked ref: `main`
-- Resolved commit: `b1edeebe39277caf8d96ff07213b519641daeb7f`
+- Resolved commit: `74fadf69c464c0e0658bd7a6b740986fc3aceba8`
 - License: Apache-2.0 (see `LICENSE.upstream`)

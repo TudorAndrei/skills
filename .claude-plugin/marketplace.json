@@ -41,6 +41,7 @@
         "./skills/agent-browser",
         "./skills/ask-matt",
         "./skills/ast-grep",
+        "./skills/batch-grill-me",
         "./skills/codebase-design",
         "./skills/data-oriented-design",
         "./skills/diagnosing-bugs",
