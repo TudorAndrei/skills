@@ -5,31 +5,37 @@ description: Reference for querying frontier advisor models from the terminal �
 
 # Advisor
 
-Documents the exact commands for running a one-shot query against the two advisor setups. Both run non-interactively, print the answer to stdout, and exit — suitable for scripting, piping, and parallel dispatch.
+Documents the exact commands for running a one-shot query against the two advisor setups. Both run non-interactively, write the answer to a file, and exit — suitable for scripting, piping, and parallel dispatch.
 
-Before running anything, read [Saving the output](#saving-the-output--do-this-every-time). Every command below must be paired with an explicit output path.
+**Every command in this file writes to a file. There is no correct invocation that does not.** Pick the output path before you launch — see [Saving the output](#saving-the-output--do-this-every-time) for why and for the naming convention. If you catch yourself running an advisor command without a path in it, stop and add one.
 
 ## Claude Code + Opus 5
 
 ```bash
-claude -p "<query>" --model claude-opus-5
+claude -p "<query>" --model claude-opus-5 > advisor-opus-<topic>.md 2>&1
 ```
 
-- `-p` / `--print` runs non-interactively and prints the result.
+Then read `advisor-opus-<topic>.md`. The file is the deliverable; the terminal shows nothing by design.
+
+- `-p` / `--print` runs non-interactively and prints the result to stdout, which the redirect captures.
 - `--model` accepts the alias `opus` or the full name `claude-opus-5`.
 - Runs in the current working directory; `cd` to the relevant repo first if the query needs codebase context.
-- Long or multi-line queries can be piped: `cat question.md | claude -p --model claude-opus-5`.
+- Long or multi-line queries can be piped: `cat question.md | claude -p --model claude-opus-5 > advisor-opus-<topic>.md 2>&1`.
 
 ## Codex + GPT-5.6 Sol at high reasoning
 
 ```bash
-codex exec -m gpt-5.6-sol -c model_reasoning_effort=high "<query>" 2>/dev/null
+codex exec -m gpt-5.6-sol -c model_reasoning_effort=high \
+  -o advisor-sol-<topic>.md "<query>" 2>advisor-sol-<topic>.trace
 ```
 
-- `codex exec` is the non-interactive mode; the prompt can also come from stdin (`cat question.md | codex exec -m gpt-5.6-sol -c model_reasoning_effort=high 2>/dev/null`).
-- Codex streams its runtime/progress trace to **stderr** and writes only the final answer to **stdout**. Append `2>/dev/null` to suppress the trace, or `2>codex.trace` to keep it in a file for debugging without cluttering the terminal. This is CLI-only and does not affect the interactive TUI — there is no config setting, the trace is simply the stderr stream. See the [non-interactive-mode docs](https://learn.chatgpt.com/docs/non-interactive-mode).
+Then read `advisor-sol-<topic>.md`. Nothing reaches the terminal: the answer goes to the `-o` file, the trace to the `.trace` file.
+
+- `-o` / `--output-last-message` writes the final answer straight to a file. This is the reason Codex never needs its stdout captured — always pass it.
+- Codex streams its runtime/progress trace to **stderr** and writes only the final answer to **stdout**. Send stderr to a `.trace` file rather than `/dev/null`: a discarded trace is the usual reason an advisor run looks like it returned nothing. This is CLI-only and does not affect the interactive TUI — there is no config setting, the trace is simply the stderr stream. See the [non-interactive-mode docs](https://learn.chatgpt.com/docs/non-interactive-mode).
+- `codex exec` is the non-interactive mode; the prompt can also come from stdin (`cat question.md | codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -o advisor-sol-<topic>.md 2>advisor-sol-<topic>.trace`).
 - `-c model_reasoning_effort=high` sets the reasoning level. `gpt-5.6-sol` also supports `low`, `medium`, `xhigh`, `max`, and `ultra`; `high` is the advisor default here.
-- Use `-C <dir>` to point Codex at a specific repo, and `-o <file>` / `--output-last-message` if only the final answer is needed.
+- Use `-C <dir>` to point Codex at a specific repo.
 - The default sandbox is read-only, which is the right posture for advisory queries.
 
 ## Saving the output — do this every time
@@ -39,24 +45,11 @@ Advisor answers are long and expensive to regenerate. **Decide the output path b
 Rules:
 
 1. **Pick the path first.** Use a scratchpad or repo-local directory and a descriptive name: `advisor-opus-<topic>.md`, `advisor-sol-<topic>.md`. Never `out.txt`.
-2. **Always redirect or tee.** Never run an advisor command with output going only to the terminal.
-
-   ```bash
-   # Claude Code — tee keeps it visible AND saved
-   claude -p "<query>" --model claude-opus-5 | tee advisor-opus-<topic>.md
-
-   # Codex — -o writes the final message straight to a file
-   codex exec -m gpt-5.6-sol -c model_reasoning_effort=high \
-     -o advisor-sol-<topic>.md "<query>" 2>/dev/null
-   ```
-
-3. **Background jobs must redirect, not tee.** A backgrounded job's stdout is not reliably captured; send it to a file explicitly.
-   ```bash
-   claude -p "<query>" --model claude-opus-5 > advisor-opus-<topic>.md 2>&1 &
-   ```
-4. **Verify the file after the run.** Check it exists and is non-empty (`wc -c`) before reporting the answer or killing the shell. An empty file usually means the command errored into stderr — rerun without `2>/dev/null` to see why.
+2. **All output goes to files — nothing to the terminal.** Redirect the answer, and redirect the trace too. Do not use `tee`: an advisor answer is far longer than a tool result will hold, so the terminal copy is truncated noise while the file is the real artifact.
+3. **Never `2>/dev/null`.** Send stderr to a `.trace` file instead. Discarding it is what turns a failed run into a silently empty file with no explanation.
+4. **Read the file, don't re-run.** After the command exits, `wc -c` both files, then read the answer file. An empty answer file means the run failed — the `.trace` file says why. Re-running to "see the output this time" pays for the same answer twice.
 5. **One file per advisor.** Do not append two advisors' answers to the same file; comparison requires them separate.
-6. **Keep the trace when debugging.** `2>advisor-sol-<topic>.trace` instead of `2>/dev/null` — the trace explains empty or truncated output.
+6. **Backgrounded runs follow the same rules.** A backgrounded job's stdout is not captured at all, so the redirect is not optional there — it is the only copy.
 
 ## Running both
 
