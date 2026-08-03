@@ -19,8 +19,7 @@ run = "skills add . --global --skill '*' --agent codex --agent claude-code --yes
 
 [tasks.add]
 description = "Vendor an external skill into skills/ as a pinned snapshot, e.g. `mise run add shadcn/improve`"
-usage = 'arg "<pkg>" help="owner/repo, owner/repo@skill, or a GitHub URL"'
-run = "./scripts/vendor-skill.sh {{arg(name='pkg')}}"
+run = "./scripts/vendor-skill.sh"
 
 [tasks.update]
 description = "Advance vendored skills to their tracked branch heads (previews and asks first)"
@@ -34,9 +33,9 @@ run = "./scripts/update-skills.sh --locked"
 description = "Offline check of the manifest, lock, snapshot hashes, licenses and catalog"
 run = "./scripts/verify-skills.sh"
 
-[tasks.catalog]
-description = "Regenerate .claude-plugin/marketplace.json from skills/ and the vendored lock"
-run = "./scripts/sync-catalog.sh"
+[tasks.hk-excludes]
+description = "Regenerate hk-vendored.pkl so hk's fixers skip the vendored snapshots"
+run = "./scripts/sync-hk-excludes.sh"
 
 [tasks.update-project]
 description = "Refresh project-only skills in .agents/skills via the skills CLI"

@@ -43,7 +43,7 @@ fi
 stage_root="$(mktemp -d)"
 trap 'rm -rf "$stage_root"' EXIT
 
-declare -a names=() commits=() hashes=() preview=()
+declare -a names=() commits=() hashes=() preview=() targets=()
 changed=0
 
 for name in "${requested[@]}"; do
@@ -98,14 +98,20 @@ for name in "${requested[@]}"; do
 
   # Whether work is needed is decided against the working tree, not the lock:
   # a hand-edited snapshot still matches its lock entry but must be replaced.
+  # A snapshot sitting anywhere but its publisher directory counts as work too.
+  target="$(skill_dir "$name")"
+  targets+=("$target")
+  on_disk="$(find_skill_dirs "$name" | paste -sd, -)"
   disk_hash=""
-  [ -d "$SKILLS_DIR/$name" ] && disk_hash="$(snapshot_hash "$SKILLS_DIR/$name")"
+  [ "$on_disk" = "$target" ] && disk_hash="$(snapshot_hash "$target")"
 
   if [ "$new_hash" = "$disk_hash" ]; then
     preview+=("  $name  unchanged (${FETCHED_COMMIT:0:12})")
   else
     changed=1
-    if [ -z "$disk_hash" ]; then
+    if [ -n "$on_disk" ] && [ -z "$disk_hash" ]; then
+      preview+=("  $name  ${FETCHED_COMMIT:0:12}  [-> $(skill_rel "$target")]")
+    elif [ -z "$disk_hash" ]; then
       preview+=("  $name  missing -> ${FETCHED_COMMIT:0:12}  [restored]")
     elif [ "$FETCHED_COMMIT" = "$old_commit" ]; then
       preview+=("  $name  ${FETCHED_COMMIT:0:12}  [local edits discarded]")
@@ -137,33 +143,52 @@ if [ "$locked" -eq 0 ] && [ "$assume_yes" -eq 0 ]; then
   fi
 fi
 
-declare -a backups=()
+declare -a backups=() stale_from=() stale_to=()
 restore() {
   local i
   for ((i = 0; i < ${#backups[@]}; i++)); do
     [ -n "${backups[$i]}" ] && [ -d "${backups[$i]}" ] || continue
-    rm -rf "${SKILLS_DIR:?}/${names[$i]}"
-    mv "${backups[$i]}" "$SKILLS_DIR/${names[$i]}"
+    rm -rf "${targets[$i]:?}"
+    mv "${backups[$i]}" "${targets[$i]}"
+  done
+  for ((i = 0; i < ${#stale_to[@]}; i++)); do
+    [ -d "${stale_to[$i]}" ] || continue
+    mkdir -p "$(dirname "${stale_from[$i]}")"
+    mv "${stale_to[$i]}" "${stale_from[$i]}"
   done
   die "swap failed, rolled back"
 }
 
 for ((i = 0; i < ${#names[@]}; i++)); do
   name="${names[$i]}"
-  if [ -d "$SKILLS_DIR/$name" ]; then
+  target="${targets[$i]}"
+
+  # A copy left at an old location - flat, or under a previous attribution.
+  while IFS= read -r old; do
+    [ -n "$old" ] && [ "$old" != "$target" ] || continue
+    aside="$stage_root/.stale-${#stale_to[@]}"
+    mv "$old" "$aside" || restore
+    stale_from+=("$old")
+    stale_to+=("$aside")
+    note "  moved $(skill_rel "$old") -> $(skill_rel "$target")"
+  done < <(find_skill_dirs "$name")
+
+  if [ -d "$target" ]; then
     backup="$stage_root/.bak-$name"
-    mv "$SKILLS_DIR/$name" "$backup" || restore
+    mv "$target" "$backup" || restore
     backups+=("$backup")
   else
     backups+=("")
   fi
-  mv "$stage_root/$name" "$SKILLS_DIR/$name" || restore
+  mkdir -p "$(dirname "$target")" || restore
+  mv "$stage_root/$name" "$target" || restore
 done
+
+find "$SKILLS_DIR" -mindepth 1 -maxdepth 1 -type d -empty -delete
 
 for ((i = 0; i < ${#names[@]}; i++)); do
   lock_put "${names[$i]}" "${commits[$i]}" "${hashes[$i]}"
 done
 
-sync_marketplace
 sync_hk_excludes
 note "updated ${#names[@]} snapshot(s); review 'git diff skills/sources.lock.json'"

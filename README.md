@@ -9,15 +9,31 @@ Install the whole set into your agents:
 npx skills add TudorAndrei/skills
 ```
 
-The installer presents two groups: **Essentials** (skills I maintain here) and
-**Third-Party** (pinned snapshots of skills maintained upstream).
-
 ## Layout & scope
 
-| Location                 | Scope                                    | Holds                                                      | Synced by           |
-| ------------------------ | ---------------------------------------- | ---------------------------------------------------------- | ------------------- |
-| `skills/<name>/`         | **global** (every project on my machine) | my authored skills **and** vendored external skills I like | `mise run sync`     |
-| `.agents/skills/<name>/` | **project-only** (this repo)             | skills used only while working in this repo                | not synced globally |
+| Location                     | Scope                                    | Holds                                       | Synced by           |
+| ---------------------------- | ---------------------------------------- | ------------------------------------------- | ------------------- |
+| `skills/<name>/`             | **global** (every project on my machine) | skills I author here                        | `mise run sync`     |
+| `skills/<publisher>/<name>/` | **global**                               | vendored snapshots, grouped by who wrote it | `mise run sync`     |
+| `.agents/skills/<name>/`     | **project-only** (this repo)             | skills used only while working in this repo | not synced globally |
+
+Vendored skills sit under their publisher, so a directory listing shows at a
+glance whose work is in here:
+
+```
+skills/
+  advisor/                  # authored here, stays flat
+  plan/
+  mattpocock/               # vendored, grouped by publisher
+    tdd/
+    grilling/
+  anthropics/frontend-design/
+  jakubkrehel/better-ui/
+```
+
+The publisher directory organizes the tree; it does not namespace the skill.
+Agents load a skill by the `name` in its frontmatter, so names still have to be
+globally unique — `mise run verify` fails if two directories share one.
 
 Project-only skills in `.agents/skills/` are tracked by the `skills` CLI
 lockfile (`skills-lock.json`) and refreshed with `mise run update-project`.
@@ -27,11 +43,16 @@ lockfile (`skills-lock.json`) and refreshed with `mise run update-project`.
 External skills are **committed into this repo** at a pinned commit, so the set
 is self-contained, reviewable and reproducible. Three files describe each one:
 
-| File                        | Role                                                           |
-| --------------------------- | -------------------------------------------------------------- |
-| `skills/sources.json`       | declared intent — repo, upstream path, tracked branch, license |
-| `skills/sources.lock.json`  | resolved state — pinned commit + deterministic snapshot hash   |
-| `skills/<name>/UPSTREAM.md` | generated provenance, alongside `LICENSE.upstream` attribution |
+| File                                    | Role                                                           |
+| --------------------------------------- | -------------------------------------------------------------- |
+| `skills/sources.json`                   | declared intent — repo, upstream path, tracked branch, license |
+| `skills/sources.lock.json`              | resolved state — pinned commit + deterministic snapshot hash   |
+| `skills/<publisher>/<name>/UPSTREAM.md` | generated provenance, alongside `LICENSE.upstream` attribution |
+
+The publisher directory is the slug of the manifest's `author` (the repo owner
+unless `--author` says otherwise), so re-attributing a skill relocates it on the
+next `mise run update`. The snapshot hash covers content and relative paths only,
+so moving a snapshot never invalidates its lock entry.
 
 Snapshot directories are generated. Don't hand-edit them — `mise run verify`
 notices, and the next update would discard the change anyway. To customize a
@@ -61,9 +82,9 @@ needs a look. Changing an overlay changes the snapshot, so re-lock it with
 mise run add <owner/repo[@skill]>   # vendor an external skill as a pinned snapshot
 mise run update [name...]           # advance to tracked branch heads (previews, asks once)
 mise run restore [name...]          # re-fetch at pinned commits, discarding local edits
-mise run verify                     # offline: manifest, lock, hashes, licenses, catalog
-mise run catalog                    # regenerate .claude-plugin/marketplace.json
-mise run sync                       # symlink everything in skills/ globally (Codex + Claude Code)
+mise run verify                     # offline: manifest, lock, hashes, locations, licenses
+mise run hk-excludes                # regenerate hk-vendored.pkl
+mise run sync                       # symlink every skill globally (Codex + Claude Code)
 mise run update-project             # refresh .agents/skills via the skills CLI
 
 npx skills add <owner/repo[@skill]> # add a remote skill for THIS repo only (.agents/skills)
@@ -72,21 +93,21 @@ npx skills add <owner/repo[@skill]> # add a remote skill for THIS repo only (.ag
 Examples:
 
 ```bash
-mise run add shadcn/improve                              # -> skills/improve
+mise run add shadcn/improve                              # -> skills/shadcn/improve
 mise run add heygen-com/hyperframes --skill gsap         # one skill from a multi-skill repo
+mise run add jakubkrehel/skills --skill better-ui,better-colors
 mise run add github/awesome-copilot@postgresql-optimization
 ```
 
 `add` resolves the tracked branch, locates the skill upstream, captures the
 license, writes provenance and records the commit and hash. Every operation
 stages and validates all snapshots before replacing anything, so a failure
-part-way through leaves the working tree untouched.
+part-way through leaves the working tree untouched. A copy of the same skill
+left at an older path — flat, or under a previous attribution — is moved in the
+same transaction, and `mise run verify` reports one that was moved by hand.
 
-## Catalog
+## Generated files
 
-`.claude-plugin/marketplace.json` is generated, never hand-edited. Group
-membership is derived: a skill with a lock entry is Third-Party, anything else
-with a `SKILL.md` is Essentials. `mise run verify` fails on drift.
-
-`hk-vendored.pkl` is generated from the same lock and keeps hk's formatters off
-the vendored snapshots — an auto-fix there would drift the hash on every commit.
+`hk-vendored.pkl` is generated from the lock and keeps hk's formatters off the
+vendored snapshots — an auto-fix there would drift the hash on every commit.
+`mise run verify` fails if it no longer matches the snapshot paths.

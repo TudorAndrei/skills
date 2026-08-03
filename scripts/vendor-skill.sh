@@ -22,9 +22,12 @@
 #   scripts/vendor-skill.sh github/awesome-copilot --skill postgresql-optimization
 #   scripts/vendor-skill.sh https://github.com/macton/nagent/blob/main/context/data-oriented-design.md
 #
+# Snapshots land in skills/<publisher>/<name>/, where the publisher is the slug
+# of --author (the repo owner by default).
+#
 # Fetches with git directly, stages and validates every requested skill, then
-# swaps them in with rollback. The manifest, lock and marketplace are written
-# only after every snapshot has staged successfully.
+# swaps them in with rollback. The manifest and lock are written only after every
+# snapshot has staged successfully.
 set -euo pipefail
 
 # shellcheck source=scripts/vendor-lib.sh
@@ -150,33 +153,59 @@ done
 
 [ "${#staged_names[@]}" -gt 0 ] || die "nothing staged"
 
-# Swap in, rolling every directory back if any single move fails.
-declare -a backups=()
+# Swap in, rolling every directory back if any single move fails. A copy of the
+# same skill sitting anywhere else - a flat legacy directory, or the previous
+# publisher after a re-attribution - is moved aside in the same transaction.
+publisher="$(publisher_slug "$author")"
+[ -n "$publisher" ] || die "cannot derive a publisher directory from author '$author'"
+
+declare -a targets=() backups=() stale_from=() stale_to=()
 restore() {
   local i
   for ((i = 0; i < ${#backups[@]}; i++)); do
     [ -n "${backups[$i]}" ] && [ -d "${backups[$i]}" ] || continue
-    rm -rf "${SKILLS_DIR:?}/${staged_names[$i]}"
-    mv "${backups[$i]}" "$SKILLS_DIR/${staged_names[$i]}"
+    rm -rf "${targets[$i]:?}"
+    mv "${backups[$i]}" "${targets[$i]}"
+  done
+  for ((i = 0; i < ${#stale_to[@]}; i++)); do
+    [ -d "${stale_to[$i]}" ] || continue
+    mkdir -p "$(dirname "${stale_from[$i]}")"
+    mv "${stale_to[$i]}" "${stale_from[$i]}"
   done
   die "swap failed, rolled back"
 }
 
 for ((i = 0; i < ${#staged_names[@]}; i++)); do
   name="${staged_names[$i]}"
-  if [ -d "$SKILLS_DIR/$name" ]; then
+  target="$SKILLS_DIR/$publisher/$name"
+  targets+=("$target")
+
+  while IFS= read -r old; do
+    [ -n "$old" ] && [ "$old" != "$target" ] || continue
+    aside="$stage_root/.stale-${#stale_to[@]}"
+    mv "$old" "$aside" || restore
+    stale_from+=("$old")
+    stale_to+=("$aside")
+    note "  moved $(skill_rel "$old") -> skills/$publisher/$name"
+  done < <(find_skill_dirs "$name")
+
+  if [ -d "$target" ]; then
     backup="$stage_root/.bak-$name"
-    mv "$SKILLS_DIR/$name" "$backup" || restore
+    mv "$target" "$backup" || restore
     backups+=("$backup")
   else
     backups+=("")
   fi
-  mv "$stage_root/$name" "$SKILLS_DIR/$name" || restore
+  mkdir -p "$(dirname "$target")" || restore
+  mv "$stage_root/$name" "$target" || restore
 done
+
+# A re-attribution can empty the old publisher directory.
+find "$SKILLS_DIR" -mindepth 1 -maxdepth 1 -type d -empty -delete
 
 for ((i = 0; i < ${#staged_names[@]}; i++)); do
   name="${staged_names[$i]}"
-  spdx="$(spdx_guess "$SKILLS_DIR/$name/LICENSE.upstream")"
+  spdx="$(spdx_guess "${targets[$i]}/LICENSE.upstream")"
   entry="$(jq -n \
     --arg name "$name" --arg repo "$url" --arg path "${staged_paths[$i]}" \
     --arg ref "$ref" --arg author "$author" --arg homepage "$homepage" \
@@ -185,9 +214,8 @@ for ((i = 0; i < ${#staged_names[@]}; i++)); do
        author: $author, homepage: $homepage, license: { spdx: $spdx } }')"
   manifest_put "$entry"
   lock_put "$name" "${staged_commits[$i]}" "${staged_hashes[$i]}"
-  note "vendored skills/$name  (${slug}@${staged_commits[$i]:0:12})"
+  note "vendored $(skill_rel "${targets[$i]}")  (${slug}@${staged_commits[$i]:0:12})"
 done
 
-sync_marketplace
 sync_hk_excludes
-note "updated skills/sources.json, skills/sources.lock.json and .claude-plugin/marketplace.json"
+note "updated skills/sources.json and skills/sources.lock.json"

@@ -3,10 +3,10 @@
 #
 # Usage: scripts/verify-skills.sh
 #
-# Verifies the manifest, the lock, every snapshot hash, provenance and license
-# attribution, and that .claude-plugin/marketplace.json matches what the current
-# directory and lock membership would generate. Touches the network never and
-# the working tree never; exits non-zero on any error.
+# Verifies the manifest, the lock, that every snapshot sits under its publisher
+# directory at the locked hash, and its provenance and license attribution.
+# Touches the network never and the working tree never; exits non-zero on any
+# error.
 set -euo pipefail
 
 # shellcheck source=scripts/vendor-lib.sh
@@ -47,10 +47,18 @@ declare -a declared=()
 while IFS= read -r n; do [ -n "$n" ] && declared+=("$n"); done < <(manifest_names)
 
 for name in ${declared[@]+"${declared[@]}"}; do
-  dir="$SKILLS_DIR/$name"
+  dir="$(skill_dir "$name")"
+
+  # A copy at any other path is a leftover the tooling would ignore, and the
+  # `skills` CLI would install it as a second skill of the same name.
+  while IFS= read -r other; do
+    [ -n "$other" ] && [ "$other" != "$dir" ] || continue
+    err "$name: a stray copy sits at $(skill_rel "$other"); it belongs at $(skill_rel "$dir")
+        (run 'mise run restore $name' to move it)"
+  done < <(find_skill_dirs "$name")
 
   if [ ! -d "$dir" ]; then
-    err "$name: declared in the manifest but skills/$name does not exist"
+    err "$name: declared in the manifest but $(skill_rel "$dir") does not exist"
     continue
   fi
   [ -f "$dir/SKILL.md" ] || err "$name: no SKILL.md"
@@ -94,14 +102,23 @@ while IFS= read -r n; do
   manifest_has "$n" || err "$n: present in the lock but not the manifest"
 done < <(jq -r '.skills | keys[]' "$LOCK")
 
-shopt -s nullglob
-# Every skill here, authored or vendored, has to be loadable by an agent.
-for skill in "$SKILLS_DIR"/*/SKILL.md; do
-  n="$(basename "$(dirname "$skill")")"
-  problem="$(description_problem "$skill" "$n")"
+# Every skill here, authored or vendored, has to be loadable by an agent, and
+# its name has to be unique - agents key on the frontmatter name, so a duplicate
+# under a second publisher shadows rather than coexists.
+declare -a seen_names=()
+while IFS= read -r dir; do
+  [ -n "$dir" ] || continue
+  n="$(basename "$dir")"
+  seen_names+=("$n")
+  problem="$(description_problem "$dir/SKILL.md" "$n")"
   [ -z "$problem" ] || err "$problem"
-done
-for marker in "$SKILLS_DIR"/*/.skill-source; do
+done < <(each_skill_dir)
+
+dupe_dirs="$(printf '%s\n' ${seen_names[@]+"${seen_names[@]}"} | LC_ALL=C sort | uniq -d)"
+[ -z "$dupe_dirs" ] || err "more than one skill directory shares a name: $(printf '%s' "$dupe_dirs" | tr '\n' ' ')"
+
+shopt -s nullglob
+for marker in "$SKILLS_DIR"/*/.skill-source "$SKILLS_DIR"/*/*/.skill-source; do
   err "$(basename "$(dirname "$marker")"): legacy .skill-source marker still present"
 done
 for overlay in "$ROOT"/vendor-overlays/*/; do
@@ -109,20 +126,19 @@ for overlay in "$ROOT"/vendor-overlays/*/; do
   manifest_has "$n" ||
     err "$n: vendor-overlays/$n exists but no skill of that name is vendored"
 done
-for snapshot in "$SKILLS_DIR"/*/.git; do
+for snapshot in "$SKILLS_DIR"/*/.git "$SKILLS_DIR"/*/*/.git; do
   err "$(basename "$(dirname "$snapshot")"): a .git directory was vendored into the snapshot"
 done
 shopt -u nullglob
 
-# --- marketplace -----------------------------------------------------------
+# --- hk excludes -----------------------------------------------------------
 
-if [ ! -f "$MARKETPLACE" ]; then
-  err "missing .claude-plugin/marketplace.json"
-elif ! diff -q <(render_marketplace) "$MARKETPLACE" >/dev/null; then
-  err "marketplace drift: .claude-plugin/marketplace.json does not match the current
-        skills/ and lock membership (run 'mise run catalog' to regenerate)"
+if ! diff -q <(sed -n '/^globs/,$p' "$ROOT/hk-vendored.pkl") \
+  <(printf 'globs: List<String> = List(\n%s\n)\n' "$(render_hk_globs | sed '$!s/$/,/')") >/dev/null; then
+  err "hk-vendored.pkl does not match the current snapshot paths
+        (run 'mise run hk-excludes' to regenerate)"
 else
-  ok "marketplace catalog matches skills/ and lock membership"
+  ok "hk-vendored.pkl matches the vendored snapshot paths"
 fi
 
 printf '\n%d skill(s) declared, %d error(s), %d warning(s)\n' \

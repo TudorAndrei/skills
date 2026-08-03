@@ -2,9 +2,14 @@
 # Shared helpers for vendoring external skills into skills/.
 #
 # Model (ported from gabimoncha/skills):
-#   skills/sources.json       declared intent  - repo, upstream path, tracked ref, license
-#   skills/sources.lock.json  resolved state   - pinned commit + deterministic snapshot hash
-#   skills/<name>/            generated snapshot + UPSTREAM.md + LICENSE.upstream
+#   skills/sources.json           declared intent  - repo, upstream path, tracked ref, license
+#   skills/sources.lock.json      resolved state   - pinned commit + snapshot hash
+#   skills/<publisher>/<name>/    generated snapshot + UPSTREAM.md + LICENSE.upstream
+#
+# Vendored snapshots are grouped by publisher; skills authored here stay flat at
+# skills/<name>/. Skill names are still globally unique - the publisher directory
+# organizes the tree, it does not namespace the skill, since agents load skills
+# by the `name` in their frontmatter.
 #
 # Vendoring talks to git directly; the `skills` CLI is only used to install and
 # sync what lands here. Sourced by vendor-skill.sh, update-skills.sh and
@@ -14,11 +19,6 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SKILLS_DIR="$ROOT/skills"
 MANIFEST="$SKILLS_DIR/sources.json"
 LOCK="$SKILLS_DIR/sources.lock.json"
-MARKETPLACE="$ROOT/.claude-plugin/marketplace.json"
-
-MARKETPLACE_OWNER="TudorAndrei"
-MARKETPLACE_NAME="tudorandrei-skills"
-MARKETPLACE_DESC="Skills I author, plus pinned snapshots of external skills I use."
 
 die() {
   printf 'error: %s\n' "$*" >&2
@@ -67,6 +67,62 @@ lock_put() {
     | .skills |= (to_entries | sort_by(.key) | from_entries)
   ' "$LOCK" >"$tmp"
   mv "$tmp" "$LOCK"
+}
+
+# --- layout ----------------------------------------------------------------
+
+# publisher_slug <author> - directory-safe form of an attribution string, so a
+# manifest author of "Matt Pocock" and one of "mattpocock" cannot land in two
+# different directories.
+publisher_slug() {
+  printf '%s' "$1" | tr '[:upper:]' '[:lower:]' |
+    sed -e 's/[^a-z0-9._-]\{1,\}/-/g' -e 's/^-*//' -e 's/-*$//'
+}
+
+# skill_publisher <name> - publisher directory for a vendored skill, empty for a
+# skill authored here. Falls back to the repo owner when the manifest records no
+# author, so an entry written before --author existed still resolves.
+skill_publisher() {
+  local author
+  manifest_has "$1" 2>/dev/null || return 0
+  author="$(manifest_field "$1" author)"
+  [ -n "$author" ] || author="$(repo_slug "$(manifest_field "$1" repo)")"
+  author="${author%%/*}"
+  publisher_slug "$author"
+}
+
+# skill_dir <name> - where the snapshot for <name> belongs.
+skill_dir() {
+  local pub
+  pub="$(skill_publisher "$1")"
+  if [ -n "$pub" ]; then printf '%s/%s/%s' "$SKILLS_DIR" "$pub" "$1"; else printf '%s/%s' "$SKILLS_DIR" "$1"; fi
+}
+
+# skill_rel <dir> - path relative to the repo root, for messages.
+skill_rel() { printf '%s' "${1#"$ROOT"/}"; }
+
+# find_skill_dirs <name> - every directory currently holding a skill of this
+# name, flat or under a publisher. More than one means a stale copy is left over
+# from a rename, which the callers clean up.
+find_skill_dirs() {
+  local d
+  shopt -s nullglob
+  for d in "$SKILLS_DIR/$1" "$SKILLS_DIR"/*/"$1"; do
+    [ -f "$d/SKILL.md" ] && printf '%s\n' "$d"
+  done
+  shopt -u nullglob
+}
+
+# each_skill_dir - every skill directory in the tree, authored or vendored, one
+# per line. A publisher directory holds no SKILL.md of its own, so the two globs
+# cannot both match the same path.
+each_skill_dir() {
+  local d
+  shopt -s nullglob
+  for d in "$SKILLS_DIR"/*/ "$SKILLS_DIR"/*/*/; do
+    [ -f "${d}SKILL.md" ] && printf '%s\n' "${d%/}"
+  done
+  shopt -u nullglob
 }
 
 # --- hashing ---------------------------------------------------------------
@@ -414,65 +470,15 @@ write_provenance() {
   } >"$dest/UPSTREAM.md"
 }
 
-# --- marketplace -----------------------------------------------------------
+# --- hk excludes -----------------------------------------------------------
 
-# json_array - newline-separated stdin -> sorted JSON string array
-json_array() {
-  LC_ALL=C sort | jq -R . | jq -s 'map(select(length > 0))'
-}
-
-# render_marketplace - derive the catalog from directory + lock membership.
-# Vendored = has a lock entry; authored = everything else with a SKILL.md.
-render_marketplace() {
-  local authored vendored d name
-  authored=""
-  vendored=""
-  for d in "$SKILLS_DIR"/*/; do
-    [ -f "$d/SKILL.md" ] || continue
-    name="$(basename "$d")"
-    if jq -e --arg n "$name" '.skills | has($n)' "$LOCK" >/dev/null; then
-      vendored+="./skills/$name"$'\n'
-    else
-      authored+="./skills/$name"$'\n'
-    fi
-  done
-  jq -n \
-    --arg name "$MARKETPLACE_NAME" \
-    --arg owner "$MARKETPLACE_OWNER" \
-    --arg desc "$MARKETPLACE_DESC" \
-    --argjson authored "$(printf '%s' "$authored" | json_array)" \
-    --argjson vendored "$(printf '%s' "$vendored" | json_array)" \
-    '{
-      name: $name,
-      owner: { name: $owner },
-      description: $desc,
-      plugins: [
-        {
-          name: "essentials",
-          displayName: "Essentials",
-          source: "./",
-          description: "Skills I author and maintain here.",
-          strict: false,
-          skills: $authored
-        },
-        {
-          name: "third-party",
-          displayName: "Third-Party",
-          source: "./",
-          description: "Pinned snapshots of skills maintained upstream.",
-          strict: false,
-          skills: $vendored
-        }
-      ]
-    }'
-}
-
-sync_marketplace() {
-  mkdir -p "$(dirname "$MARKETPLACE")"
-  local tmp
-  tmp="$(mktemp)"
-  render_marketplace >"$tmp"
-  mv "$tmp" "$MARKETPLACE"
+# render_hk_globs - one quoted glob per vendored snapshot, at its publisher path.
+render_hk_globs() {
+  local name
+  while IFS= read -r name; do
+    [ -n "$name" ] || continue
+    printf '    "%s/**"\n' "$(skill_rel "$(skill_dir "$name")")"
+  done < <(jq -r '.skills | keys[]' "$LOCK") | LC_ALL=C sort
 }
 
 # sync_hk_excludes - keep hk's linters off the hash-verified snapshots. An
@@ -481,9 +487,10 @@ sync_marketplace() {
 sync_hk_excludes() {
   local tmp names
   tmp="$(mktemp)"
-  names="$(jq -r '.skills | keys | map("    \"skills/\(.)/**\"") | join(",\n")' "$LOCK")"
+  # a trailing comma on every line but the last
+  names="$(render_hk_globs | sed '$!s/$/,/')"
   {
-    printf '// Generated by scripts/sync-catalog.sh - do not edit by hand.\n//\n'
+    printf '// Generated by scripts/sync-hk-excludes.sh - do not edit by hand.\n//\n'
     printf '// Vendored snapshots in skills/ are hash-verified against skills/sources.lock.json.\n'
     printf '// Linters must not rewrite them: an auto-fix would drift the hash permanently and\n'
     printf '// be discarded by the next update anyway. Customize via vendor-overlays/ instead.\n'
