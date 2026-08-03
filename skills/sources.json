@@ -46,6 +46,83 @@
       }
     },
     {
+      "name": "better-accessibility",
+      "repo": "https://github.com/jakubkrehel/skills.git",
+      "path": "skills/better-accessibility",
+      "ref": "main",
+      "author": "jakubkrehel",
+      "homepage": "https://github.com/jakubkrehel/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "better-colors",
+      "repo": "https://github.com/jakubkrehel/skills.git",
+      "path": "skills/better-colors",
+      "ref": "main",
+      "author": "jakubkrehel",
+      "homepage": "https://github.com/jakubkrehel/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "better-interface",
+      "repo": "https://github.com/jakubkrehel/skills.git",
+      "path": "skills/better-interface",
+      "ref": "main",
+      "author": "jakubkrehel",
+      "homepage": "https://github.com/jakubkrehel/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "better-layout",
+      "repo": "https://github.com/jakubkrehel/skills.git",
+      "path": "skills/better-layout",
+      "ref": "main",
+      "author": "jakubkrehel",
+      "homepage": "https://github.com/jakubkrehel/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "better-typography",
+      "repo": "https://github.com/jakubkrehel/skills.git",
+      "path": "skills/better-typography",
+      "ref": "main",
+      "author": "jakubkrehel",
+      "homepage": "https://github.com/jakubkrehel/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "better-ui",
+      "repo": "https://github.com/jakubkrehel/skills.git",
+      "path": "skills/better-ui",
+      "ref": "main",
+      "author": "jakubkrehel",
+      "homepage": "https://github.com/jakubkrehel/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
+      "name": "better-writing",
+      "repo": "https://github.com/jakubkrehel/skills.git",
+      "path": "skills/better-writing",
+      "ref": "main",
+      "author": "jakubkrehel",
+      "homepage": "https://github.com/jakubkrehel/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
       "name": "codebase-design",
       "repo": "https://github.com/mattpocock/skills.git",
       "path": "skills/engineering/codebase-design",

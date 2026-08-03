@@ -17,6 +17,34 @@
       "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
       "hash": "38d7ecb813f54eeea6493027fb833e387f48c59c3ccceb83d7e8495770e77fa7"
     },
+    "better-accessibility": {
+      "commit": "a67333399dabbc71d7778962cb9c4fb9b86a00d0",
+      "hash": "5f7d0773b582b1962c6e4fbcdc8bb0f625a6712176c91632b7c2fb74e587f0e0"
+    },
+    "better-colors": {
+      "commit": "a67333399dabbc71d7778962cb9c4fb9b86a00d0",
+      "hash": "402e137755ddda2aeab1fe2b3d65d55e4bc6feee9d3f85f1dda4edfde4d77b99"
+    },
+    "better-interface": {
+      "commit": "a67333399dabbc71d7778962cb9c4fb9b86a00d0",
+      "hash": "0b6d4733cd5feae7bd65b2632ab9fe4b344a860f37497b599d5149a5b11b8f5d"
+    },
+    "better-layout": {
+      "commit": "a67333399dabbc71d7778962cb9c4fb9b86a00d0",
+      "hash": "9af34b35d5543d72b3a557c2e303508a7df5235510801d4644bf54f93e9549c6"
+    },
+    "better-typography": {
+      "commit": "a67333399dabbc71d7778962cb9c4fb9b86a00d0",
+      "hash": "e6276fb88550ef8e95474be2ac04e7667da51ffa9373a98e6b8b0e9f7bb83744"
+    },
+    "better-ui": {
+      "commit": "a67333399dabbc71d7778962cb9c4fb9b86a00d0",
+      "hash": "2c2d5e040d986791b7867d2080075c23c582c90472e342d0c8d66f124354d7e2"
+    },
+    "better-writing": {
+      "commit": "a67333399dabbc71d7778962cb9c4fb9b86a00d0",
+      "hash": "2efba36b7ec836876dc66900a132f4e86a4c4a603c4f5202d8446f343a9c9d66"
+    },
     "codebase-design": {
       "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
       "hash": "90180b4730f2598a19b4805cd12b09506f9eef054c9649d2ea3633b2f7399fb9"
