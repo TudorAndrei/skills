@@ -19,7 +19,7 @@ For detailed implementation patterns and the full article-derived topic map, rea
 4. Update sitemap generation so every intended indexable localized page is listed.
 5. Generate canonical and `hreflang` metadata per URL variant. Each localized page should be self-canonical and list alternates, including `x-default`.
 6. Add strategic robots rules for pages that should not compete with primary search pages.
-7. Strengthen authority with relevant internal links, blog links, and cross-product backlinks where they are natural and useful.
+7. Strengthen authority with relevant internal links, blog links, and cross-product backlinks where they are natural and useful. To audit a backlink profile without a paid subscription, the [Common Crawl hyperlink graph](https://gist.github.com/retlehs/cf0ac6c74476e766fba2f14076fff501) lists inbound links for free — but price it honestly before proposing it: the script needs `duckdb` and downloads the quarterly domain edge list (tens of GB gzipped, cached locally) to answer one query. It is **domain-level only** — no source URL, no anchor text, no first-seen date — and the release cadence is quarterly, so it cannot show a recent link. That makes it a one-off baseline or competitor link-source snapshot, not a monitoring loop, and it is the wrong tool when the question is "did our campaign earn links this month." Confirm the download is acceptable before running it.
 8. Add measurement before or with rollout: Search Console impressions/clicks, indexed URL coverage, organic signups, attribution survey options, and AI-recommendation referral signals where relevant.
 
 ## Output Style

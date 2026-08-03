@@ -205,6 +205,21 @@ For detailed templates for each block type, see [references/content-patterns.md]
 - Numbered lists beat paragraphs for process content
 - Each paragraph should convey one clear idea
 
+**Semantic HTML is the carrier.** `<article>`, `<nav>`, `<section>`, `<main>`, `<header>`, `<footer>` express intent and hierarchy; a stack of `<div>`s styled into looking right is semantically dead — an extractor, a screen reader, or a buying agent cannot tell a product card from a call to action. Structure the block first, then style it:
+
+```html
+<article class="product-card">
+  <header>
+    <p class="product-brand">ACME Widget</p>
+    <h2 class="product-name">Blue Widget</h2>
+  </header>
+  <p class="product-description">Lightweight, fast, dependable.</p>
+  <footer><span class="product-price">$49.99</span></footer>
+</article>
+```
+
+Semantic markup guarantees nothing on its own, but it's the foundation systems can use. Build-hashed class names (`.sc-a12bc`, `.jsx-392hf`) compound the problem — they change every build, so analytics selectors, e2e tests, and any scraper you or a partner points at the page break silently. Source: Jono Alderson, [Why Semantic HTML Still Matters](https://www.jonoalderson.com/conjecture/why-semantic-html-still-matters/).
+
 ### Pillar 2: Authority — Make Content Citable
 
 AI systems prefer sources they can trust. Build citation-worthiness.
@@ -332,6 +347,8 @@ If you don't have one yet, add an `llms.txt` that gives AI systems a quick overv
 
 Google [introduced OKF](https://cloud.google.com/blog/products/data-analytics/how-the-open-knowledge-format-can-improve-data-sharing) in June 2026 — a markdown spec for representing site content as a directory of cross-linked files with YAML frontmatter, agent-readable without scraping. Built primarily for data-team catalog metadata; the site-readable-by-agents repurposing was popularized by Suganthan Mohanadasan. No confirmed AI-search ranking signal today — treat it as protocol-layer registration like early schema.org. **For the full breakdown, implementation paths (free generator, WordPress plugin, by-hand), hosting guidance, and when to skip, see [references/okf.md](okf.md).**
 
+**Generating them at build time** — [AgentMarkup](https://agentmarkup.dev/) (`@agentmarkup/*` adapters for Next.js, Vite, Astro, Nuxt, plus a framework-agnostic CLI that runs over any built static output directory) emits `llms.txt` / `llms-full.txt`, injects JSON-LD from presets or custom schemas, writes the AI-crawler rules (GPTBot, ClaudeBot, PerplexityBot, Google-Extended, CCBot), and optionally publishes markdown mirrors of HTML pages for fetch-based agents. It validates at build time — missing required fields, incomplete schema.org types, thin client-shell HTML — so the failure surfaces in CI rather than in an AI answer that skipped you. Zero runtime cost: nothing ships to the browser. Prefer it over hand-maintained files on any site whose content changes, since hand-written `llms.txt` and pricing files go stale silently.
+
 ### Schema Markup for AI
 
 Structured data helps AI systems understand your content. Key schemas:
@@ -431,6 +448,8 @@ Monthly manual check:
 2. Run each through ChatGPT, Perplexity, and Google
 3. Record: Are you cited? Who is? What page?
 4. Log in a spreadsheet, track month-over-month
+
+To run that loop at more than 20 queries, [`advertools`](https://advertools.readthedocs.io)'s `serp_claude` module queries LLM/AI search results in bulk and returns them as a dataframe — the same citation-tracking the paid tools above sell, at API cost, and diffable across months in version control. Its `serp` module does the same for Google and YouTube results, so you can hold traditional rankings and AI citations side by side for the same query set.
 
 ### Search Console expectations
 

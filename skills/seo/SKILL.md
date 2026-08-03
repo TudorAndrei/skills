@@ -14,7 +14,7 @@ description: >-
   well-known URIs, or agent readiness.
 license: MIT and CC-BY-4.0 sources; local skill instructions MIT-compatible
 metadata:
-  version: "4.0.0"
+  version: "4.1.0"
   source: https://github.com/coreyhaines31/marketingskills
   source_license: MIT
 ---
@@ -92,8 +92,17 @@ covers the full diagnostic order.
 Schema (`Article`, `FAQPage`, `HowTo`, `Product`, `Organization`, `ItemList`, `Review`) gives search
 engines and AI systems machine-readable context and lifts AI visibility on non-Google engines.
 Google treats it as recommended, not required, for generative search. **Validation caveat:**
-`web_fetch`/`curl` strip `<script>` tags and cannot see JS-injected JSON-LD — use the browser tool,
+`web_fetch`/`curl` strip `<script>` tags and cannot see JS-injected JSON-LD — use `agent-browser`,
 the Rich Results Test, or a Screaming Frog render instead (details in [references/audit.md](references/audit.md)).
+
+### Measure the rendered page, don't eyeball it
+
+Anything a tool can decide, let it decide, and spend your judgment on what's left:
+
+- `agent-browser a11y <url> --json` — axe-core WCAG violations with selectors and fix links, per template
+  ([references/website-checklist.md](references/website-checklist.md) covers what it settles and what stays manual).
+- [AgentMarkup](https://agentmarkup.dev/) — build-time `llms.txt`, JSON-LD, AI-crawler rules, and markdown mirrors,
+  validated in CI ([references/ai-search.md](references/ai-search.md)).
 
 ### What NOT to do (all workstreams)
 

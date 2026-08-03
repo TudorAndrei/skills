@@ -434,7 +434,12 @@ Same format as above
 - Mobile-Friendly Test
 - Schema Validator
 
-> **Note on schema detection:** `web_fetch` strips `<script>` tags (including JSON-LD) and cannot detect JS-injected schema. Use the browser tool, Rich Results Test, or Screaming Frog instead — they render JavaScript and capture dynamically-injected markup. See the Schema Markup Detection Limitation section above.
+**Runnable from the terminal** — prefer these when you have the codebase or shell access, since they produce evidence you can diff across runs rather than a screenshot:
+
+- [`advertools`](https://advertools.readthedocs.io) (Python) — `sitemap_to_df()` flattens XML sitemaps, sitemap indexes, and news/video sitemaps into a dataframe; `logs_to_df()` parses server logs; the `robotstxt` module bulk-tests URLs against `robots.txt`; the `spider` module crawls with custom CSS/XPath extraction. The sitemap and log work is what a browser tool cannot do — it answers "which URLs are actually in the sitemap" and "which of them has Googlebot actually fetched." Its `serp_claude` module also measures AI-search visibility at scale (see [ai-search.md](ai-search.md)).
+- `agent-browser a11y <url> --json` — axe-core WCAG violations against the rendered page (see [website-checklist.md](website-checklist.md)).
+
+> **Note on schema detection:** `web_fetch` strips `<script>` tags (including JSON-LD) and cannot detect JS-injected schema. Use `agent-browser`, Rich Results Test, or Screaming Frog instead — they render JavaScript and capture dynamically-injected markup. See the Schema Markup Detection Limitation section above.
 
 **Paid Tools** (if available)
 
