@@ -85,6 +85,10 @@
       "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
       "hash": "f043f1a84dd4e6f5ad91ad66800c04404dc16b2fb8457a07fffbea0aab3b1927"
     },
+    "herdr": {
+      "commit": "10974c822d607f03e20e9741ec027910f0c1f93a",
+      "hash": "b2abdc7ce4c9104a733e0bdbaf0bb02a6ca606bcd9aab7f12189d5fdccbf6edf"
+    },
     "hyperframes": {
       "commit": "74fadf69c464c0e0658bd7a6b740986fc3aceba8",
       "hash": "8d2936a486c006a3131da6bea91efe5b628d81d9f61292707b76e6f1a8a62256"

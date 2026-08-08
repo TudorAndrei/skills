@@ -233,6 +233,17 @@
       }
     },
     {
+      "name": "herdr",
+      "repo": "https://github.com/herdrdev/herdr.git",
+      "path": "skills/herdr",
+      "ref": "master",
+      "author": "herdrdev",
+      "homepage": "https://github.com/herdrdev/herdr",
+      "license": {
+        "spdx": "Apache-2.0"
+      }
+    },
+    {
       "name": "hyperframes",
       "repo": "https://github.com/heygen-com/hyperframes.git",
       "path": "skills/hyperframes",
