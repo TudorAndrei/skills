@@ -2,6 +2,11 @@
 name: shrink-git-repo
 description: Shrink a bloated git repository by deleting stale branches and stripping large or binary blobs out of history with git-filter-repo. Use whenever a repo is huge or slow to clone, `.git` has ballooned, someone committed large binaries / build caches / model weights / videos that are still bloating history, there are hundreds of stale branches, or the user asks to reduce repo size, clean up git history, or remove a file from all past commits. This rewrites history destructively, so it always backs up first and confirms before deleting.
 compatibility: Requires git and git-filter-repo (install via `pipx install git-filter-repo`, `pip install git-filter-repo`, or `brew install git-filter-repo`). For deleting remote branches / archiving on GitHub, the `gh` CLI is convenient but not required.
+metadata:
+  tools:
+    - source: mise
+      command: git-filter-repo
+      spec: pipx:git-filter-repo@2.47.0
 ---
 
 # Shrink a Git Repository

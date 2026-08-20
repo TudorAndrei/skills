@@ -1,6 +1,11 @@
 ---
 name: typst
 description: Create, edit, migrate, review, debug, and compile Typst (.typ) documents and templates. Use when working with Typst markup, math, citations, bibliography files, figures, tables, page layout, set/show rules, packages, Typst Universe templates, CLI commands such as typst compile/watch/fonts/init/eval, or LaTeX-to-Typst style conversion.
+metadata:
+  tools:
+    - source: mise
+      command: typst
+      spec: typst@0.15.1
 ---
 
 # Typst

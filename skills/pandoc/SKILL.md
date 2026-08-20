@@ -1,6 +1,11 @@
 ---
 name: pandoc
 description: Create, convert, template, review, and debug Pandoc-based business documents and presentation workflows. Use when working with Pandoc, Markdown-to-PDF, LaTeX PDF output, Beamer slide decks, official documents, DOCX/HTML/EPUB outputs, citations, CSL files, bibliography files, reference DOCX files, Pandoc defaults YAML, Pandoc templates, filters, or CLI commands such as pandoc --defaults, --pdf-engine, -t beamer, --citeproc, -D, and -o.
+metadata:
+  tools:
+    - source: mise
+      command: pandoc
+      spec: pandoc@3.10.2
 ---
 
 # Pandoc

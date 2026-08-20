@@ -1,6 +1,14 @@
 ---
 name: advisor
 description: Reference for querying frontier advisor models from the terminal — Claude Code with the Opus 5 model and Codex with gpt-5.6-sol at high reasoning. Use whenever the user wants to ask an advisor model, get a second opinion from Claude Code or Codex, run a one-shot query against opus or gpt-5.6-sol, or mentions "advisor", "ask opus", "ask sol", or consulting an external frontier model on a question.
+metadata:
+  tools:
+    - source: mise
+      command: claude
+      spec: github:anthropics/claude-code@2.1.237
+    - source: mise
+      command: codex
+      spec: npm:@openai/codex@0.148.0
 ---
 
 # Advisor

@@ -1,6 +1,14 @@
 ---
 name: worktrunk-init
 description: Initialize worktrunk (https://worktrunk.dev) in a repository — project hooks in .config/wt.toml plus a tmux bridge that opens one session per worktree. Use when the user asks to set up worktrunk or `wt`, wants a tmux session spawned per worktree or per branch, wants each git worktree to get its own env files, ports, services, or database, or wants parallel-agent worktrees that clean themselves up.
+metadata:
+  tools:
+    - source: mise
+      command: wt
+      spec: worktrunk@0.74.0
+    - source: mise
+      command: tmux
+      spec: tmux@3.7b
 ---
 
 # worktrunk-init

@@ -17,6 +17,10 @@ metadata:
   version: "4.1.0"
   source: https://github.com/coreyhaines31/marketingskills
   source_license: MIT
+  tools:
+    - source: mise
+      command: agent-browser
+      spec: npm:agent-browser@0.34.0
 ---
 
 # SEO
