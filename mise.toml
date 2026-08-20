@@ -6,6 +6,7 @@ hk = "latest"
 pkl = "latest"
 gitleaks = "latest"
 "npm:oxfmt" = "latest"
+yq = "4.53.6"
 
 [env]
 HK_MISE = 1
@@ -15,7 +16,15 @@ postinstall = "hk install --mise"
 
 [tasks.sync]
 description = "Symlink everything in skills/ globally for Codex and Claude Code"
-run = "skills add . --global --skill '*' --agent codex --agent claude-code --yes --full-depth"
+run = [
+  "skills add . --global --skill '*' --agent codex --agent claude-code --yes --full-depth",
+  "./scripts/install-skill-tools.sh --check",
+]
+
+[tasks.install-skill-tools]
+description = "Install the CLI tools declared by skills into the global mise config"
+confirm = "Add or update the declared skill tools in your global mise config?"
+run = "./scripts/install-skill-tools.sh"
 
 [tasks.add]
 description = "Vendor an external skill into skills/ as a pinned snapshot, e.g. `mise run add shadcn/improve`"
@@ -24,6 +33,10 @@ run = "./scripts/vendor-skill.sh"
 [tasks.update]
 description = "Advance vendored skills to their tracked branch heads (previews and asks first)"
 run = "./scripts/update-skills.sh"
+
+[tasks.relock]
+description = "Keep vendored commits pinned and refresh hashes after overlay changes"
+run = "./scripts/update-skills.sh --relock"
 
 [tasks.restore]
 description = "Re-fetch vendored skills at their pinned commits, discarding local edits"

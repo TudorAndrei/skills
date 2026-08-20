@@ -66,25 +66,50 @@ sync what lands here.
 A local change to a vendored skill lives in `vendor-overlays/<name>/` and is
 re-applied on top of every fetch, so it survives updates:
 
-```
-vendor-overlays/ast-grep/files/mise.toml       # copied over the snapshot
-vendor-overlays/ast-grep/setup-block.patch     # applied with `patch -p1`
+```text
+vendor-overlays/ast-grep/tool-metadata.patch   # applied with patch -p1
+vendor-overlays/<name>/files/<path>            # copied over the snapshot
 ```
 
 Patches apply first, then `files/`. A patch that stops applying is a hard error
 rather than a silent drop — upstream moved under the customization and that
-needs a look. Changing an overlay changes the snapshot, so re-lock it with
-`mise run update <name>`.
+needs a look. Changing an overlay changes the snapshot. Use
+`mise run relock <name>` to keep the pinned upstream commit and refresh the
+snapshot hash. Use `mise run update <name>` when you also want a new upstream
+commit.
+
+## Skill tools
+
+A skill that owns an external CLI declares it in `SKILL.md` frontmatter:
+
+```yaml
+metadata:
+  tools:
+    - source: mise
+      command: ast-grep
+      spec: ast-grep@0.45.1
+```
+
+`command` is the executable that the skill runs. `spec` is the complete,
+fixed-version mise specification. Do not declare the target project's runtime,
+package manager, database, system service, or an optional alternative.
+
+Run `mise run install-skill-tools` to collect these entries, reject version
+conflicts, and add the tools to the global mise config after one confirmation.
+`mise run sync` does not change the global config. It reports missing declared
+tools and recommends the install task.
 
 ## Tasks
 
 ```bash
 mise run add <owner/repo[@skill]>   # vendor an external skill as a pinned snapshot
 mise run update [name...]           # advance to tracked branch heads (previews, asks once)
+mise run relock [name...]           # keep pinned commits; refresh hashes after overlay changes
 mise run restore [name...]          # re-fetch at pinned commits, discarding local edits
 mise run verify                     # offline: manifest, lock, hashes, locations, licenses
 mise run hk-excludes                # regenerate hk-vendored.pkl
 mise run sync                       # symlink every skill globally (Codex + Claude Code)
+mise run install-skill-tools        # install declared skill CLIs through the global mise config
 mise run update-project             # refresh .agents/skills via the skills CLI
 
 npx skills add <owner/repo[@skill]> # add a remote skill for THIS repo only (.agents/skills)

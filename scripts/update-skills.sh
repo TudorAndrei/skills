@@ -4,10 +4,13 @@
 # Usage:
 #   scripts/update-skills.sh [names...] [--yes]   advance to each tracked ref head
 #   scripts/update-skills.sh --locked [names...]  reproduce the pinned commits
+#   scripts/update-skills.sh --relock [names...]  keep pinned commits and accept overlay changes
 #
 # Advancing shows one preview of every commit and hash change and asks once.
 # --locked never advances: it re-fetches the commit already in the lock and
 # fails if the result does not reproduce the locked hash.
+# --relock also keeps the pinned commit, but it updates the hash after a reviewed
+# overlay change.
 #
 # Every requested snapshot is staged and validated before anything is replaced,
 # so a failure part-way through leaves the working tree untouched.
@@ -19,18 +22,22 @@ set -euo pipefail
 ensure_files
 
 locked=0
+relock=0
 assume_yes=0
 declare -a requested=()
 
 while [ $# -gt 0 ]; do
   case "$1" in
     --locked) locked=1 ;;
+    --relock) relock=1 ;;
     --yes | -y) assume_yes=1 ;;
     -*) die "unknown option: $1" ;;
     *) requested+=("$1") ;;
   esac
   shift
 done
+
+[ "$locked" -eq 0 ] || [ "$relock" -eq 0 ] || die "--locked and --relock cannot be used together"
 
 if [ "${#requested[@]}" -eq 0 ]; then
   while IFS= read -r n; do [ -n "$n" ] && requested+=("$n"); done < <(manifest_names)
@@ -57,7 +64,7 @@ for name in "${requested[@]}"; do
   old_commit="$(locked_commit "$name")"
   old_hash="$(locked_hash "$name")"
 
-  if [ "$locked" -eq 1 ]; then
+  if [ "$locked" -eq 1 ] || [ "$relock" -eq 1 ]; then
     [ -n "$old_commit" ] || die "$name has no locked commit to reproduce"
     target="$old_commit"
   else
@@ -85,7 +92,7 @@ for name in "${requested[@]}"; do
   if [ "$locked" -eq 1 ] && [ "$new_hash" != "$old_hash" ]; then
     hint="upstream may have been force-pushed, or the fetch is not deterministic"
     [ -d "$ROOT/vendor-overlays/$name" ] &&
-      hint="vendor-overlays/$name changed since the lock was written - run 'mise run update $name' to re-lock"
+      hint="vendor-overlays/$name changed since the lock was written - run 'mise run relock $name'"
     die "$name: locked commit ${old_commit:0:12} does not reproduce the locked hash
   expected $old_hash
   found    $new_hash
@@ -105,11 +112,14 @@ for name in "${requested[@]}"; do
   disk_hash=""
   [ "$on_disk" = "$target" ] && disk_hash="$(snapshot_hash "$target")"
 
-  if [ "$new_hash" = "$disk_hash" ]; then
+  if [ "$new_hash" = "$disk_hash" ] &&
+    { [ "$relock" -eq 0 ] || [ "$new_hash" = "$old_hash" ]; }; then
     preview+=("  $name  unchanged (${FETCHED_COMMIT:0:12})")
   else
     changed=1
-    if [ -n "$on_disk" ] && [ -z "$disk_hash" ]; then
+    if [ "$new_hash" = "$disk_hash" ] && [ "$new_hash" != "$old_hash" ]; then
+      preview+=("  $name  ${FETCHED_COMMIT:0:12}  [lock refreshed]")
+    elif [ -n "$on_disk" ] && [ -z "$disk_hash" ]; then
       preview+=("  $name  ${FETCHED_COMMIT:0:12}  [-> $(skill_rel "$target")]")
     elif [ -z "$disk_hash" ]; then
       preview+=("  $name  missing -> ${FETCHED_COMMIT:0:12}  [restored]")
@@ -129,7 +139,11 @@ if [ "$changed" -eq 0 ]; then
   if [ "$locked" -eq 1 ]; then
     note "every snapshot already reproduces its pinned commit"
   else
-    note "everything already at the tracked head; nothing to do"
+    if [ "$relock" -eq 1 ]; then
+      note "every snapshot already matches its pinned commit and current overlay"
+    else
+      note "everything already at the tracked head; nothing to do"
+    fi
   fi
   exit 0
 fi

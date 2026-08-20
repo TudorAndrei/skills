@@ -36,35 +36,35 @@ shell activation set up. The official [configuration guide](https://mise.jdx.dev
 explains the global config. The official [`mise use` guide](https://mise.jdx.dev/cli/use.html)
 explains `--global` and `--pin`.
 
-## Proposed task design
+## Tool declaration
 
-Keep an explicit list of tools that skills need. Do not include tools that only
-maintain this repository. Use exact versions in the task.
+Each skill that owns an external CLI declares it in `SKILL.md` frontmatter:
 
-```toml
-[tasks.install-skill-tools]
-description = "Install the CLI tools that global skills need"
-confirm = "Add the skill tools to your global mise config?"
-run = "mise use --global --pin ast-grep@0.45.1"
-
-[tasks.setup]
-description = "Sync the skills and install their global CLI tools"
-depends = ["sync", "install-skill-tools"]
+```yaml
+metadata:
+  tools:
+    - source: mise
+      command: ast-grep
+      spec: ast-grep@0.45.1
 ```
 
-Add more tools to the same `mise use` command. Mise can install them in
-parallel. Use the backend name when it is important. Examples are
-`npm:PACKAGE@VERSION`, `pipx:PACKAGE@VERSION`, and
-`aqua:OWNER/REPOSITORY@VERSION`.
+`command` is the executable that the skill runs. `spec` is the complete,
+fixed-version mise specification. The installer scans all skills, removes
+duplicate entries, and stops if two skills request different specifications for
+one command.
+
+Do not declare the target project's runtime, package manager, database, system
+service, or an optional alternative. A declaration means that the skill owns
+the tool and that the central task can safely add it to the user global config.
 
 The task changes a file outside this repository. The confirmation is important.
 Do not use `--yes` in this task. Do not remove or replace other global tools.
 
 ## Version and update policy
 
-Use fixed versions for skill tools. Do not use `latest` in the global install
-task. Test an update in this repository, and then change the version in one
-scoped commit.
+Use fixed versions for skill tools. Do not use `latest` in `metadata.tools`.
+Test an update in this repository, and then change the version in one scoped
+commit.
 
 The global config is user state. A repository lockfile cannot control it after
 the install task copies the version there. The fixed version in the task is the
@@ -74,35 +74,18 @@ Mise keeps installed binaries in a shared store. Different configs can select
 different versions without a second copy when the version is the same. See the
 official [mise directory guide](https://mise.jdx.dev/directories.html).
 
-## Skill instructions
+## Install task
 
-Each tool-dependent `SKILL.md` must have a short check before its first tool
-command:
-
-```sh
-command -v ast-grep >/dev/null 2>&1
-```
-
-If the command is not available, tell the user to run this command from the
-skill repository:
-
-```sh
-mise run install-skill-tools
-```
-
-Do not run the global install task without user approval. For an independent
-skill install, also give the direct command:
-
-```sh
-mise use --global --pin ast-grep@0.45.1
-```
+`mise run install-skill-tools` reads the declarations and runs one
+`mise use --global --pin` command. The task asks for confirmation because it
+changes the user global mise config. `mise run sync` only checks commands and
+recommends the install task when a declared command is missing.
 
 ## Repository fit
 
-The current [ast-grep skill](../skills/ast-grep/ast-grep/SKILL.md) has a
-per-skill config and uses a repository-relative path that does not match the
-publisher layout. The central setup design removes this path problem for your
-local installation.
+The [ast-grep skill](../skills/ast-grep/ast-grep/SKILL.md) now uses the central
+declaration. It does not need a per-skill config or a repository-relative mise
+command.
 
 The repository also vendors external skills. Do not edit a generated vendor
 snapshot. Put a change to its `SKILL.md` in `vendor-overlays/<name>/`, as the
@@ -119,6 +102,6 @@ documents `MISE_ORIGINAL_CWD` for this case.
 
 ## Result
 
-For your local workflow, use a central global setup task. Keep it separate from
-normal sync, or put both actions behind an explicit `setup` task. This gives the
-skills normal tool commands and removes most per-skill mise work.
+For your local workflow, use frontmatter declarations and one central global
+install task. Keep installation separate from normal sync. This gives the skills
+normal tool commands and removes most per-skill mise work.
