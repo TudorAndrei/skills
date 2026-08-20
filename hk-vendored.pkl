@@ -20,6 +20,7 @@ globs: List<String> = List(
     "skills/jakubkrehel/better-typography/**",
     "skills/jakubkrehel/better-ui/**",
     "skills/jakubkrehel/better-writing/**",
+    "skills/lassejlv/build-gpui-apps/**",
     "skills/macton/data-oriented-design/**",
     "skills/mattpocock/ask-matt/**",
     "skills/mattpocock/batch-grill-me/**",

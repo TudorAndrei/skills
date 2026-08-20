@@ -123,6 +123,17 @@
       }
     },
     {
+      "name": "build-gpui-apps",
+      "repo": "https://github.com/lassejlv/skills.git",
+      "path": "skills/build-gpui-apps",
+      "ref": "main",
+      "author": "lassejlv",
+      "homepage": "https://github.com/lassejlv/skills",
+      "license": {
+        "spdx": "UNKNOWN"
+      }
+    },
+    {
       "name": "codebase-design",
       "repo": "https://github.com/mattpocock/skills.git",
       "path": "skills/engineering/codebase-design",

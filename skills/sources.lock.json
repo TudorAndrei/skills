@@ -45,6 +45,10 @@
       "commit": "a67333399dabbc71d7778962cb9c4fb9b86a00d0",
       "hash": "2efba36b7ec836876dc66900a132f4e86a4c4a603c4f5202d8446f343a9c9d66"
     },
+    "build-gpui-apps": {
+      "commit": "fdf401285c504c826ce3963f042fffc62f8b21c2",
+      "hash": "7c46015b18a15fcb617c244d041765bad4bbbe33be581fa4097f2b4568f68062"
+    },
     "codebase-design": {
       "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
       "hash": "90180b4730f2598a19b4805cd12b09506f9eef054c9649d2ea3633b2f7399fb9"
