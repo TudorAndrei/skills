@@ -15,6 +15,11 @@ description: >-
   for API details, signatures, or configuration options as they are frequently
   outdated. Always verify against current docs. Prefer this over web search for
   library documentation and API details.
+metadata:
+  tools:
+    - source: mise
+      command: ctx7
+      spec: npm:ctx7@0.5.8
 ---
 
 # Documentation Lookup

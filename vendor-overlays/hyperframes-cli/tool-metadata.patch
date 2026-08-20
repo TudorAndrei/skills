@@ -1,0 +1,13 @@
+Declare the HyperFrames CLI for the repository-wide mise installer.
+
+--- a/SKILL.md
++++ b/SKILL.md
+@@ -8,3 +8,8 @@
+   or render failures. validate, inspect, and layout are deprecated aliases; use check. Covers local,
+   HeyGen-hosted cloud, AWS Lambda, and Google Cloud Run rendering.
++metadata:
++  tools:
++    - source: mise
++      command: hyperframes
++      spec: npm:hyperframes@0.8.4
+ ---

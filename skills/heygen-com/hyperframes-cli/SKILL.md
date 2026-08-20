@@ -7,6 +7,11 @@ description: >
   benchmark, telemetry, transcribe, auth, tts, and remove-background. Also use when diagnosing build
   or render failures. validate, inspect, and layout are deprecated aliases; use check. Covers local,
   HeyGen-hosted cloud, AWS Lambda, and Google Cloud Run rendering.
+metadata:
+  tools:
+    - source: mise
+      command: hyperframes
+      spec: npm:hyperframes@0.8.4
 ---
 
 # HyperFrames CLI

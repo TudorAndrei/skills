@@ -11,3 +11,4 @@ change `skills/sources.json` upstream and run `mise run update hyperframes-cli`.
 - Tracked ref: `main`
 - Resolved commit: `74fadf69c464c0e0658bd7a6b740986fc3aceba8`
 - License: Apache-2.0 (see `LICENSE.upstream`)
+- Local overlay: `vendor-overlays/hyperframes-cli/` applied on top of upstream

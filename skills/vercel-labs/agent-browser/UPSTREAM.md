@@ -11,3 +11,4 @@ change `skills/sources.json` upstream and run `mise run update agent-browser`.
 - Tracked ref: `main`
 - Resolved commit: `93cdda5709e8861c0c26b0b955d8d746e9fda0d7`
 - License: Apache-2.0 (see `LICENSE.upstream`)
+- Local overlay: `vendor-overlays/agent-browser/` applied on top of upstream

@@ -3,7 +3,7 @@
   "skills": {
     "agent-browser": {
       "commit": "93cdda5709e8861c0c26b0b955d8d746e9fda0d7",
-      "hash": "49f00f1244ca869ee9fccbe6d99d03266f3895d7b903f31bc81098ab2cb2ba6f"
+      "hash": "bb318e88fb7ead09c8b2e842f24d7febe5722790e981023a06063784a7eadb39"
     },
     "ask-matt": {
       "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
@@ -11,7 +11,7 @@
     },
     "ast-grep": {
       "commit": "c2a9bc154f4ffe08b25d28d5e852dfac8c0d0d8a",
-      "hash": "0e6dc6ab30a68dc9f12eeb09ddd1d306835870bfa62bf3e80982901f2dd80320"
+      "hash": "c29dbc1dd0e221dc40ec33984ddc282bf2ff91fa0cbc4dcfdea2c937ecadbf67"
     },
     "batch-grill-me": {
       "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
@@ -63,7 +63,7 @@
     },
     "find-docs": {
       "commit": "594a73133e14631af8c915a1b4f2c8039c964fe1",
-      "hash": "58c3c9d49dd799c12cd6b515aa40e0dad11cf6d017276ba85a16a65b0652a0e4"
+      "hash": "1c43a4e34fa8b80069233c5f251bdee26c8b160424b444a1d004253b2ead4356"
     },
     "frontend-design": {
       "commit": "b29e7cf65e5cb78a5ac33d582270551bc74a14eb",
@@ -87,19 +87,19 @@
     },
     "herdr": {
       "commit": "10974c822d607f03e20e9741ec027910f0c1f93a",
-      "hash": "b2abdc7ce4c9104a733e0bdbaf0bb02a6ca606bcd9aab7f12189d5fdccbf6edf"
+      "hash": "f974570157de0770d65eb9fb88c751f3ba07b17b518ee80d533acad9315b12d7"
     },
     "hyperframes": {
       "commit": "74fadf69c464c0e0658bd7a6b740986fc3aceba8",
-      "hash": "8d2936a486c006a3131da6bea91efe5b628d81d9f61292707b76e6f1a8a62256"
+      "hash": "924fdc58d2762426bcd40e9c5fa8d49ad7fff47129375514594f8aaac882f374"
     },
     "hyperframes-cli": {
       "commit": "74fadf69c464c0e0658bd7a6b740986fc3aceba8",
-      "hash": "1c67442ade44d93563ad60bde0d9b8d95e136319aecf5449952645220dfad3a3"
+      "hash": "51975b85704970d05fbdc4f68c3d21eceedc6ba5a8b2a0fbf617ff7f19986436"
     },
     "hyperframes-registry": {
       "commit": "74fadf69c464c0e0658bd7a6b740986fc3aceba8",
-      "hash": "5f459bb15dfc5d4f102ef9efe8ad0f0913584885a77e5168fb26cf7a4bda4e69"
+      "hash": "bc773df13b6e6aa353dfaced9911f58d86b90beba6b3f5fc896085836f14dfad"
     },
     "implement": {
       "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
@@ -143,7 +143,7 @@
     },
     "tmux": {
       "commit": "d265b8ef32f896d3ef3bc6a45bd7b8e0d02150e0",
-      "hash": "6acf9094b3fe0feb1c1b93867ce28e78cac26c6f4b0350eda49e3a72ad41bb3e"
+      "hash": "8cfe023f424f3abe07a7603475cf466cedbe2fee2164022f2601fb6028c55354"
     },
     "to-spec": {
       "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",

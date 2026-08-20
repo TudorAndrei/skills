@@ -1,0 +1,13 @@
+Declare the Context7 CLI for the repository-wide mise installer.
+
+--- a/SKILL.md
++++ b/SKILL.md
+@@ -16,3 +16,8 @@
+   outdated. Always verify against current docs. Prefer this over web search for
+   library documentation and API details.
++metadata:
++  tools:
++    - source: mise
++      command: ctx7
++      spec: npm:ctx7@0.5.8
+ ---

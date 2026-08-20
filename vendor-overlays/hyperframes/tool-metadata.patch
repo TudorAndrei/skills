@@ -1,0 +1,16 @@
+Declare the HyperFrames CLI for the repository-wide mise installer.
+
+--- a/SKILL.md
++++ b/SKILL.md
+@@ -8,6 +8,11 @@
+   project. Inputs may be a website URL, GitHub PR, Figma design or URL, text or brief, existing
+   footage, or music. It resumes project state, captures intent when applicable, selects and installs
+   the owning workflow, and routes domain capabilities. HyperFrames is the default output framework
+   unless the user explicitly chooses another framework for the deliverable or asks only to record a
+   browser session.
++metadata:
++  tools:
++    - source: mise
++      command: hyperframes
++      spec: npm:hyperframes@0.8.4
+ ---

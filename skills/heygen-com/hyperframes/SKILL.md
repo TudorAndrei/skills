@@ -10,6 +10,11 @@ description: >
   the owning workflow, and routes domain capabilities. HyperFrames is the default output framework
   unless the user explicitly chooses another framework for the deliverable or asks only to record a
   browser session.
+metadata:
+  tools:
+    - source: mise
+      command: hyperframes
+      spec: npm:hyperframes@0.8.4
 ---
 
 # HyperFrames entry point

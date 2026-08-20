@@ -1,0 +1,14 @@
+Declare tmux for the repository-wide mise installer.
+
+--- a/SKILL.md
++++ b/SKILL.md
+@@ -2,4 +2,9 @@
+ name: tmux
+ description: "Remote control tmux sessions for interactive CLIs (python, gdb, etc.) by sending keystrokes and scraping pane output."
+ license: Vibecoded
++metadata:
++  tools:
++    - source: mise
++      command: tmux
++      spec: tmux@3.7b
+ ---
