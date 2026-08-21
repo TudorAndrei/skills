@@ -1,13 +1,13 @@
 # Upstream provenance
 
 This directory is a generated snapshot. Do not edit it by hand;
-change `skills/sources.json` upstream and run `mise run update batch-grill-me`.
+change `skills/sources.json` upstream and run `mise run update writing-for-agents`.
 
-- Skill: `batch-grill-me`
+- Skill: `writing-for-agents`
 - Author: mattpocock
 - Repository: https://github.com/mattpocock/skills.git
 - Homepage: https://github.com/mattpocock/skills
-- Upstream path: `skills/in-progress/batch-grill-me`
+- Upstream path: `skills/productivity/writing-for-agents`
 - Tracked ref: `main`
-- Resolved commit: `2ab958093e83e0ec752e6c1c5932da465bf23e0c`
+- Resolved commit: `0ab1b63a410a03d3627979a109c8695de27af954`
 - License: MIT (see `LICENSE.upstream`)

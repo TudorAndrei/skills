@@ -35,17 +35,6 @@
       }
     },
     {
-      "name": "batch-grill-me",
-      "repo": "https://github.com/mattpocock/skills.git",
-      "path": "skills/in-progress/batch-grill-me",
-      "ref": "main",
-      "author": "mattpocock",
-      "homepage": "https://github.com/mattpocock/skills",
-      "license": {
-        "spdx": "MIT"
-      }
-    },
-    {
       "name": "better-accessibility",
       "repo": "https://github.com/jakubkrehel/skills.git",
       "path": "skills/better-accessibility",
@@ -475,9 +464,9 @@
       }
     },
     {
-      "name": "writing-great-skills",
+      "name": "writing-for-agents",
       "repo": "https://github.com/mattpocock/skills.git",
-      "path": "skills/productivity/writing-great-skills",
+      "path": "skills/productivity/writing-for-agents",
       "ref": "main",
       "author": "mattpocock",
       "homepage": "https://github.com/mattpocock/skills",

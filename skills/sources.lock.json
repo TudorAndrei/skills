@@ -13,10 +13,6 @@
       "commit": "c2a9bc154f4ffe08b25d28d5e852dfac8c0d0d8a",
       "hash": "c29dbc1dd0e221dc40ec33984ddc282bf2ff91fa0cbc4dcfdea2c937ecadbf67"
     },
-    "batch-grill-me": {
-      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
-      "hash": "38d7ecb813f54eeea6493027fb833e387f48c59c3ccceb83d7e8495770e77fa7"
-    },
     "better-accessibility": {
       "commit": "6c43b20ce00f720eed854591abe480127629c191",
       "hash": "14e2d7399c576d87491ceba139a7699052f4f01966402c11b6a6d38224ef561f"
@@ -173,9 +169,9 @@
       "commit": "0ab1b63a410a03d3627979a109c8695de27af954",
       "hash": "1480b740e819611f3a72565a61bf57acd966a66c3d4ed921f4fcfbe1681179c2"
     },
-    "writing-great-skills": {
-      "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
-      "hash": "3308dd8676d6935133415a895d3e0dc817ea9873593fc75b3e01597cab53d565"
+    "writing-for-agents": {
+      "commit": "0ab1b63a410a03d3627979a109c8695de27af954",
+      "hash": "146eec9a99c2d2e8d9b866bad57de2381cb2055c525a150c1a8faae91a6f6149"
     }
   }
 }
