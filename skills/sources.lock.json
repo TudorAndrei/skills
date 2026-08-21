@@ -165,6 +165,10 @@
       "commit": "a145acf0c158f822d70ccdc2590164abb83b39cb",
       "hash": "ae19a013c6279fb4681625cff44f870bd61487a5cb447abba61e7758bcb895d4"
     },
+    "unslop": {
+      "commit": "46125561306434d8a1d7745d540d8932ab0cd2a2",
+      "hash": "e66551a0cc6a1ae9bc464137a9e9b002de31eeac7fa025210f317636d577833a"
+    },
     "wayfinder": {
       "commit": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
       "hash": "b40a753851f80a5ba224a2d37d87be9e93441bdb5350529ab66936a41c886769"

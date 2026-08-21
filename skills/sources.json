@@ -453,6 +453,17 @@
       }
     },
     {
+      "name": "unslop",
+      "repo": "https://github.com/cursor/plugins.git",
+      "path": "pstack/skills/unslop",
+      "ref": "main",
+      "author": "cursor",
+      "homepage": "https://github.com/cursor/plugins",
+      "license": {
+        "spdx": "UNKNOWN"
+      }
+    },
+    {
       "name": "wayfinder",
       "repo": "https://github.com/mattpocock/skills.git",
       "path": "skills/engineering/wayfinder",
