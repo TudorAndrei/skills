@@ -9,5 +9,5 @@ change `skills/sources.json` upstream and run `mise run update frontend-design`.
 - Homepage: https://github.com/anthropics/skills
 - Upstream path: `skills/frontend-design`
 - Tracked ref: `main`
-- Resolved commit: `b29e7cf65e5cb78a5ac33d582270551bc74a14eb`
+- Resolved commit: `0a64e398ec6bb34a494f0c347e8ccae53a862f8e`
 - License: Apache-2.0 (see `LICENSE.upstream`)

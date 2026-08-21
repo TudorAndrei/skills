@@ -9,6 +9,6 @@ change `skills/sources.json` upstream and run `mise run update agent-browser`.
 - Homepage: https://github.com/vercel-labs/agent-browser
 - Upstream path: `skills/agent-browser`
 - Tracked ref: `main`
-- Resolved commit: `93cdda5709e8861c0c26b0b955d8d746e9fda0d7`
+- Resolved commit: `b041bd4c9e71b0b1ea0727a9d9deb1e661615050`
 - License: Apache-2.0 (see `LICENSE.upstream`)
 - Local overlay: `vendor-overlays/agent-browser/` applied on top of upstream

@@ -9,5 +9,5 @@ change `skills/sources.json` upstream and run `mise run update improve-codebase-
 - Homepage: https://github.com/mattpocock/skills
 - Upstream path: `skills/engineering/improve-codebase-architecture`
 - Tracked ref: `main`
-- Resolved commit: `2ab958093e83e0ec752e6c1c5932da465bf23e0c`
+- Resolved commit: `0ab1b63a410a03d3627979a109c8695de27af954`
 - License: MIT (see `LICENSE.upstream`)

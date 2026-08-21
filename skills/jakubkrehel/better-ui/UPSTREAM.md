@@ -9,5 +9,5 @@ change `skills/sources.json` upstream and run `mise run update better-ui`.
 - Homepage: https://github.com/jakubkrehel/skills
 - Upstream path: `skills/better-ui`
 - Tracked ref: `main`
-- Resolved commit: `a67333399dabbc71d7778962cb9c4fb9b86a00d0`
+- Resolved commit: `6c43b20ce00f720eed854591abe480127629c191`
 - License: MIT (see `LICENSE.upstream`)

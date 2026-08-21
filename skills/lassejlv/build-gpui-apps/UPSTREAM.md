@@ -9,5 +9,5 @@ change `skills/sources.json` upstream and run `mise run update build-gpui-apps`.
 - Homepage: https://github.com/lassejlv/skills
 - Upstream path: `skills/build-gpui-apps`
 - Tracked ref: `main`
-- Resolved commit: `fdf401285c504c826ce3963f042fffc62f8b21c2`
+- Resolved commit: `26d2f2031ca20d5c6136e7de699bcea1b8d7bfb1`
 - License: UNKNOWN (no license file found upstream)
