@@ -41,6 +41,10 @@
       "commit": "6c43b20ce00f720eed854591abe480127629c191",
       "hash": "40637e6abcadc4dc7f8c4270811c5a4b2c63fac5af92d923dea6ee13d01a620e"
     },
+    "bro": {
+      "commit": "8603380821fee6a77c82639f364ce8fe4f5a92be",
+      "hash": "00155301f292ec9421cc918bbc3bae60306b21a2719a4a52505d08f2f5c7a878"
+    },
     "build-gpui-apps": {
       "commit": "26d2f2031ca20d5c6136e7de699bcea1b8d7bfb1",
       "hash": "d4a0ea895ebc3e03300274741ed92b7810f40a29c7bbc09b9e27565904cdcd0d"

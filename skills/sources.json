@@ -112,6 +112,17 @@
       }
     },
     {
+      "name": "bro",
+      "repo": "https://github.com/dmmulroy/skills.git",
+      "path": "bro",
+      "ref": "main",
+      "author": "dmmulroy",
+      "homepage": "https://github.com/dmmulroy/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
       "name": "build-gpui-apps",
       "repo": "https://github.com/lassejlv/skills.git",
       "path": "skills/build-gpui-apps",
