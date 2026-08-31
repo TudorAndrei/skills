@@ -1,16 +1,6 @@
 ---
 name: postgres-ops
-description: >-
-  Diagnose and modernize a running PostgreSQL deployment. Covers evidence-first triage of slow
-  queries, bad plans, locks, connection pressure, autovacuum, bloat, queues, partitioning and large
-  data moves, plus prioritized advice on which extensions (pgvector, TimescaleDB, pg_partman,
-  pg_search, PostGIS, pg_repack, pg_stat_monitor, PgBouncer/pgcat, Citus, pgmq, pgaudit) and
-  version-gated core features (LZ4/zstd compression, covering/BRIN indexes, native partitioning,
-  MERGE, JSON_TABLE, async I/O, extended statistics, incremental backup) to adopt. Use whenever a
-  user is troubleshooting or planning a change to a live Postgres database — a slow query, a risky
-  migration, disk growth, a background worker — or asks how to improve or speed up their database,
-  which extension fits a use case (vector/AI search, time-series, geospatial, queues, sharding,
-  full-text), what their version unlocks, or is planning a major-version upgrade.
+description: Diagnose and improve live PostgreSQL systems. Use for slow queries, query plans, locks, connection pressure, autovacuum, bloat, migrations, partitioning, scaling, and extension selection.
 compatibility: >-
   Read-only advisor. Needs database access only for diagnostics; the audit and investigation SQL is
   safe on supported PostgreSQL versions. Never run production-changing SQL without explicit user

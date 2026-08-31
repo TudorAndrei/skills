@@ -1,17 +1,6 @@
 ---
 name: seo
-description: >-
-  Comprehensive SEO and website-quality skill with five workstreams: (1) SEO audit — crawlability,
-  indexation, on-page, Core Web Vitals, content quality, hreflang; (2) AI search optimization
-  (AEO/GEO/LLMO) — getting cited by ChatGPT, Perplexity, and Google AI Overviews; (3) programmatic
-  SEO — templated pages at scale; (4) technical SEO growth — localized SSR routing, canonical/hreflang,
-  sitemaps, backlinks; (5) website launch checklist — auditing against The Website Specification
-  (accessibility, security, privacy, resilience, well-known URIs, agent readiness, i18n). Use when the
-  user mentions SEO, technical/on-page SEO, "why am I not ranking," traffic drops, crawl/indexing
-  issues, core web vitals, AI SEO, AEO, GEO, LLMO, answer engine optimization, AI Overviews, getting
-  cited by LLMs, llms.txt, programmatic SEO, pSEO, pages at scale, hreflang, localized/international
-  SEO, backlink strategy, website launch/readiness checklist, accessibility audit, security headers,
-  well-known URIs, or agent readiness.
+description: Audit and improve website SEO. Use for technical or on-page SEO, crawl and indexing problems, Core Web Vitals, international or programmatic SEO, and AI search visibility.
 license: MIT and CC-BY-4.0 sources; local skill instructions MIT-compatible
 metadata:
   version: "4.1.0"
