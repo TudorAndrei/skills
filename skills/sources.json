@@ -376,6 +376,17 @@
       }
     },
     {
+      "name": "show-me",
+      "repo": "https://github.com/humanlayer/skills.git",
+      "path": "plugins/show-me/skills/show-me",
+      "ref": "main",
+      "author": "humanlayer",
+      "homepage": "https://github.com/humanlayer/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
       "name": "tdd",
       "repo": "https://github.com/mattpocock/skills.git",
       "path": "skills/engineering/tdd",

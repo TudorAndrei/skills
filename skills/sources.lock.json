@@ -137,6 +137,10 @@
       "commit": "0ab1b63a410a03d3627979a109c8695de27af954",
       "hash": "969b90aa00298b538d59861e64b05ac6c0369a694d218d31ff4f8749cc37819a"
     },
+    "show-me": {
+      "commit": "3c2629142c5d437428269b1b722b08c0b87f574d",
+      "hash": "4338ce4a598ea4c0aeccdf7b47a70457a81844a881a40db7fcd64c1eb1493388"
+    },
     "tdd": {
       "commit": "0ab1b63a410a03d3627979a109c8695de27af954",
       "hash": "52d99e2ae3372dc9d0657512e7b170268b439192886a40b22f9a7fd158eeeeec"

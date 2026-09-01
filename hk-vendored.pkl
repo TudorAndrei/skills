@@ -15,6 +15,7 @@ globs: List<String> = List(
     "skills/heygen-com/hyperframes-cli/**",
     "skills/heygen-com/hyperframes-registry/**",
     "skills/heygen-com/hyperframes/**",
+    "skills/humanlayer/show-me/**",
     "skills/jakubkrehel/better-accessibility/**",
     "skills/jakubkrehel/better-colors/**",
     "skills/jakubkrehel/better-interface/**",
