@@ -365,6 +365,25 @@ Structured data helps AI systems understand your content. Key schemas:
 
 Content with proper schema shows 30-40% higher AI visibility on non-Google AI engines. **Google's note**: structured data is "not required for generative AI search" but is recommended for overall SEO strategy. For validating implemented markup, use the Rich Results Test — see the Schema Markup Detection note in [audit.md](audit.md).
 
+**Authoring it in TypeScript** — [schema-dts](https://github.com/google/schema-dts) (Google, MIT) ships Schema.org as TypeScript typings, so hand-written JSON-LD is type-checked at build time rather than spot-checked after deploy:
+
+```bash
+npm install --save-dev schema-dts
+```
+
+```ts
+import type { Product, WithContext } from "schema-dts";
+
+const product: WithContext<Product> = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: "Example",
+  offers: { "@type": "Offer", price: "29.00", priceCurrency: "USD" },
+};
+```
+
+The types are discriminated unions keyed on `@type`, so a misspelled property, a property that does not belong to the type, or a nested object of the wrong type is a compile error — the class of defect an audit otherwise finds months later. `WithContext<T>` adds the `@context` key the root object needs. The companion `schema-dts-gen` CLI regenerates the typings for a pinned Schema.org version or for the pending/extension layers the default package leaves out. Use it for JSON-LD you write yourself; where an AgentMarkup preset already covers the page type, let AgentMarkup emit it instead. The two layer — reach for schema-dts on the custom schemas you hand to AgentMarkup, not on the presets.
+
 ---
 
 ## Agentic Experiences
@@ -384,6 +403,15 @@ Beyond AI search engines summarizing content, autonomous agents are starting to 
 - **Clean accessibility tree** — every interactive element labelled; ARIA used correctly (or not at all when native HTML suffices)
 - **Stable selectors / predictable layouts** — agents struggle with sites that re-render every interaction
 - **Visible pricing, specs, contact info** — anything an agent would need to make a buying recommendation should be on a public, indexable page (this is where `/pricing.md` and similar files help)
+
+**Measuring it** — [is-agentic](https://is-agentic.com/) scores a domain on exactly the properties above and reports the evidence:
+
+```bash
+npx is-agentic example.com            # human-readable report
+npx is-agentic example.com --json     # structured output
+```
+
+It checks server-rendered content, HTTP and error-response behaviour, page structure, and crawler controls, then detects the optional interfaces the site actually exposes — API, OAuth, GraphQL, MCP server. Essential checks apply to every site; recommended checks activate only for features present, so a site is never marked down for not being an API product. Each report also runs a real agent at the site and records the journey, which is where the friction shows up — the checks say what is missing, the journey says what actually blocked it. Reports keep a stable public URL, readable through the web page, the versioned JSON API at `https://is-agentic.com/api/v1/report`, or its MCP server. Use it as the before/after measure on the recommendations in this section; use it for the whole agent-readiness category in [website-checklist.md](website-checklist.md).
 
 **Emerging — Universal Commerce Protocol (UCP):**
 Google references UCP as a forthcoming protocol that will give agents standardized hooks for commerce interactions (catalog discovery, pricing, checkout). Watch for adoption; for now, the structural recommendations above are the precursor.

@@ -3,7 +3,7 @@ name: seo
 description: Audit and improve website SEO. Use for technical or on-page SEO, crawl and indexing problems, Core Web Vitals, international or programmatic SEO, and AI search visibility.
 license: MIT and CC-BY-4.0 sources; local skill instructions MIT-compatible
 metadata:
-  version: "4.1.0"
+  version: "4.2.0"
   source: https://github.com/coreyhaines31/marketingskills
   source_license: MIT
   tools:
@@ -84,7 +84,9 @@ covers the full diagnostic order.
 
 Schema (`Article`, `FAQPage`, `HowTo`, `Product`, `Organization`, `ItemList`, `Review`) gives search
 engines and AI systems machine-readable context and lifts AI visibility on non-Google engines.
-Google treats it as recommended, not required, for generative search. **Validation caveat:**
+Google treats it as recommended, not required, for generative search. In a TypeScript codebase,
+author the JSON-LD with [schema-dts](https://github.com/google/schema-dts) (Google's Schema.org
+typings) so a wrong `@type` or property fails the build instead of the audit. **Validation caveat:**
 `web_fetch`/`curl` strip `<script>` tags and cannot see JS-injected JSON-LD — use `agent-browser`,
 the Rich Results Test, or a Screaming Frog render instead (details in [references/audit.md](references/audit.md)).
 
@@ -96,6 +98,9 @@ Anything a tool can decide, let it decide, and spend your judgment on what's lef
   ([references/website-checklist.md](references/website-checklist.md) covers what it settles and what stays manual).
 - [AgentMarkup](https://agentmarkup.dev/) — build-time `llms.txt`, JSON-LD, AI-crawler rules, and markdown mirrors,
   validated in CI ([references/ai-search.md](references/ai-search.md)).
+- `npx is-agentic <domain> --json` ([is-agentic.com](https://is-agentic.com/)) — agent-readiness score with the
+  evidence behind it, plus a recorded agent journey over the site
+  ([references/website-checklist.md](references/website-checklist.md) covers how to read the report).
 
 ### What NOT to do (all workstreams)
 

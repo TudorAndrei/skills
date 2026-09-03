@@ -39,6 +39,8 @@ Many CMS plugins (AIOSEO, Yoast, RankMath) inject JSON-LD via client-side JavaSc
 
 Reporting "no schema found" based solely on `web_fetch` or `curl` leads to false audit findings — these tools can't see JS-injected schema.
 
+When the finding is malformed rather than missing schema and the codebase is TypeScript, the durable fix is [schema-dts](https://github.com/google/schema-dts) — Schema.org as typings, so the same defect fails the build next time (see [ai-search.md](ai-search.md)).
+
 ### Priority Order
 
 1. **Crawlability & Indexation** (can Google find and index it?)
@@ -438,6 +440,7 @@ Same format as above
 
 - [`advertools`](https://advertools.readthedocs.io) (Python) — `sitemap_to_df()` flattens XML sitemaps, sitemap indexes, and news/video sitemaps into a dataframe; `logs_to_df()` parses server logs; the `robotstxt` module bulk-tests URLs against `robots.txt`; the `spider` module crawls with custom CSS/XPath extraction. The sitemap and log work is what a browser tool cannot do — it answers "which URLs are actually in the sitemap" and "which of them has Googlebot actually fetched." Its `serp_claude` module also measures AI-search visibility at scale (see [ai-search.md](ai-search.md)).
 - `agent-browser a11y <url> --json` — axe-core WCAG violations against the rendered page (see [website-checklist.md](website-checklist.md)).
+- `npx is-agentic <domain> --json` — agent-readiness score with evidence: server-rendered content, HTTP and error behaviour, page structure, AI-crawler rules, plus a recorded agent journey over the site (see [website-checklist.md](website-checklist.md)).
 
 > **Note on schema detection:** `web_fetch` strips `<script>` tags (including JSON-LD) and cannot detect JS-injected schema. Use `agent-browser`, Rich Results Test, or Screaming Frog instead — they render JavaScript and capture dynamically-injected markup. See the Schema Markup Detection Limitation section above.
 
