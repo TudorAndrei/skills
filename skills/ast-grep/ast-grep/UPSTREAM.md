@@ -9,6 +9,6 @@ change `skills/sources.json` upstream and run `mise run update ast-grep`.
 - Homepage: https://github.com/ast-grep/agent-skill
 - Upstream path: `ast-grep/skills/ast-grep`
 - Tracked ref: `main`
-- Resolved commit: `c2a9bc154f4ffe08b25d28d5e852dfac8c0d0d8a`
+- Resolved commit: `6b668aa526afdc623c1a9ed1d6ae920e04a717ad`
 - License: UNKNOWN (no license file found upstream)
 - Local overlay: `vendor-overlays/ast-grep/` applied on top of upstream

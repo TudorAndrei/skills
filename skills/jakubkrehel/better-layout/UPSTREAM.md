@@ -9,5 +9,5 @@ change `skills/sources.json` upstream and run `mise run update better-layout`.
 - Homepage: https://github.com/jakubkrehel/skills
 - Upstream path: `skills/better-layout`
 - Tracked ref: `main`
-- Resolved commit: `6c43b20ce00f720eed854591abe480127629c191`
+- Resolved commit: `267330e1adfc66a718fb65fa6918c1f06d0a689e`
 - License: MIT (see `LICENSE.upstream`)

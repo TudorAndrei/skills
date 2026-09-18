@@ -9,5 +9,5 @@ change `skills/sources.json` upstream and run `mise run update grill-me`.
 - Homepage: https://github.com/mattpocock/skills
 - Upstream path: `skills/productivity/grill-me`
 - Tracked ref: `main`
-- Resolved commit: `0ab1b63a410a03d3627979a109c8695de27af954`
+- Resolved commit: `3cca18b368ae95cdbdebbff572ccafa662551015`
 - License: MIT (see `LICENSE.upstream`)

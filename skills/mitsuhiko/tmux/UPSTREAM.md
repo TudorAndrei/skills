@@ -9,6 +9,6 @@ change `skills/sources.json` upstream and run `mise run update tmux`.
 - Homepage: https://github.com/mitsuhiko/agent-stuff
 - Upstream path: `skills/tmux`
 - Tracked ref: `main`
-- Resolved commit: `13bc8f87970bec8830aab0f1c0487d35aa7c0917`
+- Resolved commit: `122e2994adddb113c04764c5697217dae120fcc6`
 - License: Apache-2.0 (see `LICENSE.upstream`)
 - Local overlay: `vendor-overlays/tmux/` applied on top of upstream

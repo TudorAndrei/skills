@@ -9,5 +9,5 @@ change `skills/sources.json` upstream and run `mise run update unslop`.
 - Homepage: https://github.com/cursor/plugins
 - Upstream path: `pstack/skills/unslop`
 - Tracked ref: `main`
-- Resolved commit: `46125561306434d8a1d7745d540d8932ab0cd2a2`
+- Resolved commit: `df3fb154fb982fb83f649de8646d4af6a0cb16b3`
 - License: UNKNOWN (no license file found upstream)
