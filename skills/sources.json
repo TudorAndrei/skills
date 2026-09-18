@@ -255,39 +255,6 @@
       }
     },
     {
-      "name": "hyperframes",
-      "repo": "https://github.com/heygen-com/hyperframes.git",
-      "path": "skills/hyperframes",
-      "ref": "main",
-      "author": "heygen-com",
-      "homepage": "https://github.com/heygen-com/hyperframes",
-      "license": {
-        "spdx": "Apache-2.0"
-      }
-    },
-    {
-      "name": "hyperframes-cli",
-      "repo": "https://github.com/heygen-com/hyperframes.git",
-      "path": "skills/hyperframes-cli",
-      "ref": "main",
-      "author": "heygen-com",
-      "homepage": "https://github.com/heygen-com/hyperframes",
-      "license": {
-        "spdx": "Apache-2.0"
-      }
-    },
-    {
-      "name": "hyperframes-registry",
-      "repo": "https://github.com/heygen-com/hyperframes.git",
-      "path": "skills/hyperframes-registry",
-      "ref": "main",
-      "author": "heygen-com",
-      "homepage": "https://github.com/heygen-com/hyperframes",
-      "license": {
-        "spdx": "Apache-2.0"
-      }
-    },
-    {
       "name": "implement",
       "repo": "https://github.com/mattpocock/skills.git",
       "path": "skills/engineering/implement",
