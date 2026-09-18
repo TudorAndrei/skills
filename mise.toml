@@ -15,9 +15,9 @@ HK_MISE = 1
 postinstall = "hk install --mise"
 
 [tasks.sync]
-description = "Symlink everything in skills/ globally for Codex and Claude Code"
+description = "Install everything in skills/ globally into ~/.agents/skills, plus the Claude Code link"
 run = [
-  "skills add . --global --skill '*' --agent codex --agent claude-code --yes --full-depth",
+  "skills add . --global --skill '*' --agent universal --agent claude-code --yes --full-depth",
   "./scripts/install-skill-tools.sh --check",
 ]
 

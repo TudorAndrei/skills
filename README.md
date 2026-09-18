@@ -108,7 +108,7 @@ mise run relock [name...]           # keep pinned commits; refresh hashes after 
 mise run restore [name...]          # re-fetch at pinned commits, discarding local edits
 mise run verify                     # offline: manifest, lock, hashes, locations, licenses
 mise run hk-excludes                # regenerate hk-vendored.pkl
-mise run sync                       # symlink every skill globally (Codex + Claude Code)
+mise run sync                       # install every skill globally (~/.agents/skills + Claude Code)
 mise run install-skill-tools        # install declared skill CLIs through the global mise config
 mise run update-project             # refresh .agents/skills via the skills CLI
 
