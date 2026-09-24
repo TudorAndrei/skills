@@ -1,6 +1,6 @@
 # Modern hk builtin subset
 
-Curated from `hk builtins` (hk 1.52.0, 144 builtins). The picks below favour fast,
+Curated from `hk builtins` (hk 2.1.0, 158 builtins). The picks below favour fast,
 single-binary, mostly Rust/Go tools over the older Node/Python-runtime linters they
 replace. Builtin names are the snake_case Pkl identifiers (`Builtins.ox_lint`).
 
@@ -17,31 +17,34 @@ Once the steps are chosen, see `pipeline.md` for the order to run them in.
 
 ## By evidence in the repo
 
-| Evidence in repo                   | Modern builtin(s)                     | Replaces                             | mise tool                        |
-| ---------------------------------- | ------------------------------------- | ------------------------------------ | -------------------------------- |
-| `*.ts`/`*.js`, `package.json`      | `ox_lint`, `oxfmt`                    | `eslint`, `prettier`                 | `oxlint`, `npm:oxfmt`            |
-| `tsconfig.json`                    | `tsc`                                 | —                                    | project-local via `package.json` |
-| pnpm/npm workspaces monorepo       | `sherif`, optionally `knip`           | —                                    | `npm:sherif`, `npm:knip`         |
-| `*.py`, `pyproject.toml`           | `ruff`, `ruff_format`                 | `black`, `flake8`, `isort`, `pylint` | `ruff`                           |
-| Python with type annotations       | `ty`                                  | `mypy`                               | `ty`                             |
-| `*.md`                             | `rumdl`, `rumdl_format`               | `markdown_lint` (markdownlint-cli2)  | `rumdl`                          |
-| `*.yaml`/`*.yml` (beyond a couple) | `ryl`                                 | `yamllint`                           | `cargo:ryl`                      |
-| YAML embedded in markdown          | `ryl_markdown`                        | —                                    | `cargo:ryl`                      |
-| `*.toml`                           | `tombi`, `tombi_format`               | `taplo`, `taplo_format`              | `tombi`                          |
-| `Cargo.toml`                       | `cargo_fmt`, `cargo_clippy`           | —                                    | — (rustup toolchain)             |
-| `go.mod`                           | `golangci_lint`, `go_fumpt`           | `go_fmt`, `go_vet`, `staticcheck`    | `golangci-lint`, `gofumpt`       |
-| `*.sh`, shebang scripts            | `shellcheck`, `shfmt`                 | —                                    | `shellcheck`, `shfmt`            |
-| `.github/workflows/`               | `actionlint`, `zizmor`, `pinact`      | —                                    | `actionlint`, `zizmor`, `pinact` |
-| `Dockerfile*`                      | `hadolint`                            | —                                    | `hadolint`                       |
-| `docker-compose.y*ml`              | `dclint`                              | —                                    | `npm:dclint`                     |
-| `*.tf`                             | `tofu` (or `terraform`), `tf_lint`    | —                                    | `opentofu`/`terraform`, `tflint` |
-| `*.lua`                            | `stylua`, `selene`                    | `luacheck`                           | `stylua`, `cargo:selene`         |
-| `*.nix`                            | `nix_fmt` (or `alejandra`), `deadnix` | —                                    | — / `alejandra`, `deadnix`       |
-| `*.pkl` (e.g. `hk.pkl` itself)     | `pkl`, `pkl_format`                   | —                                    | `pkl`                            |
-| `mise.toml`                        | `mise` (`mise fmt`)                   | —                                    | — (mise is already required)     |
-| OpenAPI spec files                 | `vacuum`                              | `spectral`                           | `vacuum`                         |
-| Docs-heavy repo, prose matters     | `harper`                              | `vale`, `textlint`                   | `harper-cli` (source install)    |
-| Many external links in docs        | `lychee`                              | —                                    | `lychee`                         |
+| Evidence in repo                     | Modern builtin(s)                               | Replaces                             | mise tool                        |
+| ------------------------------------ | ----------------------------------------------- | ------------------------------------ | -------------------------------- |
+| `*.ts`/`*.js`, `package.json`        | `ox_lint`, `oxfmt`                              | `eslint`, `prettier`                 | `oxlint`, `npm:oxfmt`            |
+| `tsconfig.json`                      | `tsc`                                           | —                                    | project-local via `package.json` |
+| pnpm/npm workspaces monorepo         | `sherif`, optionally `knip`                     | —                                    | `npm:sherif`, `npm:knip`         |
+| `*.py`, `pyproject.toml`             | `ruff`, `ruff_format`                           | `black`, `flake8`, `isort`, `pylint` | `ruff`                           |
+| Python with type annotations         | `ty`                                            | `mypy`                               | `ty`                             |
+| `*.md`                               | `rumdl`, `rumdl_format`                         | `markdown_lint` (markdownlint-cli2)  | `rumdl`                          |
+| `*.yaml`/`*.yml` (beyond a couple)   | `ryl`                                           | `yamllint`                           | `cargo:ryl`                      |
+| YAML embedded in markdown            | `ryl_markdown`                                  | —                                    | `cargo:ryl`                      |
+| `*.toml`                             | `tombi`, `tombi_format`                         | `taplo`, `taplo_format`              | `tombi`                          |
+| `Cargo.toml`                         | `cargo_fmt`, `cargo_clippy`                     | —                                    | — (rustup toolchain)             |
+| `go.mod`                             | `golangci_lint`, `go_fumpt`                     | `go_fmt`, `go_vet`, `staticcheck`    | `golangci-lint`, `gofumpt`       |
+| `*.sh`, shebang scripts              | `shellcheck`, `shfmt`                           | —                                    | `shellcheck`, `shfmt`            |
+| `.github/workflows/`                 | `actionlint`, `zizmor`, `pinact`                | —                                    | `actionlint`, `zizmor`, `pinact` |
+| `Dockerfile*`                        | `hadolint`                                      | —                                    | `hadolint`                       |
+| `docker-compose.y*ml`                | `dclint`                                        | —                                    | `npm:dclint`                     |
+| `*.tf`                               | `tofu` (or `terraform`), `tf_lint`              | —                                    | `opentofu`/`terraform`, `tflint` |
+| `*.tf` with `terraform-docs` READMEs | `terraform_docs`, `terraform_validate`          | —                                    | `terraform-docs`, `terraform`    |
+| `terragrunt.hcl`                     | `terragrunt_hcl_fmt`, `terragrunt_hcl_validate` | —                                    | `terragrunt` (1.0.8+)            |
+| Kubernetes manifests                 | `kubeconform`, `kube_linter`                    | —                                    | `kubeconform`, `kube-linter`     |
+| `*.lua`                              | `stylua`, `selene`                              | `luacheck`                           | `stylua`, `cargo:selene`         |
+| `*.nix`                              | `nix_fmt` (or `alejandra`), `deadnix`           | —                                    | — / `alejandra`, `deadnix`       |
+| `*.pkl` (e.g. `hk.pkl` itself)       | `pkl`, `pkl_format`                             | —                                    | `pkl`                            |
+| `mise.toml`                          | `mise` (`mise fmt`)                             | —                                    | — (mise is already required)     |
+| OpenAPI spec files                   | `vacuum`                                        | `spectral`                           | `vacuum`                         |
+| Docs-heavy repo, prose matters       | `harper`                                        | `vale`, `textlint`                   | `harper-cli` (source install)    |
+| Many external links in docs          | `lychee`                                        | —                                    | `lychee`                         |
 
 ## Legacy → modern at a glance
 

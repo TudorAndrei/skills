@@ -18,7 +18,7 @@ of it.
 | 1    | Gatekeepers — never mutate                   | `check_merge_conflict`, `check_added_large_files`, `gitleaks`, `detect_private_key`, `actionlint`, `zizmor`, `hadolint`, `dclint`, `lychee` | none — let them run in parallel                      |
 | 2    | Content fixers — change what the code _says_ | `ruff`, `ox_lint`, `rumdl`, `typos`, `shellharden`, `pinact`, `golangci_lint --fix`                                                         | before tier 3 on the same files                      |
 | 3    | Formatters — change only how it _looks_      | `ruff_format`, `oxfmt`, `rumdl_format`, `tombi_format`, `ryl`, `yamlfmt`, `shfmt`, `cargo_fmt`, `go_fumpt`, `stylua`                        | `depends` on the tier-2 step that shares its glob    |
-| 4    | Whole-repo hygiene                           | `trailing_whitespace`, `newlines`, `mixed_line_ending`, `fix_byte_order_marker`                                                             | after all of tier 3 — their globs overlap everything |
+| 4    | Whole-repo hygiene                           | `trailing_whitespace`, `newlines`, `mixed_line_ending`, `byte_order_marker`                                                                 | after all of tier 3 — their globs overlap everything |
 | 5    | Validators — read-only, need final bytes     | `tsc`, `ty`, `mypy`, `cargo_clippy`, `cargo_check`, `shellcheck`, `selene`, `tombi`, `knip`, `sherif`, `vacuum`                             | after tier 4                                         |
 
 ## Why formatters run _after_ lint-fixers, not before
@@ -58,14 +58,14 @@ otherwise you serialize the whole hook for no reason.
 
 ## Reference pipeline
 
-Validated against hk 1.52.0 (`hk validate`, and `hk fix --all -v` confirms the group
+Validated against hk 2.1.0 (`hk validate`, and `hk fix --all -v` confirms the group
 sequence).
 
 ```pkl
-amends "package://github.com/jdx/hk/releases/download/v1.52.0/hk@1.52.0#/Config.pkl"
-import "package://github.com/jdx/hk/releases/download/v1.52.0/hk@1.52.0#/Builtins.pkl"
+amends "package://github.com/jdx/hk/releases/download/v2.1.0/hk@2.1.0#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v2.1.0/hk@2.1.0#/Builtins.pkl"
 
-local linters = new Mapping<String, Step | Group> {
+steps {
     // ── tier 1: gatekeepers. Never mutate, no ordering needed. ──
     ["check-merge-conflict"] = Builtins.check_merge_conflict
     ["check-added-large-files"] = Builtins.check_added_large_files
@@ -105,38 +105,33 @@ local linters = new Mapping<String, Step | Group> {
 }
 
 hooks {
-    ["pre-commit"] {
-        fix = true
-        stash = "git"
-        steps { ...linters }
-    }
     ["commit-msg"] {
         steps {
             ["conventional-commit"] = Builtins.check_conventional_commit
         }
     }
     ["pre-push"] {
-        // check only — no mutation before a push
-        steps { ...linters }
+        // check only — no implicit pre-push in hk 2, so spread the shared steps
+        steps { ...module.steps }
     }
-    ["check"] { steps { ...linters } }
-    ["fix"] { fix = true; steps { ...linters } }
 }
 ```
+
+The top-level `steps` block creates the `check`, `fix`, and `pre-commit` hooks, so they
+are not written out. `pre-commit` fixes, stages, and stashes; `fix` fixes without
+staging; `check` only checks. Only `commit-msg` (different steps) and `pre-push` (no
+implicit hook in hk 2) need a `hooks` entry.
 
 `hk fix --all -v` on that config prints the resulting barriers as `running group: 0…3`:
 typos alone, then the lint/format tier, then hygiene, then validators. Use that output to
 verify the ordering came out as intended after any edit.
-
-Note the mapping type is `Mapping<String, Step | Group>` — plain `Mapping<String, Step>`
-will not accept the hygiene `Group`.
 
 ## Ordering pitfalls
 
 - **Only order what overlaps.** `oxfmt` has no reason to wait on `ruff`. A `depends` chain
   across unrelated languages turns a parallel hook into a sequential one.
 - **`depends` names steps, not builtins.** The string must match the key you used in the
-  mapping (`"oxlint"`, not `"ox_lint"`).
+  `steps` block (`"oxlint"`, not `"ox_lint"`).
 - **A barrier splits everything after it.** Every step defined below an `exclusive = true`
   step lands in a later group, even ones you meant to run early. Define tier 1 above the
   first barrier.
@@ -147,3 +142,29 @@ will not accept the hygiene `Group`.
   (`tsc`, `mypy` on a whole project) — never on a step that writes files.
 - **`batch = true`** parallelizes a single-threaded linter across file chunks. Safe with
   formatters and worth setting on the slow ones; irrelevant to ordering.
+
+## Migrating from hk 1.x
+
+hk 2 loads Pkl only and fails with an error that names the replacement for each removed
+input. Full guide: <https://hk.jdx.dev/migration-v2>.
+
+| hk 1.x                                                       | hk 2                                                            |
+| ------------------------------------------------------------ | --------------------------------------------------------------- |
+| `local linters` spread into `pre-commit`/`check`/`fix`       | one top-level `steps { … }` block; delete those three hooks     |
+| `fix = true` + `stash = "git"` on `pre-commit`               | default for the implicit `pre-commit`; delete                   |
+| `hk fix` stages its fixes                                    | `hk fix` does not stage; pass `--stage` or set `stage = true`   |
+| `Builtins.gitleaks_staged`                                   | `(Builtins.gitleaks) { scan = "staged" }`                       |
+| `Builtins.knip_strict`                                       | `(Builtins.knip) { strict = true }`                             |
+| `Builtins.pinact_v3`, `Builtins.pinact_update_v3`            | `(Builtins.pinact) { version = "3" }`, same for `pinact_update` |
+| `Builtins.check_byte_order_marker` / `fix_byte_order_marker` | `Builtins.byte_order_marker`                                    |
+| `hk.toml`, `hk.yaml`, `hk.yml`, `hk.json`                    | `hk.pkl` amending `Config.pkl`                                  |
+| project `.hkrc.pkl`                                          | `hk.local.pkl`                                                  |
+| `~/.hkrc.pkl`, `--hkrc <PATH>`                               | `~/.config/hk/config.pkl`                                       |
+| `UserConfig.pkl` (`environment { }`, `defaults { }`)         | `Config.pkl` with `env { }` and top-level settings              |
+| `Types.Regex(…)`, `Config.Regex(…)`                          | Pkl's built-in `Regex(…)`                                       |
+| `hk generate`                                                | `hk init`                                                       |
+| `HK_PKL_BACKEND=pkl`, `pkl` in `mise.toml` for hk            | remove; hk uses its bundled evaluator                           |
+
+A `stage` list on a step is now only a path filter. It does not turn on staging by
+itself. After the migration, bump the package URLs to the installed version and run
+`hk validate`.

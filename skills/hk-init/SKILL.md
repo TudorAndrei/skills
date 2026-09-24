@@ -16,30 +16,29 @@ Follow these steps in order. Do not skip the codebase analysis — the value of 
 - Confirm the directory is a git repository (`git rev-parse --git-dir`). If not, ask before running `git init`.
 - Confirm `mise` is installed (`mise --version`). If not, stop and tell the user to install it first.
 - If an `hk.pkl` already exists, ask the user whether to regenerate or extend it.
+- This skill targets **hk 2.x**. If the repo has v1 config — `hk.toml`/`hk.yaml`/`hk.json`, a project `.hkrc.pkl`, `UserConfig.pkl`, package URLs at `v1.*`, or builtin variants like `gitleaks_staged` — treat the task as a migration. See "Migrating from hk 1.x" at the end of `references/pipeline.md`.
 
 ### 2. Add hk to mise.toml
 
-Edit (or create) `mise.toml` in the repo root. hk requires `pkl` to evaluate its config, and `HK_MISE=1` wraps the git hooks with `mise x` so hooks run with mise-managed tools on PATH even if the developer hasn't activated mise:
+Edit (or create) `mise.toml` in the repo root. `HK_MISE=1` wraps the git hooks with `mise x` so hooks run with mise-managed tools on PATH even if the developer hasn't activated mise:
 
 ```toml
 [tools]
 hk = "latest"
-pkl = "latest"
 
 [env]
 HK_MISE = 1
-
-[hooks]
-postinstall = "hk install --mise"
 ```
+
+hk 2 evaluates `hk.pkl` with its bundled pklr evaluator and never calls the `pkl` CLI. Do not add `pkl` for hk itself — add it only if you select the `pkl`/`pkl_format` builtins.
 
 Preserve any existing content in `mise.toml` — merge these entries, don't overwrite. Prefer pinning `hk` to the current latest version (check with `mise latest hk`) instead of `"latest"` if the repo pins its other tools.
 
-Then run `mise install` so `hk` and `pkl` are available.
+Then run `mise install` so `hk` is available. Hook installation is step 7.
 
 ### 3. Analyze the codebase and select builtins
 
-hk ships 140+ builtins (`hk builtins` lists them all; sources live in hk's repo under `pkl/builtins/`). Inspect the repo — file extensions, manifests, config files — and select only the builtins that match.
+hk ships 150+ builtins (`hk builtins` lists them all; sources live in hk's repo under `pkl/builtins/`). Inspect the repo — file extensions, manifests, config files — and select only the builtins that match.
 
 **Default to the modern subset** — the fast, single-binary, mostly Rust/Go tools that replace the older Node/Python-runtime linters. Use a legacy tool only when the repo already commits to it.
 
@@ -87,11 +86,19 @@ Use `depends = List("<step-key>")` to order two steps that share a glob — it c
 
 Run `hk init --mise` to scaffold, or write `hk.pkl` directly, using the reference pipeline as the skeleton and dropping the tiers that don't apply. Pin the version in the package URLs to the installed hk version (`hk --version`).
 
+In hk 2, a top-level `steps` block creates the `check`, `fix`, and `pre-commit` hooks for you, with these defaults:
+
+- `pre-commit` fixes, stages the fixed files, and uses git stashing.
+- `fix` fixes but does **not** stage (pass `--stage` to stage).
+- `check` only checks.
+
+Only hooks that need something different are written under `hooks`:
+
 ```pkl
 amends "package://github.com/jdx/hk/releases/download/vX.Y.Z/hk@X.Y.Z#/Config.pkl"
 import "package://github.com/jdx/hk/releases/download/vX.Y.Z/hk@X.Y.Z#/Builtins.pkl"
 
-local linters = new Mapping<String, Step | Group> {
+steps {
     ["gitleaks"] = Builtins.gitleaks                                    // tier 1
     ["typos"] = (Builtins.typos) { exclusive = true }                   // tier 2, repo-wide
     ["ruff"] = Builtins.ruff                                            // tier 2
@@ -106,27 +113,18 @@ local linters = new Mapping<String, Step | Group> {
 }
 
 hooks {
-    ["pre-commit"] {
-        fix = true       // auto-fix staged files where the tool supports it
-        stash = "git"
-        steps { ...linters }
-    }
     ["commit-msg"] {
         steps {
             ["conventional-commit"] = Builtins.check_conventional_commit
         }
     }
-    ["check"] {
-        steps { ...linters }
-    }
-    ["fix"] {
-        fix = true
-        steps { ...linters }
-    }
 }
 ```
 
-The mapping must be typed `Mapping<String, Step | Group>` if any `Group` is used. Customize a builtin by amending it, e.g. `["oxfmt"] = (Builtins.oxfmt) { glob = List("**/*.ts", "**/*.tsx") }`.
+- Do not add `pre-commit`, `check`, or `fix` hooks just to repeat the shared steps. If you write one of these hooks explicitly, its hook-level settings apply, its steps replace shared steps with the same key, and the other shared steps still run.
+- hk 2 creates no implicit `pre-push`. To add one, write `["pre-push"] { steps { ...module.steps } }`.
+- Customize a builtin by amending it, e.g. `["oxfmt"] = (Builtins.oxfmt) { glob = List("**/*.ts", "**/*.tsx") }`. Builtin variants are now typed options on the primary builtin: `(Builtins.gitleaks) { scan = "staged" }`, `(Builtins.knip) { strict = true }`, `(Builtins.pinact) { version = "3" }`.
+- Set `enabled = false` on a hook to skip it and leave it out of `hk install`.
 
 Verify the ordering came out as intended: `hk fix --all -v` prints the resulting barriers as `running group: 0…N`.
 
@@ -140,15 +138,28 @@ Verify each tool resolves before writing it into `hk.pkl`: `mise x -- <tool> --v
 
 ### 7. Install the hooks and run the checks
 
+Choose the install scope from the git version (`git --version`):
+
+- **Git 2.54 or later — global install (recommended by hk).** `hk install --global --mise` installs the hooks one time per machine in `~/.gitconfig`. In a repository without hk config, the hook does nothing. This changes the user's global git config, so ask before you run it. If a global hk install already exists, `hk install` in the repo skips the local install. That is correct — do not force a local install.
+- **Older git, or the user wants repo-scoped hooks.** Run `hk install --mise`. For teammates, add this to `mise.toml` so `mise install` also installs the hooks:
+
+  ```toml
+  [hooks]
+  postinstall = "hk install --mise"
+  ```
+
+  A repo-scoped install needs `mise` on git's runtime `PATH`.
+
+Then run the checks:
+
 ```sh
-hk install --mise   # writes .git/hooks/* wrapped with `mise x`
 hk check --all      # run every linter across the whole repo
 ```
 
-- If `hk check --all` reports fixable issues, run `hk fix --all`, show the user the diff, and re-run `hk check --all`.
+- If `hk check --all` reports fixable issues, run `hk fix --all`, show the user the diff, and re-run `hk check --all`. `hk fix` does not stage in hk 2, so the fixes stay as unstaged changes.
 - If a specific linter fails due to missing project config or an unfixable pre-existing issue, report it; offer to either fix the findings or narrow/remove that step rather than leaving a hook that blocks every commit.
 - Test the commit-msg hook without committing: `echo "bad message" | hk util check-conventional-commit /dev/stdin` should fail, `feat: example` should pass.
 
 ### 8. Report
 
-Summarize for the user: which builtins were selected and why, which tools were added to `mise.toml`, and the result of `hk check --all`. Remind them that teammates only need `mise install` (the `postinstall` hook installs the git hooks automatically).
+Summarize for the user: which builtins were selected and why, which tools were added to `mise.toml`, which install scope you used, and the result of `hk check --all`. Tell them what teammates must do: with a global install, each teammate runs `hk install --global --mise` one time on their machine. With the `postinstall` hook, `mise install` is sufficient.
