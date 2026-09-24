@@ -3,7 +3,6 @@
 jq = "latest"
 uv = "latest"
 hk = "latest"
-pkl = "latest"
 gitleaks = "latest"
 "npm:oxfmt" = "latest"
 yq = "4.53.6"

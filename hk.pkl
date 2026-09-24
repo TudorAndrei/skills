@@ -1,5 +1,5 @@
-amends "package://github.com/jdx/hk/releases/download/v1.50.0/hk@1.50.0#/Config.pkl"
-import "package://github.com/jdx/hk/releases/download/v1.50.0/hk@1.50.0#/Builtins.pkl"
+amends "package://github.com/jdx/hk/releases/download/v2.1.0/hk@2.1.0#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v2.1.0/hk@2.1.0#/Builtins.pkl"
 import "hk-vendored.pkl" as vendored
 
 // Overlay patches are byte-exact: a context line is " " plus the original line,
@@ -7,7 +7,7 @@ import "hk-vendored.pkl" as vendored
 // rewrite bytes must leave them alone, same as the vendored snapshots.
 local unformattable = vendored.globs + List("vendor-overlays/**/*.patch")
 
-local linters = new Mapping<String, Step> {
+steps {
     ["check-merge-conflict"] = Builtins.check_merge_conflict
     ["check-added-large-files"] = Builtins.check_added_large_files
     ["trailing-whitespace"] = (Builtins.trailing_whitespace) {
@@ -24,20 +24,9 @@ local linters = new Mapping<String, Step> {
 }
 
 hooks {
-    ["pre-commit"] {
-        fix = true
-        stash = "git"
-        steps { ...linters }
-    }
     ["commit-msg"] {
         steps {
             ["conventional-commit"] = Builtins.check_conventional_commit
         }
-    }
-    ["check"] {
-        steps { ...linters }
-    }
-    ["fix"] {
-        steps { ...linters }
     }
 }
