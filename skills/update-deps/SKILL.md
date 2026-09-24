@@ -76,10 +76,11 @@ Use the package manager's built-in command:
 If the command isn't available, search for it online.
 
 Present the findings as a table:
-| Package | Current | Latest | Type |
-| --- | --- | --- | --- |
-| pkg-name | 1.2.3 | 1.3.0 | minor |
-| other-pkg | 2.0.0 | 3.0.0 | major |
+
+| Package   | Current | Latest | Type  |
+| --------- | ------- | ------ | ----- |
+| pkg-name  | 1.2.3   | 1.3.0  | minor |
+| other-pkg | 2.0.0   | 3.0.0  | major |
 
 ### Step 3: Research changelogs and breaking changes
 
