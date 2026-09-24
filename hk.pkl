@@ -19,7 +19,9 @@ steps {
     ["gitleaks"] = Builtins.gitleaks
     ["oxfmt"] = (Builtins.oxfmt) {
         glob = List("**/*.md", "**/*.markdown")
-        exclude = vendored.globs
+        // .agents/skills is installed by the skills CLI and hash-checked in
+        // skills-lock.json, so reformatting it would drift from upstream.
+        exclude = vendored.globs + List(".agents/**")
     }
 }
 
