@@ -13,6 +13,7 @@ globs: List<String> = List(
     "skills/dmmulroy/bro/**",
     "skills/herdrdev/herdr/**",
     "skills/humanlayer/show-me/**",
+    "skills/internetarchive/ia/**",
     "skills/jakubkrehel/better-accessibility/**",
     "skills/jakubkrehel/better-colors/**",
     "skills/jakubkrehel/better-interface/**",

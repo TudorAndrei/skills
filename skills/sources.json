@@ -255,6 +255,17 @@
       }
     },
     {
+      "name": "ia",
+      "repo": "https://github.com/internetarchive/internet-archive-skills.git",
+      "path": "skills/ia",
+      "ref": "main",
+      "author": "internetarchive",
+      "homepage": "https://github.com/internetarchive/internet-archive-skills",
+      "license": {
+        "spdx": "AGPL-3.0"
+      }
+    },
+    {
       "name": "implement",
       "repo": "https://github.com/mattpocock/skills.git",
       "path": "skills/engineering/implement",
