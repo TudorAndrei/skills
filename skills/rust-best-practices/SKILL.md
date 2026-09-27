@@ -1,6 +1,6 @@
 ---
 name: rust-best-practices
-description: Rust project best practices - strict Clippy lints that deny panics, shared Cargo build caching with mr boxington (mbx), and smaller release binaries. Use when setting up or auditing a Rust project, configuring Clippy or `[lints]` in Cargo.toml, writing clippy.toml, removing unwrap/expect/panic/indexing/`as` casts, speeding up Cargo builds across worktrees or CI, or reducing Rust binary size (release profile tuning, strip/LTO/codegen settings, panic strategy, build-std, no_std, UPX, cargo-bloat, container image size).
+description: Rust project best practices - strict Clippy lints that deny panics, shared Cargo build caching with mr boxington (mbx), Cocogitto releases in GitHub Actions, and smaller release binaries. Use when setting up or auditing a Rust project, configuring Clippy or `[lints]` in Cargo.toml, writing clippy.toml, removing unwrap/expect/panic/indexing/`as` casts, speeding up Cargo builds across worktrees or CI, setting up versioning, changelogs, tags, or a release workflow (cog, cog.toml, cocogitto-action), or reducing Rust binary size (release profile tuning, strip/LTO/codegen settings, panic strategy, build-std, no_std, UPX, cargo-bloat, container image size).
 ---
 
 # Rust Best Practices
@@ -22,6 +22,12 @@ Read [references/clippy.md](references/clippy.md) for the exact config, the reas
 Use mr boxington (`mbx`) when builds repeat across projects, git worktrees, or CI. It wraps `rustc`, needs no daemon, and works with standard Cargo commands. Install it with mise, confirm with `mbx doctor`, and check reuse with `mbx explain --last`.
 
 Read [references/build-cache.md](references/build-cache.md) for install, verification, storage, and the GitHub Actions setup.
+
+## Releases
+
+Use Cocogitto (`cog`) as the release manager in GitHub Actions. It checks Conventional Commits, calculates the next SemVer version, writes `CHANGELOG.md`, and makes the version commit and tag. Configure it in `cog.toml` and run it with `cocogitto/cocogitto-action@v4` (`command: check` on pull requests, `command: bump` with `args: --auto` for releases).
+
+Read [references/release.md](references/release.md) for `cog.toml`, the Cargo version hooks, and the workflow files.
 
 ## Binary size
 
