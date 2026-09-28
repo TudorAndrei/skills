@@ -1,0 +1,4 @@
+interface:
+  display_name: "Brag"
+  short_description: "Launch video for your project, built with fframes and a Strudel soundtrack"
+  default_prompt: "Use $brag to make a launch video for this project."
