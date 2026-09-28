@@ -5,7 +5,8 @@ import "hk-vendored.pkl" as vendored
 // Overlay patches are byte-exact: a context line is " " plus the original line,
 // so stripping its trailing space makes the patch stop applying. Fixers that
 // rewrite bytes must leave them alone, same as the vendored snapshots.
-local unformattable = vendored.globs + List("vendor-overlays/**/*.patch")
+// brag keeps a verbatim copy of the fframes skill as reference material.
+local unformattable = vendored.globs + List("vendor-overlays/**/*.patch", "skills/brag/references/fframes-video/**")
 
 steps {
     ["check-merge-conflict"] = Builtins.check_merge_conflict
@@ -21,7 +22,7 @@ steps {
         glob = List("**/*.md", "**/*.markdown")
         // .agents/skills is installed by the skills CLI and hash-checked in
         // skills-lock.json, so reformatting it would drift from upstream.
-        exclude = vendored.globs + List(".agents/**")
+        exclude = unformattable + List(".agents/**")
     }
 }
 
