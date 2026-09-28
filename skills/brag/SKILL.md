@@ -46,11 +46,13 @@ Write everything to `brag-output/`, or to `brag-output-YYYY-MM-DD-HHmmss/` when 
 3. Create the project and start the first release build in the background. It compiles Skia and ffmpeg, about 20 minutes:
 
    ```bash
-   cargo fframes new <out>/video --format <landscape|portrait|square> --fps 30 --template multi-scene --yes
+   cargo fframes new brag-video --dir <out>/video --format <landscape|portrait|square> --fps 30 --template multi-scene --yes
    (cd <out>/video && cargo build --release)   # background
    ```
 
-   `multi-scene` accepts only `landscape`; use the default `single-scene` template for `vertical` (fframes calls it `portrait`) and `square`, and add scenes yourself.
+   The name accepts only a-z, 0-9, `-` and `_`; `--dir` sets the folder. `multi-scene` accepts only `landscape`; use the default `single-scene` template for `vertical` (fframes calls it `portrait`) and `square`, and add scenes yourself.
+
+   If the build fails in `fframes-skia-bindings` and the `LIBCLANG_PATH` fix from [guide.md § Troubleshooting](references/fframes-video/guide.md) does not help (for example, a bindgen error on new macOS SDK headers), use the CPU backend: remove `fframes_skia_renderer` and `fframes_native_player` from `Cargo.toml`, and remove `.backend(..)`, `.preview(..)` and the GPU context from `main.rs` (`cargo fframes new --backend cpu` shows the result). The CPU backend has no `preview` window.
 
 **Gate:** the build runs in the background, and every tool answers.
 
