@@ -38,16 +38,21 @@ The synth voices in the render script:
 | Control                                             | Effect                                                         |
 | --------------------------------------------------- | -------------------------------------------------------------- |
 | `s("bd sd hh oh cp rim")`                           | synthesized kick, snare, closed hat, open hat, clap, rim click |
-| `s("sine square sawtooth triangle")`                | tone for `note` or numeric `n`                                 |
+| `s("cr lt mt ht")`                                  | crash, low / mid / high tom (fills)                            |
+| `s("sine square sawtooth triangle supersaw")`       | tone for `note` or numeric `n`; supersaw = 7 detuned saws      |
 | `note("c3")`, `note(48)`, `n(..).scale("C4:major")` | pitch (c4 = MIDI 60)                                           |
 | `gain`, `velocity`                                  | level                                                          |
-| `pan`                                               | 0 = left, 1 = right                                            |
-| `cutoff` (`.lpf()`)                                 | one-pole low-pass in Hz                                        |
-| `attack`, `release`                                 | tone envelope in seconds                                       |
+| `pan`, `.jux(..)`                                   | 0 = left, 1 = right                                            |
+| `cutoff` (`.lpf()`), `hcutoff` (`.hpf()`)           | one-pole low-pass / high-pass in Hz                            |
+| `attack`, `decay`, `sustain`, `release`             | ADSR envelope; `decay` + `sustain(0)` makes plucks and stabs   |
+| `room`                                              | send to a shared reverb                                        |
+| `delay`, `delaytime`, `delayfeedback`               | send to a shared echo (default: a dotted 8th)                  |
 
-Other controls (`room`, `delay`, `vowel`, sample banks such as `piano`) are ignored or skipped, and the script lists them on stderr. Write the pattern with the controls above.
+Other controls (`vowel`, sample banks such as `piano`) are ignored or skipped, and the script lists them on stderr. Write the pattern with the controls above. The script skips events that start before the queried range (for example from `off`).
 
-Match the tone table in `SKILL.md`. Keep it modern and clean: a steady groove, one lead idea, and room for the SFX. Change the arrangement at scene boundaries so the music marks the cuts.
+Match the tone table in `SKILL.md`. Write a real arrangement, not a loop: a chord progression, a bass that moves with it, a groove with accents (`hh*16` with a gain pattern), one lead idea, and a fill or a roll into each big cut. Change the arrangement at scene boundaries so the music marks the cuts. Inside `arrange`, each section's `<…>` alternation starts again at its own first cycle.
+
+Kicks that double (`bd*4` stacked with another `bd`) raise the peak but not the loudness, so the whole mix comes out quiet after peak normalization. Check with `audio analyze`, and keep one kick per beat.
 
 ## 3. Check
 
