@@ -387,6 +387,17 @@
       }
     },
     {
+      "name": "test-audit",
+      "repo": "https://github.com/openclaw/openclaw.git",
+      "path": ".agents/skills/test-audit",
+      "ref": "main",
+      "author": "openclaw",
+      "homepage": "https://github.com/openclaw/openclaw",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
       "name": "tmux",
       "repo": "https://github.com/mitsuhiko/agent-stuff.git",
       "path": "skills/tmux",

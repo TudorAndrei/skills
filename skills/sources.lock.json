@@ -141,6 +141,10 @@
       "commit": "3cca18b368ae95cdbdebbff572ccafa662551015",
       "hash": "08317a414be9d50f53b4a44753985803dcd518b809ce110e259e162f4839743f"
     },
+    "test-audit": {
+      "commit": "c374040735c9c4fa6e9dd21efe55b136db782693",
+      "hash": "5bb2d464a361718e1bc5f7b08c499c1b1b7e5c3e51d3c800146b65425a1123ab"
+    },
     "tmux": {
       "commit": "122e2994adddb113c04764c5697217dae120fcc6",
       "hash": "b29c16ba5323872c6f754e8bddf9d858405e29e6d6774d9f7437f67221d45ae2"

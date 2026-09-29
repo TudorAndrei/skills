@@ -45,6 +45,7 @@ globs: List<String> = List(
     "skills/mattpocock/wayfinder/**",
     "skills/mattpocock/writing-for-agents/**",
     "skills/mitsuhiko/tmux/**",
+    "skills/openclaw/test-audit/**",
     "skills/shadcn/improve/**",
     "skills/timescale/postgres/**",
     "skills/upstash/find-docs/**",
