@@ -1,6 +1,6 @@
 ---
 name: rust-best-practices
-description: Rust project best practices - strict Clippy lints that deny panics, shared Cargo build caching with mr boxington (mbx), Cocogitto releases in GitHub Actions, and smaller release binaries. Use when setting up or auditing a Rust project, configuring Clippy or `[lints]` in Cargo.toml, writing clippy.toml, removing unwrap/expect/panic/indexing/`as` casts, speeding up Cargo builds across worktrees or CI, setting up versioning, changelogs, tags, or a release workflow (cog, cog.toml, cocogitto-action), or reducing Rust binary size (release profile tuning, strip/LTO/codegen settings, panic strategy, build-std, no_std, UPX, cargo-bloat, container image size).
+description: Rust project best practices - strict Clippy lints that deny panics, shared Cargo build caching with mr boxington (mbx), Cocogitto releases in GitHub Actions, and smaller release binaries. Use when setting up or auditing a Rust project, configuring Clippy or `[lints]` in Cargo.toml, writing clippy.toml, removing unwrap/expect/panic/indexing/`as` casts, speeding up Cargo builds across worktrees or CI, caching Rust compilation in GitHub Actions (Swatinem/rust-cache, sccache), setting up versioning, changelogs, tags, or a release workflow (cog, cog.toml, cocogitto-action), or reducing Rust binary size (release profile tuning, strip/LTO/codegen settings, panic strategy, build-std, no_std, UPX, cargo-bloat, container image size).
 ---
 
 # Rust Best Practices
@@ -22,6 +22,8 @@ Read [references/clippy.md](references/clippy.md) for the exact config, the reas
 Use mr boxington (`mbx`) when builds repeat across projects, git worktrees, or CI. It wraps `rustc`, needs no daemon, and works with standard Cargo commands. Install it with mise, confirm with `mbx doctor`, and check reuse with `mbx explain --last`.
 
 Read [references/build-cache.md](references/build-cache.md) for install, verification, storage, and the GitHub Actions setup.
+
+If the project cannot use mbx in CI, use `Swatinem/rust-cache@v2` or `mozilla-actions/sccache-action`. Use only one cache layer per job, and save the cache only from the default branch. Read [references/ci-cache.md](references/ci-cache.md) to choose between them, for the workflow files, and for GitHub cache limits.
 
 ## Releases
 
