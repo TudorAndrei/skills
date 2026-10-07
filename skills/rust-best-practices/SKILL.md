@@ -43,7 +43,7 @@ In review, treat these as a string carrying an enum's job: `match s.as_str()` or
 
 ## Foreign idioms
 
-Write Rust shaped by Rust, not Go, Java, C#, Python, TypeScript, or C++ in Rust syntax. The usual signs are a `.clone()` or `Arc<Mutex<_>>` added to silence the borrow checker, free functions over `&mut Struct` in place of methods, hand-written impls that `#[derive]` or a std trait would give, inheritance-style traits, error codes or sentinel values in place of `Result` and `Option`, and maps used as records. Read [references/foreign-idioms.md](references/foreign-idioms.md) when you write or review Rust, and rewrite each hit to the Rust form.
+Write Rust shaped by Rust, not Go, Java, Python, TypeScript, or C++ in Rust syntax. The usual signs are a `.clone()` or `Arc<Mutex<_>>` added to silence the borrow checker, free functions over `&mut Struct` in place of methods, hand-written impls that `#[derive]` or a std trait would give, inheritance-style traits, error codes or sentinel values in place of `Result` and `Option`, and maps used as records. Read [references/foreign-idioms.md](references/foreign-idioms.md) when you write or review Rust, and rewrite each hit to the Rust form.
 
 ## Performance
 

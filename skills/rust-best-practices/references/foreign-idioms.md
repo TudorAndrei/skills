@@ -1,8 +1,8 @@
 # Foreign Idioms
 
-Sources: https://rust-unofficial.github.io/patterns/, https://users.rust-lang.org/t/common-newbie-mistakes-or-bad-practices/64821, https://dystroy.org/blog/how-not-to-learn-rust/, https://microsoft.github.io/RustTraining/csharp-book/ch16-best-practices.html, https://google.github.io/comprehensive-rust/idiomatic/welcome.html
+Sources: https://rust-unofficial.github.io/patterns/, https://users.rust-lang.org/t/common-newbie-mistakes-or-bad-practices/64821, https://dystroy.org/blog/how-not-to-learn-rust/, https://google.github.io/comprehensive-rust/idiomatic/welcome.html
 
-A **foreign idiom** is code that compiles but is shaped by another language: Go, Java, C#, Python, TypeScript, C, or C++ written in Rust syntax. Each one usually costs a clone, an allocation, a lock, or a runtime check that the type system could do for free. Use this list when you write Rust and when you review it. For each hit, rewrite to the Rust form unless the code has a stated reason.
+A **foreign idiom** is code that compiles but is shaped by another language: Go, Java, Python, TypeScript, C, or C++ written in Rust syntax. Each one usually costs a clone, an allocation, a lock, or a runtime check that the type system could do for free. Use this list when you write Rust and when you review it. For each hit, rewrite to the Rust form unless the code has a stated reason.
 
 ## Ownership (any garbage-collected language)
 
@@ -11,9 +11,8 @@ A **foreign idiom** is code that compiles but is shaped by another language: Go,
 - **The escalation loop.** A lifetime error fixed with `clone()`, then `Arc<Mutex<_>>`, then `Box::leak` or `unsafe`, is one design problem. Stop and restructure who owns the data.
 - **References stored in structs.** A `&Foo` field forces lifetime parameters onto every struct that holds it. Own the data (`String`, `Vec<T>`, `Arc<T>`) unless the struct is a short-lived view, such as an iterator or a parser over a borrowed buffer.
 - **Self-referential structs and pointer graphs.** Store nodes in a `Vec` and refer to them by index ([performance.md](performance.md), Data layout), or use `slotmap`. A linked list is almost never the right collection; use `Vec` or `VecDeque`.
-- **Returning a reference to a local.** Return the owned value.
 
-## Behavior and types (Go, Java, C#)
+## Behavior and types (Go, Java)
 
 - **Free functions over `&mut Struct`.** `fn update(state: &mut State, x: u32)` is Go-style receiver code. Put behavior that belongs to a type in its `impl` block as a method (`state.update(x)`), and implement a trait when several types share the behavior. A free function fits when no single type owns the operation.
 - **Hand-written boilerplate impls.** `#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]` replaces hand-written equivalents; derive `Serialize`, `Deserialize`, and `thiserror::Error` too.
@@ -26,7 +25,7 @@ A **foreign idiom** is code that compiles but is shaped by another language: Go,
 - **Global mutable singletons and `init()` functions.** Pass dependencies as arguments or struct fields. For a truly global value computed once, use `std::sync::OnceLock` or `LazyLock`.
 - **Half-built objects.** Construct a value complete and valid (`new`, a builder, or `Default` with struct update syntax `..Default::default()`), not empty and then set field by field, and not with a separate `init()` call.
 
-## Errors and absence (Go, Java, C#, Python, C)
+## Errors and absence (Go, Java, Python, C)
 
 - **Error codes, `(T, error)` tuples, and `bool ok` returns.** Return `Result<T, E>` and propagate with `?`. A `match` per call that only forwards the error is Go's `if err != nil` written longhand.
 - **Exceptions as control flow.** `panic!` is for bugs. Expected failures are `Result` values ([clippy.md](clippy.md) denies the panicking shortcuts).
