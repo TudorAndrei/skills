@@ -1,6 +1,6 @@
 ---
 name: rust-best-practices
-description: Rust project best practices - strict Clippy lints that deny panics, shared Cargo build caching with mr boxington (mbx), Cocogitto releases in GitHub Actions, and smaller release binaries. Use when setting up or auditing a Rust project, configuring Clippy or `[lints]` in Cargo.toml, writing clippy.toml, removing unwrap/expect/panic/indexing/`as` casts, speeding up Cargo builds across worktrees or CI, caching Rust compilation in GitHub Actions (Swatinem/rust-cache, sccache), setting up versioning, changelogs, tags, or a release workflow (cog, cog.toml, cocogitto-action), or reducing Rust binary size (release profile tuning, strip/LTO/codegen settings, panic strategy, build-std, no_std, UPX, cargo-bloat, container image size).
+description: Rust project best practices - strict lints, verification, misuse-resistant APIs, benchmarks, dependency vetting, build caching, releases, and binary size. Use when setting up or auditing a Rust project, configuring Clippy, `[lints]`, or clippy.toml, removing unwrap/expect/panic/indexing/`as` casts, hardening or reviewing high-stakes Rust, verifying `unsafe`, concurrent, or rewritten code (Miri, sanitizers, Loom, Kani, proptest, fuzzing, cargo-mutants, TLA+), designing a public API or keeping semver, benchmarking or optimizing working Rust, vetting dependencies (cargo deny, cargo-vet, cargo auditable), speeding up Cargo builds across worktrees or CI (mbx, Swatinem/rust-cache, sccache), setting up versioning, changelogs, or releases (cog, cog.toml, cocogitto-action), or reducing binary size (release profile, LTO, panic strategy, build-std, no_std, UPX, cargo-bloat, container images).
 ---
 
 # Rust Best Practices
@@ -11,11 +11,31 @@ Pick the sections that match the request. Inspect the project before editing: `C
 
 Deny panicking code paths in production code and allow them in tests.
 
-1. Add the `[lints.clippy]` table to `Cargo.toml` (or `[workspace.lints.clippy]` in a workspace root, with `[lints] workspace = true` in each member).
+1. Add the `[lints.clippy]` and `[lints.rust]` tables to `Cargo.toml` (or `[workspace.lints.*]` in a workspace root, with `[lints] workspace = true` in each member).
 2. Add `clippy.toml` with the `allow-*-in-tests` settings.
 3. Run `cargo clippy --all-targets --all-features` and fix findings. Do not silence them with a blanket `#[allow]`.
 
 Read [references/clippy.md](references/clippy.md) for the exact config, the reason for each lint, and how to apply it to an existing codebase.
+
+## Verification
+
+For high-stakes or long-lived crates, "it compiles and the tests pass" is the start of the job. Give each real failure class one **owner** (fuzzing for untrusted input, Miri for `unsafe`, Loom for lock-free code, differential tests against the retained old code for a rewrite), and name the **oracle** that would catch the code being wrong. Read the workspace and map the verifiers already in CI before you recommend a tool. A verification review is a read-only audit first.
+
+End the work with the Evidence, Documented, Deferred, Compat/deps, and Verification report. Name each claim with its narrowest term and bounds; a bounded check, fuzz run, or test suite is never a proof.
+
+Read [references/verification.md](references/verification.md) for the testing checklist, sanitizer commands, the risk-to-owner table, formal tools, anti-drift rules, CI shape, and the report format.
+
+## API design
+
+Make misuse inexpressible with newtypes, validated two-phase structs, enums, and typestate, and keep the public surface small. Read [references/api-design.md](references/api-design.md) for the state-machine ladder, everyday API idioms, semver tooling, and what to document.
+
+## Performance
+
+A speed claim compares equal work under a frozen **benchmark contract**, and an optimization keeps the old implementation as the oracle. Read [references/performance.md](references/performance.md) to benchmark, to change data layout, or to run the optimization loop until gains converge.
+
+## Dependencies
+
+Ship binaries built with `cargo auditable`, gate on `cargo deny`, vet with `cargo-vet`, scan workflows with `zizmor`, and keep upgrades flowing. Read [references/dependencies.md](references/dependencies.md) for the supply-chain steps and the anti-stagnation practices.
 
 ## Shared build cache
 

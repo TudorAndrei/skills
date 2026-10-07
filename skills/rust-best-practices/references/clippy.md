@@ -22,9 +22,12 @@ panic_in_result_fn = "deny"
 panic = "deny"
 exit = "deny"
 as_conversions = "deny"
+
+[lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
 ```
 
-In a workspace, put the table in the root `Cargo.toml` as `[workspace.lints.clippy]`, and add this to each member:
+In a workspace, put the tables in the root `Cargo.toml` as `[workspace.lints.clippy]` and `[workspace.lints.rust]`, and add this to each member:
 
 ```toml
 [lints]
@@ -54,6 +57,7 @@ allow-indexing-slicing-in-tests = true
 - `panic_in_result_fn`: a function that returns `Result` must not also panic.
 - `exit`: `std::process::exit` skips destructors. Return an exit code from `main` instead.
 - `as_conversions`: `as` truncates and changes sign silently. Use `From`, `TryFrom`, or `try_into`.
+- `unsafe_op_in_unsafe_fn` (rustc lint): each unsafe operation inside an `unsafe fn` still needs its own `unsafe` block, so the unsafe surface stays visible for review and Miri.
 
 ## Applying to an existing codebase
 
