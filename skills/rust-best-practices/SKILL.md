@@ -29,6 +29,18 @@ Read [references/verification.md](references/verification.md) for the testing ch
 
 Make misuse inexpressible with newtypes, validated two-phase structs, enums, and typestate, and keep the public surface small. Read [references/api-design.md](references/api-design.md) for the state-machine ladder, everyday API idioms, semver tooling, and what to document.
 
+## Enums over strings
+
+Parse, don't validate: turn a string into a typed value once, where it enters the program, and carry the type from there.
+
+- Model every closed set of values (mode, status, kind, command, unit, format, event name) as an enum. Parse it at the input boundary with `#[derive(Deserialize)]` and `#[serde(rename_all = "...")]`, `clap::ValueEnum`, or `FromStr` / `TryFrom<&str>`.
+- Pass the enum through functions, struct fields, and map keys, and `match` on it exhaustively, so adding a variant makes the compiler list every site to update.
+- Turn it back into a string only at the output boundary (`Serialize`, `Display`, or `fn as_str(&self) -> &'static str`). Keep the string mapping in one place; `strum` derives (`EnumString`, `Display`, `IntoStaticStr`) generate both directions from the variant names.
+- Put data that belongs to one kind on that variant (`enum Shape { Circle { r: f64 }, Rect { w: f64, h: f64 } }`), with `#[serde(tag = "type")]` for tagged JSON, instead of a `kind` string beside loosely related fields.
+- Keep a `String` or newtype only for an open set, such as user-defined names. For an external set that can grow, add `#[non_exhaustive]` on a public enum, or an `Other(String)` variant when unknown values must round-trip.
+
+In review, treat these as a string carrying an enum's job: `match s.as_str()` or `== "literal"` past the input boundary, a `&str` or `String` parameter that takes a fixed set of values, `to_string()` on a variant followed by a parse elsewhere, and a `HashMap<String, _>` keyed by a fixed set.
+
 ## Performance
 
 A speed claim compares equal work under a frozen **benchmark contract**, and an optimization keeps the old implementation as the oracle. Read [references/performance.md](references/performance.md) to benchmark, to change data layout, or to run the optimization loop until gains converge.
