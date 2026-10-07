@@ -1,6 +1,6 @@
 ---
 name: rust-best-practices
-description: Rust project best practices - strict lints, verification, misuse-resistant APIs, benchmarks, dependency vetting, build caching, releases, and binary size. Use when setting up or auditing a Rust project, configuring Clippy, `[lints]`, or clippy.toml, removing unwrap/expect/panic/indexing/`as` casts, hardening or reviewing high-stakes Rust, verifying `unsafe`, concurrent, or rewritten code (Miri, sanitizers, Loom, Kani, proptest, fuzzing, cargo-mutants, TLA+), designing a public API or keeping semver, benchmarking or optimizing working Rust, vetting dependencies (cargo deny, cargo-vet, cargo auditable), speeding up Cargo builds across worktrees or CI (mbx, Swatinem/rust-cache, sccache), setting up versioning, changelogs, or releases (cog, cog.toml, cocogitto-action), or reducing binary size (release profile, LTO, panic strategy, build-std, no_std, UPX, cargo-bloat, container images).
+description: Rust project best practices - strict lints, verification, misuse-resistant APIs, benchmarks, dependency vetting, build caching, releases, and binary size. Use when setting up or auditing a Rust project, configuring Clippy, `[lints]`, or clippy.toml, removing unwrap/expect/panic/indexing/`as` casts, writing, hardening, or reviewing Rust (including habits carried over from Go, Java, or Python), verifying `unsafe`, concurrent, or rewritten code (Miri, sanitizers, Loom, Kani, proptest, fuzzing, cargo-mutants, TLA+), designing a public API or keeping semver, benchmarking or optimizing working Rust, vetting dependencies (cargo deny, cargo-vet, cargo auditable), speeding up Cargo builds across worktrees or CI (mbx, Swatinem/rust-cache, sccache), setting up versioning, changelogs, or releases (cog, cog.toml, cocogitto-action), or reducing binary size (release profile, LTO, panic strategy, build-std, no_std, UPX, cargo-bloat, container images).
 ---
 
 # Rust Best Practices
@@ -40,6 +40,10 @@ Parse, don't validate: turn a string into a typed value once, where it enters th
 - Keep a `String` or newtype only for an open set, such as user-defined names. For an external set that can grow, add `#[non_exhaustive]` on a public enum, or an `Other(String)` variant when unknown values must round-trip.
 
 In review, treat these as a string carrying an enum's job: `match s.as_str()` or `== "literal"` past the input boundary, a `&str` or `String` parameter that takes a fixed set of values, `to_string()` on a variant followed by a parse elsewhere, and a `HashMap<String, _>` keyed by a fixed set.
+
+## Foreign idioms
+
+Write Rust shaped by Rust, not Go, Java, C#, Python, TypeScript, or C++ in Rust syntax. The usual signs are a `.clone()` or `Arc<Mutex<_>>` added to silence the borrow checker, free functions over `&mut Struct` in place of methods, hand-written impls that `#[derive]` or a std trait would give, inheritance-style traits, error codes or sentinel values in place of `Result` and `Option`, and maps used as records. Read [references/foreign-idioms.md](references/foreign-idioms.md) when you write or review Rust, and rewrite each hit to the Rust form.
 
 ## Performance
 
