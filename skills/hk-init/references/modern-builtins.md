@@ -1,6 +1,6 @@
 # Modern hk builtin subset
 
-Curated from `hk builtins` (hk 2.1.0, 158 builtins). The picks below favour fast,
+Curated from `hk builtins` (hk 2.5.0). The picks below favour fast,
 single-binary, mostly Rust/Go tools over the older Node/Python-runtime linters they
 replace. Builtin names are the snake_case Pkl identifiers (`Builtins.ox_lint`).
 
@@ -17,7 +17,7 @@ Once the steps are chosen, see `pipeline.md` for the order to run them in.
 
 ## By evidence in the repo
 
-| Evidence in repo                     | Modern builtin(s)                               | Replaces                             | mise tool                        |
+| Evidence in repo                     | Modern step(s)                                  | Replaces                             | mise tool                        |
 | ------------------------------------ | ----------------------------------------------- | ------------------------------------ | -------------------------------- |
 | `*.ts`/`*.js`, `package.json`        | `ox_lint`, `oxfmt`                              | `eslint`, `prettier`                 | `oxlint`, `npm:oxfmt`            |
 | `tsconfig.json`                      | `tsc`                                           | —                                    | project-local via `package.json` |
@@ -31,7 +31,7 @@ Once the steps are chosen, see `pipeline.md` for the order to run them in.
 | `Cargo.toml`                         | `cargo_fmt`, `cargo_clippy`                     | —                                    | — (rustup toolchain)             |
 | `go.mod`                             | `golangci_lint`, `go_fumpt`                     | `go_fmt`, `go_vet`, `staticcheck`    | `golangci-lint`, `gofumpt`       |
 | `*.sh`, shebang scripts              | `shellcheck`, `shfmt`                           | —                                    | `shellcheck`, `shfmt`            |
-| `.github/workflows/`                 | `actionlint`, `zizmor`, `pinact`                | —                                    | `actionlint`, `zizmor`, `pinact` |
+| `.github/workflows/`                 | `jactionlint` custom step, optional `pinact`    | `actionlint`, `zizmor`               | `jactionlint`, optional `pinact` |
 | `Dockerfile*`                        | `hadolint`                                      | —                                    | `hadolint`                       |
 | `docker-compose.y*ml`                | `dclint`                                        | —                                    | `npm:dclint`                     |
 | `*.tf`                               | `tofu` (or `terraform`), `tf_lint`              | —                                    | `opentofu`/`terraform`, `tflint` |
@@ -77,9 +77,14 @@ Once the steps are chosen, see `pipeline.md` for the order to run them in.
 - **`betterleaks`** is a faster, more configurable gitleaks alternative that reads
   `.gitleaks.toml`. A reasonable swap, but `gitleaks` stays the default — wider adoption
   and a longer track record.
-- **`zizmor`** catches GitHub Actions security issues `actionlint` does not (script
-  injection, over-broad `permissions`, unpinned third-party actions). **`pinact`** pins
-  actions to commit SHAs and can update them (`pinact_update`).
+- **[`jactionlint` 2.2.0](https://github.com/jdx/jactionlint/releases/tag/v2.2.0)**
+  checks GitHub Actions correctness and security, including the checks in
+  `actionlint` and the audits in `zizmor`. Use a custom `Step` with hk 2.5.0;
+  that release has no `Builtins.jactionlint`. Its `--fix` option can change
+  workflow files, so place it with the content fixers. If a YAML formatter
+  shares those files, make it depend on the `jactionlint` step. See
+  `pipeline.md` for the step.
+  **`pinact`** pins actions to commit SHAs and can update them (`pinact_update`).
 - **`knip`** (unused files/deps/exports) and **`sherif`** (monorepo package.json hygiene)
   are useful but opinionated — they frequently fail on first run in an existing repo.
   Suggest them, don't add them silently.
@@ -115,9 +120,8 @@ tombi = "latest"
 ty = "latest"
 typos = "latest"
 gitleaks = "latest"
-zizmor = "latest"
 pinact = "latest"
-actionlint = "latest"
+jactionlint = "2.2.0"
 vacuum = "latest"
 ```
 

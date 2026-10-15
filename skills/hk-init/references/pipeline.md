@@ -13,13 +13,13 @@ file.** Everything else can run in parallel.
 That yields five tiers. Only tiers 2→4 need explicit ordering; tier 1 and tier 5 fall out
 of it.
 
-| Tier | What                                         | Examples                                                                                                                                    | Ordering                                             |
-| ---- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| 1    | Gatekeepers — never mutate                   | `check_merge_conflict`, `check_added_large_files`, `gitleaks`, `detect_private_key`, `actionlint`, `zizmor`, `hadolint`, `dclint`, `lychee` | none — let them run in parallel                      |
-| 2    | Content fixers — change what the code _says_ | `ruff`, `ox_lint`, `rumdl`, `typos`, `shellharden`, `pinact`, `golangci_lint --fix`                                                         | before tier 3 on the same files                      |
-| 3    | Formatters — change only how it _looks_      | `ruff_format`, `oxfmt`, `rumdl_format`, `tombi_format`, `ryl`, `yamlfmt`, `shfmt`, `cargo_fmt`, `go_fumpt`, `stylua`                        | `depends` on the tier-2 step that shares its glob    |
-| 4    | Whole-repo hygiene                           | `trailing_whitespace`, `newlines`, `mixed_line_ending`, `byte_order_marker`                                                                 | after all of tier 3 — their globs overlap everything |
-| 5    | Validators — read-only, need final bytes     | `tsc`, `ty`, `mypy`, `cargo_clippy`, `cargo_check`, `shellcheck`, `selene`, `tombi`, `knip`, `sherif`, `vacuum`                             | after tier 4                                         |
+| Tier | What                                         | Examples                                                                                                             | Ordering                                             |
+| ---- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| 1    | Gatekeepers — never mutate                   | `check_merge_conflict`, `check_added_large_files`, `gitleaks`, `detect_private_key`, `hadolint`, `dclint`, `lychee`  | none — let them run in parallel                      |
+| 2    | Content fixers — change what the code _says_ | `ruff`, `ox_lint`, `rumdl`, `typos`, `shellharden`, `pinact`, `jactionlint`, `golangci_lint --fix`                   | before tier 3 on the same files                      |
+| 3    | Formatters — change only how it _looks_      | `ruff_format`, `oxfmt`, `rumdl_format`, `tombi_format`, `ryl`, `yamlfmt`, `shfmt`, `cargo_fmt`, `go_fumpt`, `stylua` | `depends` on the tier-2 step that shares its glob    |
+| 4    | Whole-repo hygiene                           | `trailing_whitespace`, `newlines`, `mixed_line_ending`, `byte_order_marker`                                          | after all of tier 3 — their globs overlap everything |
+| 5    | Validators — read-only, need final bytes     | `tsc`, `ty`, `mypy`, `cargo_clippy`, `cargo_check`, `shellcheck`, `selene`, `tombi`, `knip`, `sherif`, `vacuum`      | after tier 4                                         |
 
 ## Why formatters run _after_ lint-fixers, not before
 
@@ -58,23 +58,29 @@ otherwise you serialize the whole hook for no reason.
 
 ## Reference pipeline
 
-Validated against hk 2.1.0 (`hk validate`, and `hk fix --all -v` confirms the group
-sequence).
+This example uses hk 2.5.0. Run `hk validate` and `hk fix --all -v` to check
+the config and its group sequence in the target repository.
 
 ```pkl
-amends "package://github.com/jdx/hk/releases/download/v2.1.0/hk@2.1.0#/Config.pkl"
-import "package://github.com/jdx/hk/releases/download/v2.1.0/hk@2.1.0#/Builtins.pkl"
+amends "package://github.com/jdx/hk/releases/download/v2.5.0/hk@2.5.0#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v2.5.0/hk@2.5.0#/Builtins.pkl"
 
 steps {
     // ── tier 1: gatekeepers. Never mutate, no ordering needed. ──
     ["check-merge-conflict"] = Builtins.check_merge_conflict
     ["check-added-large-files"] = Builtins.check_added_large_files
     ["gitleaks"] = Builtins.gitleaks
-    ["actionlint"] = Builtins.actionlint
-    ["zizmor"] = Builtins.zizmor
 
     // ── tier 2: content fixers. `typos` is repo-wide, so it takes the barrier. ──
     ["typos"] = (Builtins.typos) { exclusive = true }
+    ["jactionlint"] = new Step {
+        glob = List(".github/workflows/*.yml", ".github/workflows/*.yaml",
+                    ".github/actions/**/action.yml", ".github/actions/**/action.yaml",
+                    ".github/dependabot.yml", ".github/dependabot.yaml")
+        check = "jactionlint --format gcc {{files}}"
+        fix = "jactionlint --fix {{files}}"
+        batch = true
+    }
     ["oxlint"] = Builtins.ox_lint
     ["ruff"] = Builtins.ruff
     ["rumdl"] = Builtins.rumdl

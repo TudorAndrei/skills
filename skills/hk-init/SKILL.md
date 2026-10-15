@@ -55,7 +55,7 @@ The short version of the defaults:
 | TOML       | `tombi` + `tombi_format`     | `taplo`                             |
 | Go         | `golangci_lint`, `go_fumpt`  | `go_fmt` + `go_vet` + `staticcheck` |
 | Spelling   | `typos`                      | codespell / cspell                  |
-| GH Actions | `actionlint` + `zizmor`      | `actionlint` alone                  |
+| GH Actions | `jactionlint` 2.2.0          | `actionlint` + `zizmor`             |
 
 Plus, always: `check_conventional_commit` (commit-msg), `check_merge_conflict`, `trailing_whitespace`, `newlines`, `check_added_large_files`, `gitleaks`, `detect_private_key`.
 
@@ -72,8 +72,8 @@ hk runs every step in a hook in parallel, coordinated by per-file read/write loc
 
 **Read `references/pipeline.md` for the tier model, the two ordering primitives, and a complete validated `hk.pkl` to copy from.** The pipeline in five tiers:
 
-1. **Gatekeepers** — never mutate: `check_merge_conflict`, `check_added_large_files`, `gitleaks`, `actionlint`, `zizmor`. No ordering.
-2. **Content fixers** — change what the code says: `ruff`, `ox_lint`, `rumdl`, `typos`.
+1. **Gatekeepers** — never mutate: `check_merge_conflict`, `check_added_large_files`, `gitleaks`. No ordering.
+2. **Content fixers** — change what the code says: `ruff`, `ox_lint`, `rumdl`, `typos`, `jactionlint`.
 3. **Formatters** — change only how it looks: `ruff_format`, `oxfmt`, `rumdl_format`, `tombi_format`, `shfmt`. Each `depends` on the tier-2 step sharing its glob.
 4. **Whole-repo hygiene** — `trailing_whitespace`, `newlines`. Their globs overlap everything, so they go last, inside one `Group` barrier.
 5. **Validators** — read-only, must see the final bytes: `tsc`, `ty`, `cargo_clippy`, `shellcheck`, `knip`.
