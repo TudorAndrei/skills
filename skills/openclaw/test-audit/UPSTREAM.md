@@ -9,5 +9,5 @@ change `skills/sources.json` upstream and run `mise run update test-audit`.
 - Homepage: https://github.com/openclaw/openclaw
 - Upstream path: `.agents/skills/test-audit`
 - Tracked ref: `main`
-- Resolved commit: `c374040735c9c4fa6e9dd21efe55b136db782693`
+- Resolved commit: `f2fccfab05f36f400a671026d95263db790affd2`
 - License: MIT (see `LICENSE.upstream`)

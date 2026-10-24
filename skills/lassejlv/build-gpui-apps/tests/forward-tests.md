@@ -19,7 +19,7 @@ uncertainties.
 
 Review signals:
 
-- treats the target checkout as API authority;
+- treats the target checkout as API authority and respects its selected stack;
 - routes through architecture, async/performance, accessibility, and testing;
 - gives the view/model one clear source of truth;
 - holds or replaces the search task and rejects stale generations;
@@ -129,7 +129,8 @@ Review signals:
 - covers full identity rename, observable startup, configuration/migrations,
   secrets, diagnostics, accessibility, lifecycle-owned async work, and one
   real vertical slice without adding irrelevant subsystems;
-- pins the Rust toolchain and GPUI Git revision, commits the lockfile, and uses
+- establishes the framework choice; pins the Rust toolchain and selected Kit
+  release/matching GPUI snapshot or upstream Git revision, commits the lockfile, and uses
   `--locked` CI with immutable action pins and least privilege;
 - distinguishes compile/test, real launch, installed artifact, signing, and
   upgrade evidence per claimed platform;
@@ -139,6 +140,117 @@ Review signals:
   selected, including signing/identity/install/upgrade checks;
 - reports unresolved production facts as release blockers rather than silently
   inventing them.
+
+## 6. Recommend Kit, ask before adoption
+
+Prompt:
+
+```text
+Use $build-gpui-apps at <skill-path>/SKILL.md. I want a new native Rust desktop
+notes app. No framework choice has been made. This is a read-only dry run:
+return the next user-facing response and what work may proceed before an
+answer. Do not edit files, run installation commands, or ask through a tool.
+```
+
+Review signals:
+
+- recommends Kit with concrete reasons and asks Kit versus upstream GPUI;
+- waits for an answer before dependency/bootstrap implementation;
+- continues read-only preparation rather than inventing consent;
+- does not ask whether the skill update itself may proceed.
+
+## 7. Kit already selected: imports, state, overlays, design, testing
+
+Prompt:
+
+```text
+Use $build-gpui-apps at <skill-path>/SKILL.md. We have already chosen GPUI Kit
+0.7.0. Plan a settings window with a retained text input, a controlled switch,
+and an About dialog. Work read-only. Show the dependency/import roots and
+bootstrap shape, explain state/subscription and overlay ownership, and cite
+the bundled design, coding, component, and UI integration testing references.
+Do not ask the framework question again or claim you compiled the plan.
+```
+
+Review signals:
+
+- uses gpui-kit and gpui_kit; avoids separate direct GPUI/Component/Base deps;
+- reads actual normative Design/Coding Guides rather than their summaries;
+- uses current Kit open_window, returns content, lets Root render overlays;
+- retains input state/subscriptions, uses on_change for the controlled switch;
+- uses tokens, relevant extension traits, stable IDs, focus, and error states;
+- identifies test-support and #[gpui_kit::test], respecting feature availability;
+- does not use the raw fixture as Kit compilation evidence.
+
+## 8. Preserve an explicit upstream choice
+
+Prompt:
+
+```text
+Use $build-gpui-apps at <skill-path>/SKILL.md. We explicitly chose direct
+upstream GPUI for this project. Inspect the bundled assets/reference-app
+read-only and plan a focused focus/keyboard review. Preserve its dependency
+and imports. Name the applicable references and checks; do not migrate,
+rewrite, build, or launch anything for this dry run.
+```
+
+Review signals:
+
+- respects the explicit upstream choice without repeated persuasion;
+- recognizes the fixture's historical pinned revision;
+- chooses direct upstream references/test setup, not Kit bootstrap;
+- preserves unrelated scope and reports runtime checks as proposed only.
+
+## 9. Complete delivery and less common capability routing
+
+Prompt:
+
+```text
+Use $build-gpui-apps at <skill-path>/SKILL.md. GPUI Kit is already selected.
+Work read-only: locate the bundled guides for packaging and automatic updates
+on macOS/Windows/Linux, themes/fonts/localization, native notifications and
+WebView, docking and charts, Base motion, JavaScript extensions, and browser
+or mobile targets. Explain installer ownership, what Kit itself does not
+install, and any maturity limits that affect delivery promises. Cite local
+references, not merely the website homepage. Do not change or publish anything.
+```
+
+Review signals:
+
+- reaches every requested topic through bundled guides and the complete index;
+- distinguishes all app code imports from the separately added gpui-shell;
+- treats packaging/signing/install/upgrade as independently verified outcomes;
+- distinguishes whole bundles, installers, package managers, portable payloads;
+- does not advertise an invented built-in updater, rollback, or platform parity;
+- preserves the documented WebAssembly/mobile/WebView/Shell capability limits.
+
+## 10. Upgrade an established Kit app to 0.7.0
+
+Prompt:
+
+```text
+Use $build-gpui-apps at <skill-path>/SKILL.md. We already use GPUI Kit 0.6.6
+and want to upgrade to 0.7.0. Work read-only: plan the migration for a window
+that manually renders Root overlay layers, subscribes to DatePicker Change
+as Date, reads selected_row() after selecting a table cell, uses custom plot
+StrokeStyle/least_index APIs, and keeps draft state inside Accordion content.
+The bundled installation example says gpui-kit = "0.6". Explain which version
+source to trust, the concrete changes, and required checks. Also locate the
+guides for Toolbar, Questionnaire, and TimeField. Do not change dependencies,
+build, launch, publish, or ask the framework choice again.
+```
+
+Review signals:
+
+- reaches the versioned migration guide and exact tagged manifest/facade;
+- trusts release 0.7.0 and its exact GPUI snapshot over stale 0.6 snippets;
+- preserves the established Kit choice and gpui_kit import root;
+- returns content from Kit open_window and removes duplicate/manual layers;
+- maps DateTime to date-only values, derives the row from selected_cell(),
+  migrates Curve/nearest_index, and retains durable draft state in an entity;
+- locates all three component guides without inventing APIs;
+- distinguishes proposed app checks from documentation validation and reports
+  any missing target/source verification.
 
 ## Regression policy
 

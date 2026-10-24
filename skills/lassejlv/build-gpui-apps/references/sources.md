@@ -3,6 +3,87 @@
 This reference records the primary sources used to build the suite. Refresh
 time-sensitive API claims against the target checkout.
 
+## GPUI Kit 0.7.0 release audit
+
+Audited on **2026-10-01** against the [published release](https://github.com/longbridge/gpui-kit/releases/tag/v0.7.0)
+(published 2026-09-28) and tag commit
+`0c830f4d257e69fdd17200650533ab4ca9a40cc0`. Checked the tag's
+[workspace manifest](https://github.com/longbridge/gpui-kit/blob/v0.7.0/Cargo.toml)
+and [Kit facade](https://github.com/longbridge/gpui-kit/blob/v0.7.0/crates/kit/src/lib.rs).
+Kit is `0.7.0`, its GPUI snapshot is exactly `=0.3.7`, and `open_window`
+constructs one Base Root and returns the window handle plus content entity.
+The [release guide](gpui-kit/v0.7.0.md) routes the new capabilities and every
+breaking-change category to the affected documentation.
+
+Refreshed all **183 English indexed pages**; coverage is unchanged. Nine
+original source hashes changed: docs landing, installation, getting started,
+assets, i18n, multi-window, packaging, Component image, and Shell capabilities.
+Those changes revert dependency/example versions to older `0.6`/`0.6.5`
+values. Preserve the upstream text and hashes, but use the audited release
+manifest for version selection. The September bundle already included the
+new components and automatic Root hosting; this audit adds explicit upgrade
+routing rather than claiming they were previously missing.
+
+Context7 resolution selected `/longbridge/gpui-kit` (high-reputation official
+repository). A focused Root/overlay migration query again returned older
+manual-layer recipes. They conflict with the tag source and current Root
+documentation and must not be copied into 0.7.0 applications. Versioned
+documentation is advertised upstream, but the release installation Markdown
+URLs tested under `/versions/v0.7.0` and `/versions/0.7.0` returned 404; use
+the verified tag source when a versioned page is unavailable.
+
+## GPUI Kit merge and documentation snapshot
+
+Initially bundled on **2026-09-28** from the [official documentation](https://gpui-kit.com/docs/)
+and [machine-readable index](https://gpui-kit.com/llms.txt). Context7 was
+resolved through `bunx ctx7@latest library 'GPUI Kit'` to
+`/longbridge/gpui-kit`, then queried for facade/bootstrap documentation.
+That retrieved older manual-Root examples, so the current installation,
+getting-started, window, and testing pages were used to resolve the difference.
+
+The [bundled index](gpui-kit/upstream/index.md) covers **183 English pages**:
+41 application pages, 78 Component pages, 49 Base pages, and 15 Shell pages
+(counts include their four section landing pages). The saved `llms.txt` also
+retains Chinese translation URLs. Images/illustrations remain remote; all
+indexed English Markdown text is bundled. `upstream/manifest.json` records
+retrieval time, source URL, original SHA-256, and adapted snapshot SHA-256 for
+every page. Documentation links are localized and attribution is added;
+prose and code are otherwise retained from the website.
+
+At merge time the installation page specified `gpui-kit = "0.7.0"` and its recorded
+`gpui-pre = 0.3.7` dependency. Other pages can contain older example versions.
+Resolve that discrepancy from the selected release's manifest/source rather
+than treating every snippet as a version recommendation. Current
+`gpui_kit::open_window` provides Root, and Root renders overlays; the older
+manual-overlay statements in the merged recipes were corrected accordingly.
+
+Merged installed skill sources:
+
+- [GPUI Kit skill](https://github.com/longbridge/gpui-kit/tree/main/skills/gpui-kit):
+  component catalog, coding section map, conventions, usage, recipes, and all
+  GPUI mechanism references, now under `references/gpui-kit/`.
+- [GPUI Kit Design Guides skill](https://github.com/longbridge/gpui-kit/tree/main/skills/gpui-kit-design-guides):
+  section map, non-negotiables, reading rules, and review routing, now in
+  [design.md](gpui-kit/design.md). The full normative Design and Coding Guides
+  are refreshed website snapshots, avoiding duplicate stale copies.
+
+Credit GPUI Kit. Its documentation prose and original illustrations it can
+license are offered under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/);
+code and software use [Apache-2.0](https://github.com/longbridge/gpui-kit/blob/main/LICENSE).
+Third-party material retains its terms. Each bundled page retains upstream
+notices and links to its source; adapted skill references identify their source
+and changes. Do not erase these notices when refreshing.
+
+Refresh from the skill directory with
+`python3 scripts/sync_gpui_kit_docs.py`; verify coverage and hashes offline with
+`python3 scripts/sync_gpui_kit_docs.py --check`. The sync fetches every page
+before writing any snapshot files. Run the repository Markdown/link validator
+after refresh, review API/version changes, and reconcile adapted recipes.
+A documentation snapshot is not evidence that example code was built here.
+
+The remainder of this ledger describes the **historical direct upstream GPUI**
+research and fixture. It does not override Kit's current API or imports.
+
 ## Contents
 
 - [Snapshot](#snapshot)

@@ -9,6 +9,6 @@ change `skills/sources.json` upstream and run `mise run update data-oriented-des
 - Homepage: https://github.com/macton/nagent
 - Upstream path: `context/data-oriented-design.md`
 - Tracked ref: `main`
-- Resolved commit: `2fe020ff12e7045410aa94530b8c3343cdeb3007`
+- Resolved commit: `00e466a1b48d6a2ea6e181745ff3b49dcc1a4130`
 - License: MIT (see `LICENSE.upstream`)
 - Local overlay: `vendor-overlays/data-oriented-design/` applied on top of upstream

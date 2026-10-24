@@ -9,6 +9,6 @@ change `skills/sources.json` upstream and run `mise run update find-docs`.
 - Homepage: https://github.com/upstash/context7
 - Upstream path: `skills/find-docs`
 - Tracked ref: `master`
-- Resolved commit: `ec97797fdb39a638e52d462dadbe8f76dcb76c60`
+- Resolved commit: `b5e81de845092694ba1bfc5af15400f319c89b6d`
 - License: MIT (see `LICENSE.upstream`)
 - Local overlay: `vendor-overlays/find-docs/` applied on top of upstream

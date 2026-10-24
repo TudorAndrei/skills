@@ -9,5 +9,5 @@ change `skills/sources.json` upstream and run `mise run update show-me`.
 - Homepage: https://github.com/humanlayer/skills
 - Upstream path: `plugins/show-me/skills/show-me`
 - Tracked ref: `main`
-- Resolved commit: `3c2629142c5d437428269b1b722b08c0b87f574d`
+- Resolved commit: `653b6411c1f70c275a18e37673b042ff99f67ceb`
 - License: MIT (see `LICENSE.upstream`)
