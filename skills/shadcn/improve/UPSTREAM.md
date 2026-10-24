@@ -9,5 +9,5 @@ change `skills/sources.json` upstream and run `mise run update improve`.
 - Homepage: https://github.com/shadcn/improve
 - Upstream path: `skills/improve`
 - Tracked ref: `main`
-- Resolved commit: `03369ee6d7cafbfcecc4346539b05b3dc0a603bb`
+- Resolved commit: `cac56e1ebd3c279aa9153616cfeac7b174ab90f9`
 - License: MIT (see `LICENSE.upstream`)

@@ -9,5 +9,5 @@ change `skills/sources.json` upstream and run `mise run update research`.
 - Homepage: https://github.com/mattpocock/skills
 - Upstream path: `skills/engineering/research`
 - Tracked ref: `main`
-- Resolved commit: `3cca18b368ae95cdbdebbff572ccafa662551015`
+- Resolved commit: `5beb35b040e3de97e54fa9e386d7e42d15c295c2`
 - License: MIT (see `LICENSE.upstream`)
