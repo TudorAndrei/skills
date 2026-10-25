@@ -1,4 +1,4 @@
 interface:
   display_name: "Rust Best Practices"
-  short_description: "Strict lints, verification, API design, benchmarks, build cache, releases, and small Rust binaries"
+  short_description: "Code style, strict lints, verification, API design, benchmarks, build cache, releases, and small Rust binaries"
   default_prompt: "Use $rust-best-practices to set up strict Clippy lints for this Rust project."

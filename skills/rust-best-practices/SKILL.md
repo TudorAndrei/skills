@@ -1,6 +1,6 @@
 ---
 name: rust-best-practices
-description: Rust project best practices - strict lints, verification, misuse-resistant APIs, benchmarks, dependency vetting, build caching, releases, and binary size. Use when setting up or auditing a Rust project, configuring Clippy, `[lints]`, or clippy.toml, removing unwrap/expect/panic/indexing/`as` casts, writing, hardening, or reviewing Rust (including habits carried over from Go, Java, or Python), verifying `unsafe`, concurrent, or rewritten code (Miri, sanitizers, Loom, Kani, proptest, fuzzing, cargo-mutants, TLA+), designing a public API or keeping semver, benchmarking or optimizing working Rust, vetting dependencies (cargo deny, cargo-vet, cargo auditable), speeding up Cargo builds across worktrees or CI (mbx, Swatinem/rust-cache, sccache), setting up versioning, changelogs, or releases (cog, cog.toml, cocogitto-action), or reducing binary size (release profile, LTO, panic strategy, build-std, no_std, UPX, cargo-bloat, container images).
+description: Rust project best practices - idiomatic code style, strict lints, verification, misuse-resistant APIs, benchmarks, dependency vetting, build caching, releases, and binary size. Use when setting up or auditing a Rust project, configuring Clippy, `[lints]`, or clippy.toml, removing unwrap/expect/panic/indexing/`as` casts, writing, refactoring, hardening, or reviewing Rust (naming, traits, error types, docs, tests, unsafe, and habits from Go, Java, or Python), verifying `unsafe`, concurrent, or rewritten code (Miri, sanitizers, Loom, Kani, proptest, fuzzing, cargo-mutants, TLA+), designing a public API or keeping semver, benchmarking or optimizing working Rust, vetting dependencies (cargo deny, cargo-vet, cargo auditable), speeding up Cargo builds across worktrees or CI (mbx, Swatinem/rust-cache, sccache), setting up versioning, changelogs, or releases (cog, cog.toml, cocogitto-action), or reducing binary size (release profile, LTO, panic strategy, build-std, no_std, UPX, cargo-bloat, container images).
 ---
 
 # Rust Best Practices
@@ -17,6 +17,12 @@ Deny panicking code paths in production code and allow them in tests.
 
 Read [references/clippy.md](references/clippy.md) for the exact config, the reason for each lint, and how to apply it to an existing codebase.
 
+## Code style
+
+Before you return Rust code, run `cargo fmt`, `cargo clippy --all-targets --all-features -- -D warnings`, `cargo test`, and, for libraries, `cargo doc --no-deps`. Fix what they report.
+
+Library code follows the naming, trait, error, and documentation rules strictly; application code stays simple and concrete. Read [references/code-style.md](references/code-style.md) for naming, std traits to derive, builders, traits and generics, error types, idioms, async, unsafe and FFI, module layout, rustdoc, and tests.
+
 ## Verification
 
 For high-stakes or long-lived crates, "it compiles and the tests pass" is the start of the job. Give each real failure class one **owner** (fuzzing for untrusted input, Miri for `unsafe`, Loom for lock-free code, differential tests against the retained old code for a rewrite), and name the **oracle** that would catch the code being wrong. Read the workspace and map the verifiers already in CI before you recommend a tool. A verification review is a read-only audit first.
@@ -27,7 +33,7 @@ Read [references/verification.md](references/verification.md) for the testing ch
 
 ## API design
 
-Make misuse inexpressible with newtypes, validated two-phase structs, enums, and typestate, and keep the public surface small. Read [references/api-design.md](references/api-design.md) for the state-machine ladder, everyday API idioms, semver tooling, and what to document.
+Make misuse inexpressible with newtypes, validated two-phase structs, enums, and typestate, and keep the public surface small. No `bool` parameters in public or shared signatures. Read [references/api-design.md](references/api-design.md) for the state-machine ladder, everyday API idioms, semver rules and tooling, refactoring someone else's code, and what to document.
 
 ## Enums over strings
 
