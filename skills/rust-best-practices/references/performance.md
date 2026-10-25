@@ -1,6 +1,6 @@
 # Performance
 
-Source: https://github.com/hexuria/impeccable-rust (MIT)
+Sources: https://github.com/hexuria/impeccable-rust (MIT), https://github.com/morganlinton/BeautifulRust (MIT)
 
 Use this to benchmark Rust, to make working Rust faster or leaner, to hit a speedup target, or to beat another crate. For binary size, use the Binary size section of SKILL.md instead.
 
@@ -32,6 +32,17 @@ A speed claim compares equal work under equal conditions. The benchmark definiti
 Before each comparison, check against the baseline commit that these are unchanged: files under `benches/`; `rust-toolchain*`, `.cargo/config.toml`, and the `[profile.*]` tables; and `RUSTFLAGS`, `CARGO_ENCODED_RUSTFLAGS`, `CARGO_PROFILE_*`, or `rustflags` in `~/.cargo/config.toml`. A difference fails the comparison unless you waive it on the record with a reason. Note new `unsafe` lines (for Miri) and changed `Cargo.lock` packages (for the dependency checks).
 
 To change the contract (a missing workload, a broken benchmark), say so, make the change in its own commit, and measure the baseline again on it.
+
+## Cheap wins
+
+Design for usability first, then apply these where a profile shows they matter:
+
+- `Vec::with_capacity` or `collect()` over push loops.
+- Reuse caller-owned buffers in hot APIs: `fn read_into(&mut self, buf: &mut Vec<u8>)`.
+- `Box<[T]>`, `Box<str>`, `Arc<str>` for long-lived immutable sequences; `shrink_to_fit` on long-lived collections built without a reservation.
+- A faster hasher (`foldhash`, `FxHash`) only for trusted keys; untrusted keys keep the default SipHash for HashDoS resistance.
+- Batch work instead of a lock per item.
+- Applications may set a `#[global_allocator]` such as `mimalloc`; libraries never do.
 
 ## Data layout
 

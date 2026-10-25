@@ -1,6 +1,15 @@
 # Dependencies
 
-Source: https://github.com/hexuria/impeccable-rust (MIT)
+Sources: https://github.com/hexuria/impeccable-rust (MIT), https://github.com/morganlinton/BeautifulRust (MIT)
+
+## Hygiene
+
+Every dependency costs compile time, binary size, and supply-chain exposure, including its `build.rs` and proc macros.
+
+- Use version ranges (`"1"`, `"1.4"`), never `"*"` or a needless `"="`. Commit `Cargo.lock` for binaries.
+- Find duplicate versions with `cargo tree --duplicates` and unused dependencies with `cargo udeps`.
+- Keep features additive and bare-named (`std`, `serde`, `alloc`, `test-util`). A feature never removes or changes a public item; do not feature-gate struct fields or trait methods. Put mocks and fakes behind `test-util`, and `serde` impls behind `serde`.
+- Do not run code before `main()` (no `ctor`-style crates).
 
 ## Supply chain
 
