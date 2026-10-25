@@ -6,8 +6,9 @@ Source: https://namtao.com/rust
 
 ```toml
 [lints.clippy]
-pedantic = { level = "deny", priority = -1 }  # um, actually
-nursery = { level = "deny", priority = -1 }   # beta lints
+all = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 } # um, actually
+nursery = { level = "deny", priority = -1 } # beta lints
 # deny panics
 unwrap_used = "deny"
 expect_used = "deny"
@@ -22,9 +23,13 @@ panic_in_result_fn = "deny"
 panic = "deny"
 exit = "deny"
 as_conversions = "deny"
+# keep unsafe and suppressions reviewable
+undocumented_unsafe_blocks = "deny"
+allow_attributes_without_reason = "deny"
 
 [lints.rust]
 unsafe_op_in_unsafe_fn = "deny"
+missing_debug_implementations = "deny"
 ```
 
 In a workspace, put the tables in the root `Cargo.toml` as `[workspace.lints.clippy]` and `[workspace.lints.rust]`, and add this to each member:
@@ -57,6 +62,10 @@ allow-indexing-slicing-in-tests = true
 - `panic_in_result_fn`: a function that returns `Result` must not also panic.
 - `exit`: `std::process::exit` skips destructors. Return an exit code from `main` instead.
 - `as_conversions`: `as` truncates and changes sign silently. Use `From`, `TryFrom`, or `try_into`.
+- `all`: the default correctness, style, complexity, and performance groups, raised from warn to deny.
+- `undocumented_unsafe_blocks`: every `unsafe` block needs a `// SAFETY:` comment that says why the invariants hold.
+- `allow_attributes_without_reason`: every `#[allow]` or `#[expect]` must state a `reason`.
+- `missing_debug_implementations` (rustc lint): every public type implements `Debug`. Write `Debug` by hand to redact secrets.
 - `unsafe_op_in_unsafe_fn` (rustc lint): each unsafe operation inside an `unsafe fn` still needs its own `unsafe` block, so the unsafe surface stays visible for review and Miri.
 
 ## Applying to an existing codebase
@@ -64,4 +73,5 @@ allow-indexing-slicing-in-tests = true
 1. Add the config, then run `cargo clippy --all-targets --all-features` and count the findings.
 2. If the count is large, set `"warn"` first and fix module by module, then change to `"deny"`.
 3. Allow a lint locally only with a reason, for example `#[expect(clippy::indexing_slicing, reason = "index checked above")]`. Prefer `#[expect]` over `#[allow]` so the attribute fails when it is no longer needed.
-4. If Clippy reports an unknown lint, the toolchain is older than the lint. Update the toolchain or remove that line and tell the user.
+4. Do not put `#![deny(warnings)]` in source. A new toolchain adds new warnings and breaks the build. Enforce warnings as errors in CI with `cargo clippy --all-targets --all-features -- -D warnings`. Use `#[allow]` only in generated code or macro output.
+5. If Clippy reports an unknown lint, the toolchain is older than the lint. Update the toolchain or remove that line and tell the user.

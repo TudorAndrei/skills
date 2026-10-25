@@ -1,12 +1,28 @@
 # Foreign Idioms
 
-Sources: https://rust-unofficial.github.io/patterns/, https://users.rust-lang.org/t/common-newbie-mistakes-or-bad-practices/64821, https://dystroy.org/blog/how-not-to-learn-rust/, https://google.github.io/comprehensive-rust/idiomatic/welcome.html
+Sources: https://rust-unofficial.github.io/patterns/, https://users.rust-lang.org/t/common-newbie-mistakes-or-bad-practices/64821, https://dystroy.org/blog/how-not-to-learn-rust/, https://google.github.io/comprehensive-rust/idiomatic/welcome.html, https://github.com/morganlinton/BeautifulRust
 
 A **foreign idiom** is code that compiles but is shaped by another language: Go, Java, Python, TypeScript, C, or C++ written in Rust syntax. Each one usually costs a clone, an allocation, a lock, or a runtime check that the type system could do for free. Use this list when you write Rust and when you review it. For each hit, rewrite to the Rust form unless the code has a stated reason.
 
 ## Ownership (any garbage-collected language)
 
-- **Clone to satisfy the borrow checker.** A `.clone()` added only to silence an error hides an ownership design problem. Borrow instead, shorten the borrow's scope, split the struct so disjoint fields borrow separately, or move the value out with `std::mem::take` / `mem::replace`. Clone deliberately when two owners really need independent copies.
+- **Clone to satisfy the borrow checker.** A `.clone()` added only to silence an error hides an ownership design problem, and its copy silently misses later changes. Try these first, in order:
+  1. Extend a temporary with a named `let`, or shorten a borrow with a block.
+  2. Split a long expression into typed intermediates so the failing step is visible.
+  3. Move a field out of `&mut self` with `std::mem::take` (needs `Default`), `mem::replace`, or `Option::take`.
+  4. Split a large struct so disjoint fields borrow separately. The compiler tracks disjoint field borrows inside one function, not across method calls.
+  5. Clone small immutable data deliberately, with a comment if the reason is not obvious.
+  6. As a last resort, use indices into an owning `Vec`, or `Rc<RefCell<_>>` with `Weak` back-pointers.
+
+  ```rust
+  // Move out of a &mut enum without a clone.
+  fn a_to_b(e: &mut MyEnum) {
+      if let MyEnum::A { name, x: 0 } = e {
+          *e = MyEnum::B { name: std::mem::take(name) };
+      }
+  }
+  ```
+
 - **`Rc<RefCell<T>>` or `Arc<Mutex<T>>` by default.** These recreate a GC object graph with runtime checks. Give each value one owner and pass `&mut T` down the call stack. Across threads, send owned messages through a channel, or give each worker its own data. Keep shared mutable state for state that is truly shared, and keep the lock scope small.
 - **The escalation loop.** A lifetime error fixed with `clone()`, then `Arc<Mutex<_>>`, then `Box::leak` or `unsafe`, is one design problem. Stop and restructure who owns the data.
 - **References stored in structs.** A `&Foo` field forces lifetime parameters onto every struct that holds it. Own the data (`String`, `Vec<T>`, `Arc<T>`) unless the struct is a short-lived view, such as an iterator or a parser over a borrowed buffer.
@@ -17,7 +33,7 @@ A **foreign idiom** is code that compiles but is shaped by another language: Go,
 - **Free functions over `&mut Struct`.** `fn update(state: &mut State, x: u32)` is Go-style receiver code. Put behavior that belongs to a type in its `impl` block as a method (`state.update(x)`), and implement a trait when several types share the behavior. A free function fits when no single type owns the operation.
 - **Hand-written boilerplate impls.** `#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]` replaces hand-written equivalents; derive `Serialize`, `Deserialize`, and `thiserror::Error` too.
 - **Custom method names for standard conversions.** Implement the std traits so the ecosystem works with the type: `Default` over `fn empty()`, `From` / `TryFrom` over `fn from_x()`, `FromStr` over `fn parse_x()`, `Display` over `fn to_string()`, `Iterator` / `IntoIterator` over `fn items() -> Vec<T>`, `Drop` over `fn close()` that callers must remember.
-- **Inheritance hierarchies and abstract base classes.** Compose structs, share behavior through traits, and use an enum when the set of kinds is closed. `Deref` to a "parent" struct is not inheritance and surprises callers.
+- **Inheritance hierarchies and abstract base classes.** Compose structs, share behavior through traits, and use an enum when the set of kinds is closed. `Deref` to a "parent" struct is not inheritance and surprises callers; implement `Deref` only on smart pointers and owning collections (`Vec<T>` to `[T]`).
 - **`Box<dyn Trait>` for every abstraction.** Use generics or `impl Trait` when the concrete type is known at compile time, an enum when the set of kinds is closed, and `dyn Trait` when the set is open or the types must share one collection.
 - **Interfaces declared up front.** A trait with one implementation and no test double is ceremony. Write the concrete type and extract a trait when the second implementation arrives.
 - **Getters and setters for every field.** Inside a crate, use fields directly. At a public boundary, expose methods that keep an invariant, not a get/set pair per field ([api-design.md](api-design.md)).
@@ -31,6 +47,7 @@ A **foreign idiom** is code that compiles but is shaped by another language: Go,
 - **Exceptions as control flow.** `panic!` is for bugs. Expected failures are `Result` values ([clippy.md](clippy.md) denies the panicking shortcuts).
 - **Sentinel values and null.** Return `Option<T>`, not `-1`, `""`, `0`, `usize::MAX`, or a "default" that means missing.
 - **Nested null-check pyramids.** Flatten with `?`, `let ... else`, `if let`, and the `Option` / `Result` combinators (`map`, `and_then`, `ok_or`, `unwrap_or_default`).
+- **`throw_if_null`-style guard helpers.** Return `Option` or `Result` from the function and let the caller apply `?`.
 - **Defensive checks everywhere.** Validate once at the boundary into a type that cannot be invalid, and let the type carry the guarantee.
 
 ## Dynamic data (Python, JavaScript, TypeScript)
@@ -54,4 +71,4 @@ A **foreign idiom** is code that compiles but is shaped by another language: Go,
 ## Overcorrection
 
 - **Forced functional style.** A long iterator chain with nested closures, or one that needs early return or `?` in the middle, reads better as a `for` loop.
-- **Immutability everywhere.** `let mut` and `&mut self` are safe under ownership; rebuilding whole structs to avoid mutation is a foreign habit too.
+- **Immutability everywhere.** `let mut` and `&mut self` are safe under ownership; rebuilding whole structs to avoid mutation is a foreign habit too. To stop accidental change after setup, rebind: `let data = data;`.
