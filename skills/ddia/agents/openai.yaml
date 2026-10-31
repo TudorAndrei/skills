@@ -1,0 +1,4 @@
+interface:
+  display_name: "Designing Data-Intensive Applications"
+  short_description: "Data-system trade-offs: storage, replication, sharding, transactions, consistency, streams"
+  default_prompt: "Use $ddia to review the data architecture of this design."
