@@ -24,6 +24,12 @@ packages software).
 | Declarative microVMs with microvm.nix                                                           | [microvm-nix](references/microvm-nix/guide.md)                 |
 | Installing and sandboxing AI coding agents on NixOS                                             | [nixos-coding-agents](references/nixos-coding-agents/guide.md) |
 
+For flakes and module-system pitfalls that these guides do not cover (Git-tracked
+files, module priorities, conditional imports, multiple nixpkgs, cross builds,
+remote deployment, substituters, daemon proxy, `nix repl` debugging, collisions,
+prebuilt binaries), also read
+[flakes-book-notes](references/flakes-book-notes.md).
+
 ## Reading the guides
 
 - Links inside a guide are relative to that guide's folder.
