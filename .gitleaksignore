@@ -1,2 +1,13 @@
 # Placeholder key in vendored upstream docs, not a real secret
 skills/lassejlv/build-gpui-apps/references/gpui-kit/upstream/component/clipboard.md:generic-api-key:119
+
+# SHA-256 input hashes keyed by upstream file names containing "secret"/"key", not secrets
+skills/nix/references/devenv-project/sources.json:generic-api-key:24
+skills/nix/references/devenv-project/sources.json:generic-api-key:30
+skills/nix/references/devenv-project/sources.json:generic-api-key:31
+skills/nix/references/devenv-project/sources.json:generic-api-key:67
+skills/nix/references/devenv-project/sources.json:generic-api-key:160
+skills/nix/references/nixpkgs-development/sources.json:generic-api-key:368
+skills/nix/references/nixpkgs-development/sources.json:generic-api-key:369
+skills/nix/references/nixpkgs-development/sources.json:generic-api-key:370
+skills/nix/references/nixpkgs-development/sources.json:generic-api-key:425

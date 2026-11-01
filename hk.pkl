@@ -5,8 +5,8 @@ import "hk-vendored.pkl" as vendored
 // Overlay patches are byte-exact: a context line is " " plus the original line,
 // so stripping its trailing space makes the patch stop applying. Fixers that
 // rewrite bytes must leave them alone, same as the vendored snapshots.
-// brag keeps a verbatim copy of the fframes skill as reference material.
-local unformattable = vendored.globs + List("vendor-overlays/**/*.patch", "skills/brag/references/fframes-video/**")
+// brag and nix keep verbatim copies of upstream skills as reference material.
+local unformattable = vendored.globs + List("vendor-overlays/**/*.patch", "skills/brag/references/fframes-video/**", "skills/nix/references/**")
 
 steps {
     ["check-merge-conflict"] = Builtins.check_merge_conflict

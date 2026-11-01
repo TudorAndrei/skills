@@ -1,0 +1,4 @@
+interface:
+  display_name: "Nix"
+  short_description: "Nix, NixOS, Nixpkgs, Home Manager, nix-darwin, devenv and microvm.nix guidance"
+  default_prompt: "Use $nix to review this Nix configuration and propose changes as a diff."
