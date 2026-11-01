@@ -1,6 +1,6 @@
 ---
 name: rust-best-practices
-description: Rust project best practices - idiomatic code style, strict lints, verification, misuse-resistant APIs, benchmarks, dependency vetting, build caching, releases, and binary size. Use when setting up or auditing a Rust project, configuring Clippy, `[lints]`, or clippy.toml, removing unwrap/expect/panic/indexing/`as` casts, writing, refactoring, hardening, or reviewing Rust (naming, traits, error types, docs, tests, unsafe, and habits from Go, Java, or Python), verifying `unsafe`, concurrent, or rewritten code (Miri, sanitizers, Loom, Kani, proptest, fuzzing, cargo-mutants, TLA+), designing a public API or keeping semver, benchmarking or optimizing working Rust, vetting dependencies (cargo deny, cargo-vet, cargo auditable), speeding up Cargo builds across worktrees or CI (mbx, Swatinem/rust-cache, sccache), setting up versioning, changelogs, or releases (cog, cog.toml, cocogitto-action), or reducing binary size (release profile, LTO, panic strategy, build-std, no_std, UPX, cargo-bloat, container images).
+description: Rust project best practices - idiomatic code style, strict lints, verification, misuse-resistant APIs, benchmarks, dependency vetting, build caching, releases, and binary size. Use when setting up or auditing a Rust project, configuring Clippy, `[lints]`, or clippy.toml, removing unwrap/expect/panic/indexing/`as` casts, writing, refactoring, hardening, or reviewing Rust (naming, traits, error types, docs, tests, unsafe, and habits from Go, Java, or Python), writing Cucumber/Gherkin BDD tests (cucumber-rs, World, steps, `.feature` files), verifying `unsafe`, concurrent, or rewritten code (Miri, sanitizers, Loom, Kani, proptest, fuzzing, cargo-mutants, TLA+), designing a public API or keeping semver, benchmarking or optimizing working Rust, vetting dependencies (cargo deny, cargo-vet, cargo auditable), speeding up Cargo builds across worktrees or CI (mbx, Swatinem/rust-cache, sccache), setting up versioning, changelogs, or releases (cog, cog.toml, cocogitto-action), or reducing binary size (release profile, LTO, panic strategy, build-std, no_std, UPX, cargo-bloat, container images).
 ---
 
 # Rust Best Practices
@@ -30,6 +30,12 @@ For high-stakes or long-lived crates, "it compiles and the tests pass" is the st
 End the work with the Evidence, Documented, Deferred, Compat/deps, and Verification report. Name each claim with its narrowest term and bounds; a bounded check, fuzz run, or test suite is never a proof.
 
 Read [references/verification.md](references/verification.md) for the testing checklist, sanitizer commands, the risk-to-owner table, formal tools, anti-drift rules, CI shape, and the report format.
+
+## Cucumber BDD tests
+
+Use the `cucumber` crate for behavior that people outside the code must agree on. Give each domain a feature directory, a `[[test]]` target with `harness = false`, a small World, and one step file. Steps return `Result`, because the Clippy test exemptions do not cover step functions. The runner calls `fail_on_skipped()` and `run_and_exit`. Keep unit, property, and fuzz tests as `#[test]`.
+
+Read [references/cucumber.md](references/cucumber.md) for how real projects lay it out, step and scenario rules, the runner, the cargo-nextest workaround, retries, and JUnit and libtest output.
 
 ## API design
 
