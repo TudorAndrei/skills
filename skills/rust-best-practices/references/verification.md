@@ -18,7 +18,44 @@ Work through each section that fits the change, and say what you ran and what yo
   - `memory`: reads of uninitialized memory. Linux only.
   - Command: `RUSTFLAGS="-Zsanitizer=<kind>" RUSTDOCFLAGS="-Zsanitizer=<kind>" cargo +nightly test --target <host-triple>`. Add `-Zbuild-std` (needs `rust-src`) for `thread` and `memory`, else the link fails or reports noise. Add `-Zsanitizer-memory-track-origins` for `memory`. Use a separate `CARGO_TARGET_DIR` so normal builds stay clean.
 - A test that passes only on retry has failed. Run `cargo nextest` with `flaky-result = "fail"` in `.config/nextest.toml`, reproduce with `--stress-count`, and find the interleaving with Loom or `shuttle`. Rerunning until green is not a result.
+- Use [cargo-nextest](https://nexte.st/) as the test runner (`cargo nextest run`). It runs each test in its own process, so a crash, leak, or hang stays in one test, and it gives per-test timeouts, retries, partitions, and JUnit output. See [cargo-nextest](#cargo-nextest).
 - Coverage (`cargo llvm-cov`, `cargo llvm-cov nextest`; `--branch` needs nightly) finds code no test runs. It is a gap finder, not a claim. A covered line whose `cargo mutants` mutant is missed ran but was never checked, unless the mutant is equivalent (`<` to `<=` where both branches return the same value). Record a confirmed equivalent mutant in `exclude_re` in `.cargo/mutants.toml` with a comment. `--in-diff` scopes mutants to the change.
+
+### cargo-nextest
+
+Source: https://nexte.st/
+
+- Install with `cargo install --locked cargo-nextest` or `taiki-e/install-action@nextest` in CI.
+- Nextest does not run doctests. Run `cargo test --doc` as a separate step, or the doctests stop running.
+- It does not run targets with `harness = false` that do not support `--list` (for example Cucumber, see [cucumber.md](cucumber.md#runner)).
+- Put the configuration in `.config/nextest.toml`. Keep local runs fast and make CI strict:
+
+```toml
+[profile.default]
+retries = 0
+slow-timeout = { period = "60s", terminate-after = 2 }
+
+[profile.ci]
+fail-fast = false # Report every failure, not only the first.
+retries = 2
+flaky-result = "fail" # A pass on retry is still a failure.
+slow-timeout = { period = "60s", terminate-after = 5, grace-period = "30s" }
+
+[profile.ci.junit]
+path = "junit.xml" # Written to target/nextest/ci/junit.xml.
+
+[test-groups]
+serial-db = { max-threads = 1 }
+
+[[profile.default.overrides]]
+filter = 'test(/^db::/)'
+test-group = 'serial-db' # Tests that share a resource run one at a time.
+```
+
+- Run CI with `cargo nextest run --profile ci`. Select tests with filtersets (`-E 'package(foo) and test(/parse/)'`, `rdeps(<crate>)` for the crates a change affects).
+- Split a slow suite across CI jobs with `--partition slice:<m>/<n>`. Build once with `cargo nextest archive --archive-file tests.tar.zst` and run the archive on other machines with `--archive-file`.
+- Reproduce a flaky test with `cargo nextest run --stress-count <n> <filter>` before you fix it.
+- Do not set `retries` to hide a flaky test. Keep `flaky-result = "fail"`, and use a per-test `flaky-result = "pass"` override only with a comment that links the tracking issue.
 
 ## Chaos
 
