@@ -464,6 +464,17 @@
       }
     },
     {
+      "name": "untangle-codebase",
+      "repo": "https://github.com/caldoai/skills.git",
+      "path": "skills/untangle-codebase",
+      "ref": "main",
+      "author": "caldoai",
+      "homepage": "https://github.com/caldoai/skills",
+      "license": {
+        "spdx": "MIT"
+      }
+    },
+    {
       "name": "wayfinder",
       "repo": "https://github.com/mattpocock/skills.git",
       "path": "skills/engineering/wayfinder",
