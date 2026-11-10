@@ -109,6 +109,10 @@
       "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
       "hash": "0832f375f8ae77a69f23b0f21c56c3567e324af7d61abf70fa7f2e8fa334130e"
     },
+    "lintlang": {
+      "commit": "5e5fefbce78337a3b38e5de9f7ecb403027e7d3f",
+      "hash": "4cd0b15972221249050546e4e0e4a947a9b0c6839752371d282a5e9709666f24"
+    },
     "postgres": {
       "commit": "5d3b76b5c986693b30753828b404aa66ba34c31a",
       "hash": "706fc9c49a309fa187f13b31ac879e97e95880da2372c3774eb0fe7f5abb657f"

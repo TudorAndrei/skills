@@ -299,6 +299,17 @@
       }
     },
     {
+      "name": "lintlang",
+      "repo": "https://github.com/hermes-labs-ai/lintlang.git",
+      "path": "skills/lintlang",
+      "ref": "main",
+      "author": "hermes-labs-ai",
+      "homepage": "https://github.com/hermes-labs-ai/lintlang",
+      "license": {
+        "spdx": "Apache-2.0"
+      }
+    },
+    {
       "name": "postgres",
       "repo": "https://github.com/timescale/pg-aiguide.git",
       "path": "skills/postgres",
