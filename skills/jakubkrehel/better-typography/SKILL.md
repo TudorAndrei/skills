@@ -1,6 +1,6 @@
 ---
 name: better-typography
-description: Sets and reviews how text renders, from the type scale and spacing to font features, wrapping, truncation and punctuation.
+description: Sets and reviews how text renders, from the type scale and spacing to font features, wrapping, truncation and punctuation. Use when choosing fonts or a type scale, or when text wraps, truncates, or renders badly.
 ---
 
 # Typography

@@ -1,0 +1,12 @@
+Add a "Use when" clause so a model knows when to select this skill (lintlang H1.8).
+
+--- a/SKILL.md
++++ b/SKILL.md
+@@ -1,6 +1,6 @@
+ ---
+ name: better-writing
+-description: Writes and reviews interface copy, from labels and errors to empty states and confirmations, so it matches the product's voice and tells people what to do next.
++description: Writes and reviews interface copy, from labels and errors to empty states and confirmations, so it matches the product's voice and tells people what to do next. Use when writing or reviewing UI text such as button labels, error messages, empty states, or confirmation dialogs.
+ ---
+ 
+ # Writing

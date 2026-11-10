@@ -1,0 +1,12 @@
+Add a "Use when" clause so a model knows when to select this skill (lintlang H1.8).
+
+--- a/SKILL.md
++++ b/SKILL.md
+@@ -1,6 +1,6 @@
+ ---
+ name: better-ui
+-description: Polishes surfaces, icons and motion with exact values for border radius, optical alignment, shadows, icon states and animation.
++description: Polishes surfaces, icons and motion with exact values for border radius, optical alignment, shadows, icon states and animation. Use when a UI looks unpolished, or when setting border radius, shadow, icon, or animation values.
+ ---
+ 
+ # UI polish

@@ -1,0 +1,12 @@
+Add a "Use when" clause so a model knows when to select this skill (lintlang H1.8).
+
+--- a/SKILL.md
++++ b/SKILL.md
+@@ -1,6 +1,6 @@
+ ---
+ name: better-typography
+-description: Sets and reviews how text renders, from the type scale and spacing to font features, wrapping, truncation and punctuation.
++description: Sets and reviews how text renders, from the type scale and spacing to font features, wrapping, truncation and punctuation. Use when choosing fonts or a type scale, or when text wraps, truncates, or renders badly.
+ ---
+ 
+ # Typography

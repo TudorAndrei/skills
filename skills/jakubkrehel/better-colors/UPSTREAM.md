@@ -11,3 +11,4 @@ change `skills/sources.json` upstream and run `mise run update better-colors`.
 - Tracked ref: `main`
 - Resolved commit: `019ab7c199154f4509b55f12d84a4f5b578dc606`
 - License: MIT (see `LICENSE.upstream`)
+- Local overlay: `vendor-overlays/better-colors/` applied on top of upstream

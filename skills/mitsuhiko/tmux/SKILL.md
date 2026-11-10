@@ -1,6 +1,6 @@
 ---
 name: tmux
-description: "Remote control tmux sessions for interactive CLIs (python, gdb, etc.) by sending keystrokes and scraping pane output."
+description: "Remote control tmux sessions for interactive CLIs (python, gdb, etc.) by sending keystrokes and scraping pane output. Use when a task needs an interactive terminal program, such as a REPL, debugger, or TUI, that a one-shot shell command cannot drive."
 license: Vibecoded
 metadata:
   tools:

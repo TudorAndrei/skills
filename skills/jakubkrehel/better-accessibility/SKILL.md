@@ -1,6 +1,6 @@
 ---
 name: better-accessibility
-description: Reviews and fixes keyboard and focus behavior, ARIA, accessible names, forms, screen-reader announcements, motion and zoom against WCAG 2.2.
+description: Reviews and fixes keyboard and focus behavior, ARIA, accessible names, forms, screen-reader announcements, motion and zoom against WCAG 2.2. Use when building or reviewing UI for keyboard access, screen readers, or WCAG compliance, or when asked for an accessibility audit.
 ---
 
 # Accessibility

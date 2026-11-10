@@ -1,6 +1,6 @@
 ---
 name: better-colors
-description: Builds and checks color systems by generating palettes, naming semantic tokens, converting between formats and measuring contrast.
+description: Builds and checks color systems by generating palettes, naming semantic tokens, converting between formats and measuring contrast. Use when creating a palette, defining color tokens, converting color formats, or checking contrast ratios.
 ---
 
 # Colors

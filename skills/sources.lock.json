@@ -15,11 +15,11 @@
     },
     "better-accessibility": {
       "commit": "019ab7c199154f4509b55f12d84a4f5b578dc606",
-      "hash": "e9e37eb1b0c292147d91a701f109a8e9559626a0c3b8e4005226ae910dcb2378"
+      "hash": "956b733a59f52d7f652572a816c10ddb21259c013858933dc636bf3563a462a3"
     },
     "better-colors": {
       "commit": "019ab7c199154f4509b55f12d84a4f5b578dc606",
-      "hash": "24be0f93c6b54c9dcf0f3759b21f516dda3371092419ad8037d0a88e2deafcc2"
+      "hash": "f4f5b54b30ead4d83db1696f433f7754da099983d657c26abcd61d2a1fd6ed36"
     },
     "better-interface": {
       "commit": "019ab7c199154f4509b55f12d84a4f5b578dc606",
@@ -31,15 +31,15 @@
     },
     "better-typography": {
       "commit": "019ab7c199154f4509b55f12d84a4f5b578dc606",
-      "hash": "2f7e8cf5a2d83189f07e77252a4acff8b4872a4f7de3406a4b3987f237a4a00e"
+      "hash": "4a696726a93437e5d436eb02e13112e33cb68573af060109028cff2ac9fdf463"
     },
     "better-ui": {
       "commit": "019ab7c199154f4509b55f12d84a4f5b578dc606",
-      "hash": "d5b4ab2cf3ab2e9ebeeda6e1aca8ecce2c536ae0a819ebf79d645eb2951fb062"
+      "hash": "4e844842c7c88004bce392336ee7ecd06ca90c0421afa480ca3d032eb88cc17a"
     },
     "better-writing": {
       "commit": "019ab7c199154f4509b55f12d84a4f5b578dc606",
-      "hash": "323f04bb2aa7581b7b0cc3a38c3967d3182d22e7e1d969fe478a54d74f28cd83"
+      "hash": "7ad4c1fa60435ba106af1b82d9f76f3440b34789c77697f0dbb20fbfa6bdc7f0"
     },
     "bro": {
       "commit": "8603380821fee6a77c82639f364ce8fe4f5a92be",
@@ -151,7 +151,7 @@
     },
     "tmux": {
       "commit": "0865c849befd2021490679f96a8dee58c84ac857",
-      "hash": "e180813835895527e4ffaad94e1e884e30a37c0677ab4dea786ad1909d6a3d1d"
+      "hash": "d6712766644d146a59e9b8bbd4c5d79aaff937600e29d175131dd7ec3771d481"
     },
     "to-spec": {
       "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
