@@ -1,6 +1,20 @@
 ---
 name: web-best-practices
 description: Website engineering best practices - semantic HTML, Core Web Vitals and loading performance, caching, security headers, a machine-readable surface for crawlers and AI agents, and the toolkit that checks each of them in CI. Use when setting up, auditing, building, hardening, or reviewing a website or web app front end; fixing LCP, INP, or CLS; choosing image, font, or script loading; setting Cache-Control, CSP, HSTS, cookie flags, or CORS; writing the document head, forms, or native HTML controls; adding llms.txt, JSON-LD, markdown mirrors, or AI-crawler robots.txt rules (AgentMarkup); checking what AI crawlers receive from a deployed URL; or wiring Lighthouse CI, HTML validation, bundle budgets, or header scans into a pipeline. For rankings and content strategy use seo; for WCAG use better-accessibility.
+metadata:
+  tools:
+    - source: mise
+      command: lighthouse
+      spec: npm:lighthouse@13.6.0
+    - source: mise
+      command: html-validate
+      spec: npm:html-validate@11.21.1
+    - source: mise
+      command: lychee
+      spec: lychee@0.24.2
+    - source: mise
+      command: hurl
+      spec: hurl@8.1.0
 ---
 
 # Web Best Practices
@@ -62,16 +76,20 @@ This section overlaps with the `seo` skill. Use this skill to implement and gate
 
 Let a tool decide everything a tool can decide. Run the checks on the built output or the deployed URL, and fail the pipeline on regressions.
 
-| Question                                      | Tool                                                        |
-| --------------------------------------------- | ----------------------------------------------------------- |
-| Is the HTML valid?                            | `html-validate`, Nu HTML Checker                            |
-| Is the page fast in the lab?                  | Lighthouse, Lighthouse CI, WebPageTest                      |
-| Is the page fast for real users?              | CrUX, PageSpeed Insights, the `web-vitals` library          |
-| Did the bundle grow?                          | `size-limit`, the bundler's analyzer                        |
-| Are the security headers correct?             | MDN HTTP Observatory, AgentMarkup security scan             |
-| Can crawlers and agents read the site?        | AgentMarkup (`check`, `audit`, website checker)             |
-| Does it work in a real browser?               | Playwright, `agent-browser`                                 |
-| Are there WCAG violations a machine can find? | axe-core (`agent-browser a11y`), see `better-accessibility` |
+| Question                                       | Tool                                                        |
+| ---------------------------------------------- | ----------------------------------------------------------- |
+| Is the HTML valid?                             | `html-validate`, Nu HTML Checker                            |
+| Is the page fast in the lab?                   | Lighthouse, Lighthouse CI, WebPageTest                      |
+| Is the page fast for real users?               | CrUX, PageSpeed Insights, the `web-vitals` library          |
+| Did the bundle grow?                           | `size-limit`, the bundler's analyzer                        |
+| Are the security headers correct?              | MDN HTTP Observatory, AgentMarkup security scan             |
+| Can crawlers and agents read the site?         | AgentMarkup (`check`, `audit`, website checker)             |
+| Are there broken links?                        | `lychee`                                                    |
+| Do routes return the right status and headers? | `hurl`                                                      |
+| Does it work in a real browser?                | Playwright, `agent-browser`                                 |
+| Are there WCAG violations a machine can find?  | axe-core (`agent-browser a11y`), see `better-accessibility` |
+
+This file's frontmatter declares `lighthouse`, `html-validate`, `lychee`, and `hurl`. If one is missing, tell the user to run `mise run install-skill-tools` in the skills repo, or `mise use -g <spec>` with the spec from the frontmatter.
 
 Read [references/tooling.md](references/tooling.md) for commands, what each tool can and cannot decide, and the CI shape.
 
