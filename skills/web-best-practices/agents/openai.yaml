@@ -1,0 +1,4 @@
+interface:
+  display_name: "Web Best Practices"
+  short_description: "Semantic HTML, Core Web Vitals, caching, security headers, a machine-readable surface with AgentMarkup, and the CI toolkit"
+  default_prompt: "Use $web-best-practices to audit this website for performance, security headers, and machine-readable output."
