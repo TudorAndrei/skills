@@ -9,27 +9,14 @@ Run a tool on the built output or the deployed URL, not on the source. For each 
 
 Neither tool sees content that script inserts later. Validate the server response and, for client-rendered routes, the DOM from a real browser.
 
-## Links and routes
+## Links
 
 - [lychee](https://lychee.cli.rs/) - fast link checker for built files and live pages. `lychee './dist/**/*.html'` or `lychee https://example.com`. The exit code is not 0 when a link fails.
-- [Hurl](https://hurl.dev/) - HTTP requests with assertions in a plain text file. Use it for the status-code and header smoke test after a deploy: `hurl --test smoke.hurl`.
-
-```hurl
-GET https://example.com/
-HTTP 200
-[Asserts]
-header "Strict-Transport-Security" exists
-header "Content-Security-Policy" exists
-
-GET https://example.com/no-such-page
-HTTP 404
-```
 
 ## Performance
 
-- [Lighthouse](https://developer.chrome.com/docs/lighthouse) - lab audit of one page load. `npx lighthouse https://example.com --output=json --output-path=./lh.json`. Scores vary between runs; take the median of several.
+- [Lighthouse](https://developer.chrome.com/docs/lighthouse) - lab audit of one page load. `lighthouse https://example.com --output=json --output-path=./lh.json`. Scores vary between runs; take the median of several.
 - [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci) - runs Lighthouse in the pipeline and fails on assertions. `npx @lhci/cli autorun` with a `lighthouserc` file that sets budgets for LCP, CLS, and total blocking time.
-- [Unlighthouse](https://unlighthouse.dev/) - runs Lighthouse on every page of a site. `npx unlighthouse --site https://example.com`. Use it to find the weak templates, not as a gate.
 - [WebPageTest](https://www.webpagetest.org/) - real devices and networks, filmstrips, and request waterfalls. Use it to find the cause of a slow LCP.
 - [PageSpeed Insights](https://pagespeed.web.dev/) and CrUX - field data from real Chrome users, at the 75th percentile, for an origin or a URL with enough traffic.
 - [`web-vitals`](https://github.com/GoogleChrome/web-vitals) - a small library that reports LCP, INP, and CLS from your own users. Use the attribution build to learn which element or interaction caused a bad value.
@@ -39,7 +26,7 @@ Lab tools cannot measure INP for real interactions; they report total blocking t
 
 ## Security
 
-- [MDN HTTP Observatory](https://developer.mozilla.org/en-US/observatory) - grades the response headers of a public host and explains each test. The npm package `@mdn/mdn-http-observatory` runs the same scan from the terminal (`mdn-http-observatory-scan <host>`) and gives JSON.
+- [MDN HTTP Observatory](https://developer.mozilla.org/en-US/observatory) - grades the response headers of a public host and explains each test.
 - [AgentMarkup security scan](https://agentmarkup.dev/security-scan/) - passive scan of a public site: HTTPS and HSTS, CSP, clickjacking and sniffing protections, cookie flags, mixed content, `security.txt`, and SPF, DMARC, and DNSSEC.
 - [CSP Evaluator](https://csp-evaluator.withgoogle.com/) - finds bypasses in a Content Security Policy.
 - `curl -sI <url>` - the headers that the host really sends.
@@ -73,12 +60,12 @@ These scans are passive and see only public responses. They do not test authenti
 
 ## CI shape
 
-| Stage        | Checks                                                                              |
-| ------------ | ----------------------------------------------------------------------------------- |
-| Pull request | lint, types, unit tests, build, `html-validate`, bundle budget, `agentmarkup check` |
-| Preview URL  | Lighthouse CI assertions, Playwright, axe                                           |
-| After deploy | `@agentmarkup/audit`, `lychee`, a `hurl` smoke test of status codes and headers     |
-| Continuous   | `web-vitals` field data with an alert on the 75th percentile                        |
+| Stage        | Checks                                                                                          |
+| ------------ | ----------------------------------------------------------------------------------------------- |
+| Pull request | lint, types, unit tests, build, `html-validate`, bundle budget, `agentmarkup check`             |
+| Preview URL  | Lighthouse CI assertions, Playwright, axe                                                       |
+| After deploy | `@agentmarkup/audit`, `lychee`, header scan, a smoke test of status codes (`200`, `301`, `404`) |
+| Continuous   | `web-vitals` field data with an alert on the 75th percentile                                    |
 
 - Fail the job on a regression. A check that only prints a report is not a gate.
 - Keep the budgets in the repository, next to the code they limit.
